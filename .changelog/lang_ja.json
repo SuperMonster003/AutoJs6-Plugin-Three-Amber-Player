@@ -1,0 +1,26 @@
+{
+  "changelog_label_hint": "ヒント",
+  "changelog_label_feature": "機能",
+  "changelog_label_fix": "修正",
+  "changelog_label_improvement": "改善",
+  "changelog_label_dependency": "依存関係",
+  "$data": {
+    "v1.0.0": {
+      "released_date": "2026/08/02",
+      "feature": [
+        "プラグインID `video-player`, アクションID `play-video`, エンジン `explorer-action`, バリアント `default` のVideo Playerプラグイン",
+        "MIMEマッチャーが空で現在のホスト動画拡張子23種類だけに完全一致し, AutoJs6ホストビルド5269を必要とするプロトコルv2の読み取り専用プライマリExplorerアクション",
+        "対象と親のcontent URI, ClipData, ソース, 表示名, サイズ, MIMEタイプ, 拡張子, grantを厳密に検証し, 非エクスポートプレーヤーへ最小限の情報だけを転送する署名保護Explorerエントリ",
+        "読み取り専用動画content URI向けの独立したエクスポート済みACTION_VIEWエントリ, 信頼できないextrasとClipDataの破棄, 禁止grantの拒否, 自己ループ防止",
+        "自動再生, 標準コントロール, オーディオフォーカス, noisy出力変化への対応, 再生位置と再生状態の保存, 再生中だけの画面点灯を備えたMedia3 ExoPlayerとPlayerViewによる再生",
+        "再生失敗後にこのプラグインを明示的に除外する新しい読み取り専用Intentを使う安全な別のアプリで開く復旧操作",
+        "ネイティブライブラリを含まない純粋なJVM実装, `supportedAbis = emptyArray()` によるABI無制限宣言, ABIに依存しない単一APK",
+        "スペイン語, フランス語, ロシア語, アラビア語, 日本語, 韓国語, 英語, 簡体字中国語, 香港繁体字中国語, 台湾繁体字中国語にローカライズされたメタデータ, UIテキスト, 使用説明, README, 変更履歴"
+      ],
+      "dependency": [
+        "AndroidX Media3 ExoPlayer および UI バージョン 1.10.1 を追加",
+        "Kotlin Parcelize runtime バージョン 2.2.21 を追加"
+      ]
+    }
+  }
+}

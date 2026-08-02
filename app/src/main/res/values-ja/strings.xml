@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_back">戻る</string>
+    <string name="action_open_with_other_app">別のアプリで開く</string>
+    <string name="action_play_video">動画を再生</string>
+    <string name="app_name">AutoJs6プラグイン - 動画プレーヤー</string>
+    <string name="error_cannot_play_video">この動画を再生できません (%1$s)</string>
+    <string name="error_invalid_request">無効な動画リクエストです</string>
+    <string name="error_no_external_player">利用可能な別の動画プレーヤーがありません</string>
+    <string name="plugin_description">AutoJs6 Explorerから動画を直接再生</string>
+</resources>

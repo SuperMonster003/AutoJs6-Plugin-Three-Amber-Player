@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_back">رجوع</string>
+    <string name="action_open_with_other_app">فتح باستخدام تطبيق آخر</string>
+    <string name="action_play_video">تشغيل الفيديو</string>
+    <string name="app_name">إضافة AutoJs6 - مشغل الفيديو</string>
+    <string name="error_cannot_play_video">تعذر تشغيل هذا الفيديو (%1$s)</string>
+    <string name="error_invalid_request">طلب الفيديو غير صالح</string>
+    <string name="error_no_external_player">لا يتوفر مشغل فيديو آخر</string>
+    <string name="plugin_description">تشغيل مقاطع الفيديو مباشرة من مستكشف AutoJs6</string>
+</resources>

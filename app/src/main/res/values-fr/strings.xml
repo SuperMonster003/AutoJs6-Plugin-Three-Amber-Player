@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_back">Retour</string>
+    <string name="action_open_with_other_app">Ouvrir avec une autre application</string>
+    <string name="action_play_video">Lire la vidéo</string>
+    <string name="app_name">Plugin AutoJs6 - Lecteur vidéo</string>
+    <string name="error_cannot_play_video">Impossible de lire cette vidéo (%1$s)</string>
+    <string name="error_invalid_request">Demande vidéo non valide</string>
+    <string name="error_no_external_player">Aucun autre lecteur vidéo n\'est disponible</string>
+    <string name="plugin_description">Lit les vidéos directement depuis l\'explorateur AutoJs6</string>
+</resources>

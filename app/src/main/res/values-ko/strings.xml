@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_back">뒤로</string>
+    <string name="action_open_with_other_app">다른 앱으로 열기</string>
+    <string name="action_play_video">동영상 재생</string>
+    <string name="app_name">AutoJs6 플러그인 - 동영상 플레이어</string>
+    <string name="error_cannot_play_video">이 동영상을 재생할 수 없습니다 (%1$s)</string>
+    <string name="error_invalid_request">잘못된 동영상 요청입니다</string>
+    <string name="error_no_external_player">사용 가능한 다른 동영상 플레이어가 없습니다</string>
+    <string name="plugin_description">AutoJs6 탐색기에서 동영상을 직접 재생</string>
+</resources>
