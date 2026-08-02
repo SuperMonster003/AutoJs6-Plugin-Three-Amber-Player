@@ -1,0 +1,7 @@
+-keep class io.github.supermonster003.autojs6.plugin.videoplayer.ExplorerActionService { *; }
+-keep class io.github.supermonster003.autojs6.plugin.videoplayer.ExplorerActionActivity { *; }
+-keep class io.github.supermonster003.autojs6.plugin.videoplayer.ExternalViewActivity { *; }
+-keep class io.github.supermonster003.autojs6.plugin.videoplayer.VideoPlayerActivity { *; }
+-keep class io.github.supermonster003.autojs6.plugin.videoplayer.WakeActivity { *; }
+-keep class org.autojs.plugin.common.api.PluginInfo { *; }
+-keep class org.autojs.plugin.explorer.api.** { *; }
