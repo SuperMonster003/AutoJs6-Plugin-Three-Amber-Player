@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_back">Back</string>
+    <string name="action_open_with_other_app">Open with another app</string>
+    <string name="action_play_video">Play video</string>
+    <string name="app_name">AutoJs6 Plugin - Video Player</string>
+    <string name="error_cannot_play_video">Could not play this video (%1$s)</string>
+    <string name="error_invalid_request">Invalid video request</string>
+    <string name="error_no_external_player">No other video player is available</string>
+    <string name="plugin_description">Play videos directly from AutoJs6 Explorer</string>
+</resources>
