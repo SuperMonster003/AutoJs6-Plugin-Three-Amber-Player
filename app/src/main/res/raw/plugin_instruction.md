@@ -1,8 +1,8 @@
 # Video Player
 
-Video Player adds a primary read-only video action to AutoJs6 Explorer. It uses AndroidX Media3 ExoPlayer and PlayerView, starts playback automatically, handles audio focus and noisy output changes, and restores playback position and play state.
+Video Player adds a primary read-only video action to the file manager. It uses AndroidX Media3 ExoPlayer and PlayerView, starts playback automatically, handles audio focus and noisy output changes, and restores playback position and play state.
 
-The plugin requires AutoJs6 build 5269+. When it is installed, enabled, trusted, and compatible, matching video files open in this player. If it is missing or unavailable, AutoJs6 falls back to the Android ACTION_VIEW route. Audio playback and image viewing remain independent plugin capabilities.
+The plugin requires host build 5269+. When it is installed, enabled, trusted, and compatible, matching video files open in this player. If it is missing or unavailable, the host falls back to the Android ACTION_VIEW route. Audio playback and image viewing remain independent plugin capabilities.
 
 Explorer extensions:
 
@@ -10,7 +10,7 @@ Explorer extensions:
 
 Safety and privacy limits:
 
-- Explorer execution requires the signature-level AutoJs6 plugin permission.
+- Explorer execution requires the signature-level plugin permission.
 - The plugin accepts content URIs with temporary read-only access and never writes the source.
 - Write and persistable grants are rejected. Prefix access is never forwarded to the player.
 - A separate ACTION_VIEW entry accepts only read-only video content URIs and discards incoming extras and ClipData.

@@ -2,7 +2,7 @@
 
 <div align="center">
   <p>
-    <img src="{{ repo_url }}/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="autojs6-plugin-video-player-ic-launcher" border="0" width="128" />
+    <img src="{{ repo_url }}/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
   </p>
 
   <p>{{ text_plugin_synopsis }}</p>
@@ -87,7 +87,6 @@ Explorer MIME types: {{ explorer_mime_types }}
 external view action: {{ external_view_action }}
 external MIME type: {{ external_mime_type }}
 required host build: {{ required_host_build }}
-supported ABIs: {{ supported_abis }}
 ```
 
 {{ p_plugin_scope }}

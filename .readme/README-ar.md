@@ -2,10 +2,10 @@
 
 <div align="center">
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="autojs6-plugin-video-player-ic-launcher" border="0" width="128" />
+    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
   </p>
 
-  <p>تشغيل فيديو للقراءة فقط في مستكشف AutoJs6 مع معالجة آمنة لـ content URI</p>
+  <p>ملحق مدير الملفات. تشغيل ملفات الفيديو مباشرة</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -39,7 +39,7 @@
 
 ******
 
-يشغل ملحق AutoJs6 Video Player محتوى الفيديو الذي يقدمه مستكشف AutoJs6 أو تطبيق Android آخر عبر وصول مؤقت للقراءة فقط إلى content URI. يستخدم AndroidX Media3 ExoPlayer ولا يعدل فيديو المصدر مطلقا.
+يشغل Video Player محتوى الفيديو الذي يقدمه مدير الملفات أو تطبيق Android آخر عبر وصول مؤقت للقراءة فقط إلى content URI. يستخدم AndroidX Media3 ExoPlayer ولا يعدل فيديو المصدر مطلقا.
 
 ******
 
@@ -59,11 +59,11 @@
 
 ******
 
-يدمج AutoJs6 هذا الملحق في مسار فتح الفيديو الرئيسي في `app/src/main/java/org/autojs/autojs/ui/explorer/ExplorerView.kt` وإجراء التشغيل في `app/src/main/java/org/autojs/autojs/ui/main/scripts/MediaInfoDialogManager.kt`.
+يستخدم المضيف هذا الملحق لمسار فتح الفيديو الرئيسي وإجراء التشغيل.
 
 بعد تثبيت الملحق وتمكينه وتوثيقه والتأكد من توافقه يؤدي فتح فيديو مطابق إلى تشغيل الإجراء `play-video` بوصفه عارض Explorer الرئيسي.
 
-إذا كان الملحق مفقودا أو معطلا أو غير متاح أو غير متوافق أو تعذر تشغيله يعود AutoJs6 إلى مسار النظام `android.intent.action.VIEW` حتى يتمكن تطبيق فيديو آخر مثبت من معالجة الملف.
+إذا كان الملحق مفقودا أو معطلا أو غير متاح أو غير متوافق أو تعذر تشغيله يعود المضيف إلى مسار النظام `android.intent.action.VIEW` حتى يتمكن تطبيق فيديو آخر مثبت من معالجة الملف.
 
 يطابق هذا الملحق ملفات الفيديو فقط. يظل تشغيل الصوت وعرض الصور قدرات مستقلة لملحقات أخرى ولا يتم تضمينها في ملف APK هذا.
 
@@ -85,7 +85,7 @@ MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V
 
 ******
 
-يكتشف AutoJs6 الملحق وينفذه بالمعرفات التالية:
+يكتشف المضيف الملحق وينفذه بالمعرفات التالية:
 
 ```text
 service action: org.autojs.plugin.EXPLORER_ACTION
@@ -100,12 +100,11 @@ Explorer MIME types: empty
 external view action: android.intent.action.VIEW
 external MIME type: video/*
 required host build: 5269
-supported ABIs: unrestricted (supportedAbis = emptyArray())
 ```
 
 يوفر الإصدار 1 إجراء Explorer رئيسيا للقراءة فقط لامتدادات الفيديو المدرجة. يقبل المدخل الخارجي المستقل content URI للقراءة فقط مع أي نوع MIME فرعي صالح من `video/*`. يعتمد فك الترميز الفعلي على مستخرجات Media3 وبرامج الترميز المتاحة على الجهاز.
 
-تم تنفيذ الملحق بالكامل على JVM ولا يحتوي على مكتبة أصلية. يعلن `supportedAbis = emptyArray()` وينشر كملف APK واحد مستقل عن ABI. يتطلب بناء المضيف AutoJs6 رقم 5269 أو أحدث.
+يتطلب الإصدار 5269 أو أحدث من المضيف.
 
 ******
 
@@ -134,17 +133,23 @@ supported ABIs: unrestricted (supportedAbis = emptyArray())
 
 ******
 
+# v1.0.1
+
+###### 2026/08/08
+
+* `إصلاح` إرجاع ارتباط صالح بخدمة Explorer Action عند التمكين من مركز المكونات الإضافية
+* `تحسين` اختصار اسم المكون الإضافي ووصفه وصياغة وثائق المستخدم بلغة أكثر طبيعية
+
 # v1.0.0
 
 ###### 2026/08/02
 
 * `ميزة` ملحق Video Player بمعرف الملحق `video-player` ومعرف الإجراء `play-video` والمحرك `explorer-action` والمتغير `default`
-* `ميزة` إجراء Explorer رئيسي للقراءة فقط عبر الإصدار 2 من البروتوكول مع مطابق MIME فارغ, لا يطابق بدقة سوى امتدادات الفيديو الـ 23 الحالية للمضيف ويشترط بناء المضيف AutoJs6 رقم 5269
+* `ميزة` إجراء Explorer رئيسي للقراءة فقط عبر الإصدار 2 من البروتوكول مع مطابق MIME فارغ, لا يطابق بدقة سوى امتدادات الفيديو الـ 23 الحالية للمضيف ويشترط بناء المضيف رقم 5269
 * `ميزة` مدخل Explorer محمي بالتوقيع مع تحقق صارم من content URI للهدف والأصل وClipData والمصدر واسم العرض والحجم ونوع MIME والامتداد والمنح ثم إعادة توجيه مصغرة إلى مشغل غير مصدر
 * `ميزة` مدخل ACTION_VIEW مستقل ومصدر من أجل content URI للفيديو للقراءة فقط مع تجاهل extras وClipData غير الموثوقة ورفض المنح المحظورة والحماية من الحلقة الذاتية
 * `ميزة` تشغيل Media3 ExoPlayer وPlayerView مع التشغيل التلقائي وعناصر التحكم القياسية وتركيز الصوت ومعالجة تحول خرج الصوت إلى حالة noisy وحفظ الموضع وحالة التشغيل وإبقاء الشاشة قيد التشغيل أثناء التشغيل الفعلي فقط
 * `ميزة` استعادة آمنة باستخدام الفتح بتطبيق آخر بعد فشل التشغيل عبر Intent جديد للقراءة فقط يستبعد هذا الملحق صراحة
-* `ميزة` تنفيذ JVM خالص من دون مكتبة أصلية وإعلان ABI غير محدود عبر `supportedAbis = emptyArray()` وملف APK واحد مستقل عن ABI
 * `ميزة` بيانات الملحق ونصوص الواجهة وتعليمات الاستخدام وملفات README وسجلات التغييرات المترجمة إلى الإسبانية والفرنسية والروسية والعربية واليابانية والكورية والإنجليزية والصينية المبسطة والصينية التقليدية لهونغ كونغ والصينية التقليدية لتايوان
 * `تبعية` إضافة AndroidX Media3 ExoPlayer وUI الإصدار 1.10.1
 * `تبعية` إضافة بيئة تشغيل Kotlin Parcelize الإصدار 2.2.21

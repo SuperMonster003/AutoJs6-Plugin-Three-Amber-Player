@@ -3,9 +3,9 @@
     <string name="action_back">Atrás</string>
     <string name="action_open_with_other_app">Abrir con otra aplicación</string>
     <string name="action_play_video">Reproducir video</string>
-    <string name="app_name">Complemento de AutoJs6 - Reproductor de video</string>
+    <string name="app_name">Reproductor de video</string>
     <string name="error_cannot_play_video">No se pudo reproducir este video (%1$s)</string>
     <string name="error_invalid_request">Solicitud de video no válida</string>
     <string name="error_no_external_player">No hay otro reproductor de video disponible</string>
-    <string name="plugin_description">Reproduce videos directamente desde el Explorador de AutoJs6</string>
+    <string name="plugin_description">Complemento del gestor de archivos. Reproducir archivos de video directamente</string>
 </resources>

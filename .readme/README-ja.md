@@ -2,10 +2,10 @@
 
 <div align="center">
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="autojs6-plugin-video-player-ic-launcher" border="0" width="128" />
+    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
   </p>
 
-  <p>安全なcontent URI処理を備えたAutoJs6 Explorer向け読み取り専用動画再生</p>
+  <p>ファイルマネージャープラグイン. 動画ファイルを直接再生</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -39,7 +39,7 @@
 
 ******
 
-AutoJs6 Video Playerプラグインは, AutoJs6 Explorerまたは別のAndroidアプリケーションから一時的な読み取り専用content URIアクセスで渡された動画コンテンツを再生します. AndroidX Media3 ExoPlayerを使用し, 元の動画を変更しません.
+Video Playerは, ファイルマネージャーまたは別のAndroidアプリケーションから一時的な読み取り専用content URIアクセスで渡された動画コンテンツを再生します. AndroidX Media3 ExoPlayerを使用し, 元の動画を変更しません.
 
 ******
 
@@ -59,11 +59,11 @@ AutoJs6 Video Playerプラグインは, AutoJs6 Explorerまたは別のAndroid�
 
 ******
 
-AutoJs6は `app/src/main/java/org/autojs/autojs/ui/explorer/ExplorerView.kt` の主要な動画オープン経路と `app/src/main/java/org/autojs/autojs/ui/main/scripts/MediaInfoDialogManager.kt` の再生アクションにこのプラグインを統合します.
+ホストは主要な動画オープン経路と再生アクションでこのプラグインを使用します.
 
 プラグインがインストール済み, 有効, 信頼済み, 互換であれば, 一致する動画を開くとExplorerのプライマリビューアとしてアクション `play-video` が起動します.
 
-プラグインが未インストール, 無効, 利用不可, 非互換, または起動できない場合, AutoJs6はシステムの `android.intent.action.VIEW` 経路へフォールバックし, インストール済みの別の動画アプリケーションにファイルを渡します.
+プラグインが未インストール, 無効, 利用不可, 非互換, または起動できない場合, ホストはシステムの `android.intent.action.VIEW` 経路へフォールバックし, インストール済みの別の動画アプリケーションにファイルを渡します.
 
 このプラグインは動画ファイルだけを対象にします. 音声再生と画像表示は独立したプラグイン機能であり, このAPKには含まれません.
 
@@ -85,7 +85,7 @@ MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V
 
 ******
 
-AutoJs6は次の識別子でプラグインを検出して実行します:
+ホストは次の識別子でプラグインを検出して実行します:
 
 ```text
 service action: org.autojs.plugin.EXPLORER_ACTION
@@ -100,12 +100,11 @@ Explorer MIME types: empty
 external view action: android.intent.action.VIEW
 external MIME type: video/*
 required host build: 5269
-supported ABIs: unrestricted (supportedAbis = emptyArray())
 ```
 
 バージョン1は一覧の動画拡張子向けに読み取り専用のプライマリExplorerアクションを提供します. 独立した外部エントリは有効な任意の `video/*` MIMEサブタイプを持つ読み取り専用content URIを受け入れます. 実際のデコード可否はMedia3 extractorと端末で利用可能なコーデックに依存します.
 
-プラグインは完全にJVMで実装され, ネイティブライブラリを含みません. `supportedAbis = emptyArray()` を宣言し, ABIに依存しない単一APKとして公開されます. AutoJs6ホストのビルド5269以降が必要です.
+ホストビルド5269以降が必要です.
 
 ******
 
@@ -134,17 +133,23 @@ supported ABIs: unrestricted (supportedAbis = emptyArray())
 
 ******
 
+# v1.0.1
+
+###### 2026/08/08
+
+* `修正` プラグインセンターで有効化したときに有効な Explorer Action サービスバインディングを返す
+* `改善` プラグイン名と説明を簡潔にし, ユーザー向けドキュメントをより自然な表現に調整
+
 # v1.0.0
 
 ###### 2026/08/02
 
 * `機能` プラグインID `video-player`, アクションID `play-video`, エンジン `explorer-action`, バリアント `default` のVideo Playerプラグイン
-* `機能` MIMEマッチャーが空で現在のホスト動画拡張子23種類だけに完全一致し, AutoJs6ホストビルド5269を必要とするプロトコルv2の読み取り専用プライマリExplorerアクション
+* `機能` MIMEマッチャーが空で現在のホスト動画拡張子23種類だけに完全一致し, ホストビルド5269を必要とするプロトコルv2の読み取り専用プライマリExplorerアクション
 * `機能` 対象と親のcontent URI, ClipData, ソース, 表示名, サイズ, MIMEタイプ, 拡張子, grantを厳密に検証し, 非エクスポートプレーヤーへ最小限の情報だけを転送する署名保護Explorerエントリ
 * `機能` 読み取り専用動画content URI向けの独立したエクスポート済みACTION_VIEWエントリ, 信頼できないextrasとClipDataの破棄, 禁止grantの拒否, 自己ループ防止
 * `機能` 自動再生, 標準コントロール, オーディオフォーカス, noisy出力変化への対応, 再生位置と再生状態の保存, 再生中だけの画面点灯を備えたMedia3 ExoPlayerとPlayerViewによる再生
 * `機能` 再生失敗後にこのプラグインを明示的に除外する新しい読み取り専用Intentを使う安全な別のアプリで開く復旧操作
-* `機能` ネイティブライブラリを含まない純粋なJVM実装, `supportedAbis = emptyArray()` によるABI無制限宣言, ABIに依存しない単一APK
 * `機能` スペイン語, フランス語, ロシア語, アラビア語, 日本語, 韓国語, 英語, 簡体字中国語, 香港繁体字中国語, 台湾繁体字中国語にローカライズされたメタデータ, UIテキスト, 使用説明, README, 変更履歴
 * `依存関係` AndroidX Media3 ExoPlayer および UI バージョン 1.10.1 を追加
 * `依存関係` Kotlin Parcelize runtime バージョン 2.2.21 を追加

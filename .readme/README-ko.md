@@ -2,10 +2,10 @@
 
 <div align="center">
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="autojs6-plugin-video-player-ic-launcher" border="0" width="128" />
+    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
   </p>
 
-  <p>안전한 content URI 처리를 지원하는 AutoJs6 탐색기용 읽기 전용 동영상 재생</p>
+  <p>파일 관리자 플러그인. 동영상 파일 직접 재생</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -39,7 +39,7 @@
 
 ******
 
-AutoJs6 Video Player 플러그인은 AutoJs6 탐색기 또는 다른 Android 애플리케이션이 임시 읽기 전용 content URI 접근으로 제공한 동영상 콘텐츠를 재생합니다. AndroidX Media3 ExoPlayer를 사용하며 원본 동영상을 변경하지 않습니다.
+Video Player는 파일 관리자 또는 다른 Android 애플리케이션이 임시 읽기 전용 content URI 접근으로 제공한 동영상 콘텐츠를 재생합니다. AndroidX Media3 ExoPlayer를 사용하며 원본 동영상을 변경하지 않습니다.
 
 ******
 
@@ -59,11 +59,11 @@ AutoJs6 Video Player 플러그인은 AutoJs6 탐색기 또는 다른 Android 애
 
 ******
 
-AutoJs6는 `app/src/main/java/org/autojs/autojs/ui/explorer/ExplorerView.kt`의 기본 동영상 열기 경로와 `app/src/main/java/org/autojs/autojs/ui/main/scripts/MediaInfoDialogManager.kt`의 재생 작업에 이 플러그인을 통합합니다.
+호스트는 기본 동영상 열기 경로와 재생 작업에 이 플러그인을 사용합니다.
 
 플러그인이 설치되고 활성화되고 신뢰되며 호환되는 경우 일치하는 동영상을 열면 기본 탐색기 뷰어로 `play-video` 작업이 실행됩니다.
 
-플러그인이 없거나 비활성화되거나 사용할 수 없거나 호환되지 않거나 실행할 수 없으면 AutoJs6는 시스템 `android.intent.action.VIEW` 경로로 대체하여 설치된 다른 동영상 애플리케이션이 파일을 처리하도록 합니다.
+플러그인이 없거나 비활성화되거나 사용할 수 없거나 호환되지 않거나 실행할 수 없으면 호스트는 시스템 `android.intent.action.VIEW` 경로로 대체하여 설치된 다른 동영상 애플리케이션이 파일을 처리하도록 합니다.
 
 이 플러그인은 동영상 파일만 대상으로 합니다. 오디오 재생과 이미지 보기는 독립적인 플러그인 기능이며 이 APK에 포함되지 않습니다.
 
@@ -85,7 +85,7 @@ MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V
 
 ******
 
-AutoJs6는 다음 식별자로 플러그인을 검색하고 실행합니다:
+호스트는 다음 식별자로 플러그인을 검색하고 실행합니다:
 
 ```text
 service action: org.autojs.plugin.EXPLORER_ACTION
@@ -100,12 +100,11 @@ Explorer MIME types: empty
 external view action: android.intent.action.VIEW
 external MIME type: video/*
 required host build: 5269
-supported ABIs: unrestricted (supportedAbis = emptyArray())
 ```
 
 버전 1은 나열된 동영상 확장자에 대한 읽기 전용 기본 탐색기 작업을 제공합니다. 독립적인 외부 진입점은 유효한 `video/*` MIME 하위 유형을 가진 읽기 전용 content URI를 허용합니다. 실제 디코딩은 Media3 extractor와 기기에서 사용할 수 있는 코덱에 따라 달라집니다.
 
-플러그인은 전부 JVM으로 구현되며 네이티브 라이브러리를 포함하지 않습니다. `supportedAbis = emptyArray()`를 선언하고 ABI 독립적인 단일 APK로 배포됩니다. AutoJs6 호스트 빌드 5269 이상이 필요합니다.
+호스트 빌드 5269 이상이 필요합니다.
 
 ******
 
@@ -134,17 +133,23 @@ supported ABIs: unrestricted (supportedAbis = emptyArray())
 
 ******
 
+# v1.0.1
+
+###### 2026/08/08
+
+* `수정` 플러그인 센터에서 활성화할 때 유효한 Explorer Action 서비스 바인딩 반환
+* `개선` 플러그인 이름과 설명을 간결하게 하고 사용자 문서를 더 자연스럽게 정리
+
 # v1.0.0
 
 ###### 2026/08/02
 
 * `기능` 플러그인 ID `video-player`, 작업 ID `play-video`, 엔진 `explorer-action` 및 변형 `default`를 사용하는 Video Player 플러그인
-* `기능` 빈 MIME matcher로 현재 호스트 동영상 확장자 23개와만 정확히 일치하며 AutoJs6 호스트 빌드 5269를 요구하는 프로토콜 v2 읽기 전용 기본 탐색기 작업
+* `기능` 빈 MIME matcher로 현재 호스트 동영상 확장자 23개와만 정확히 일치하며 호스트 빌드 5269를 요구하는 프로토콜 v2 읽기 전용 기본 탐색기 작업
 * `기능` 대상 및 상위 content URI, ClipData, 원본, 표시 이름, 크기, MIME 유형, 확장자 및 grant를 엄격하게 검증한 뒤 내보내지 않은 플레이어로 최소한의 정보만 전달하는 서명 보호 탐색기 진입점
 * `기능` 읽기 전용 동영상 content URI를 위한 독립적인 내보낸 ACTION_VIEW 진입점, 신뢰할 수 없는 extras 및 ClipData 폐기, 금지된 grant 거부 및 자체 루프 방지
 * `기능` 자동 재생, 표준 컨트롤, 오디오 포커스, noisy 출력 변경 처리, 저장된 재생 위치와 상태 및 실제 재생 중에만 화면 켜짐을 지원하는 Media3 ExoPlayer와 PlayerView 재생
 * `기능` 재생 실패 후 이 플러그인을 명시적으로 제외하는 새 읽기 전용 Intent를 사용하는 안전한 다른 앱으로 열기 복구
-* `기능` 네이티브 라이브러리가 없는 순수 JVM 구현, `supportedAbis = emptyArray()`로 선언한 무제한 ABI 및 ABI 독립적인 단일 APK
 * `기능` 스페인어, 프랑스어, 러시아어, 아랍어, 일본어, 한국어, 영어, 중국어 간체, 홍콩 중국어 번체 및 대만 중국어 번체로 현지화된 메타데이터, 인터페이스 텍스트, 사용 안내, README 및 변경 기록
 * `의존성` AndroidX Media3 ExoPlayer 및 UI 버전 1.10.1 추가
 * `의존성` Kotlin Parcelize runtime 버전 2.2.21 추가

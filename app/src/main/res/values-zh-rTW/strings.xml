@@ -3,9 +3,9 @@
     <string name="action_back">返回</string>
     <string name="action_open_with_other_app">使用其他應用程式開啟</string>
     <string name="action_play_video">播放影片</string>
-    <string name="app_name">AutoJs6 外掛程式 - 影片播放器</string>
+    <string name="app_name">影片播放器</string>
     <string name="error_cannot_play_video">無法播放此影片 (%1$s)</string>
     <string name="error_invalid_request">影片要求無效</string>
     <string name="error_no_external_player">沒有其他可用影片播放器</string>
-    <string name="plugin_description">直接播放 AutoJs6 檔案瀏覽器中的影片</string>
+    <string name="plugin_description">檔案管理器外掛程式. 直接播放影片檔案</string>
 </resources>

@@ -2,10 +2,10 @@
 
 <div align="center">
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="autojs6-plugin-video-player-ic-launcher" border="0" width="128" />
+    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
   </p>
 
-  <p>Reproducción de video de solo lectura para el Explorador de AutoJs6 con gestión segura de content URI</p>
+  <p>Complemento del gestor de archivos. Reproducir archivos de video directamente</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -39,7 +39,7 @@ El README.md actual admite los siguientes idiomas:
 
 ******
 
-El plugin AutoJs6 Video Player reproduce contenido de video proporcionado por el Explorador de AutoJs6 u otra aplicación Android mediante acceso temporal de solo lectura a un content URI. Usa AndroidX Media3 ExoPlayer y nunca modifica el video de origen.
+Video Player reproduce contenido de video proporcionado por el gestor de archivos u otra aplicación Android mediante acceso temporal de solo lectura a un content URI. Usa AndroidX Media3 ExoPlayer y nunca modifica el video de origen.
 
 ******
 
@@ -59,11 +59,11 @@ El plugin AutoJs6 Video Player reproduce contenido de video proporcionado por el
 
 ******
 
-AutoJs6 integra este plugin en la ruta principal de apertura de video de `app/src/main/java/org/autojs/autojs/ui/explorer/ExplorerView.kt` y en la acción Reproducir de `app/src/main/java/org/autojs/autojs/ui/main/scripts/MediaInfoDialogManager.kt`.
+El host usa este complemento para la ruta principal de apertura de video y la acción Reproducir.
 
 Después de instalar, activar, confiar y comprobar la compatibilidad del plugin, al abrir un video coincidente se ejecuta la acción `play-video` como visor principal del Explorador.
 
-Si el plugin falta, está desactivado, no está disponible, es incompatible o no se puede iniciar, AutoJs6 recurre a su ruta de sistema `android.intent.action.VIEW` para que otra aplicación de video instalada pueda gestionar el archivo.
+Si el complemento falta, está desactivado, no está disponible, es incompatible o no se puede iniciar, el host recurre a su ruta de sistema `android.intent.action.VIEW` para que otra aplicación de video instalada pueda gestionar el archivo.
 
 Este plugin solo coincide con archivos de video. La reproducción de audio y la visualización de imágenes siguen siendo capacidades de plugins independientes y no se incluyen en este APK.
 
@@ -85,7 +85,7 @@ MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V
 
 ******
 
-AutoJs6 descubre y ejecuta el plugin con las siguientes identidades:
+El host descubre y ejecuta el complemento con las siguientes identidades:
 
 ```text
 service action: org.autojs.plugin.EXPLORER_ACTION
@@ -100,12 +100,11 @@ Explorer MIME types: empty
 external view action: android.intent.action.VIEW
 external MIME type: video/*
 required host build: 5269
-supported ABIs: unrestricted (supportedAbis = emptyArray())
 ```
 
 La versión 1 proporciona una acción principal de Explorador de solo lectura para las extensiones de video indicadas. La entrada externa independiente acepta un content URI de solo lectura con cualquier subtipo MIME `video/*` válido. La decodificación real depende de los extractores de Media3 y de los códecs disponibles en el dispositivo.
 
-El plugin está implementado completamente en JVM y no contiene bibliotecas nativas. Declara `supportedAbis = emptyArray()` y se publica como un único APK independiente de ABI. Requiere la compilación 5269 o posterior del host AutoJs6.
+Se requiere la compilación 5269 o posterior del host.
 
 ******
 
@@ -134,17 +133,23 @@ El plugin no solicita permisos de almacenamiento ni de INTERNET. Su límite del 
 
 ******
 
+# v1.0.1
+
+###### 2026/08/08
+
+* `Corrección` Devolver un enlace válido al servicio Explorer Action al activarlo desde el centro de complementos
+* `Mejora` Acortar el nombre y la descripción del complemento y hacer más natural la documentación de usuario
+
 # v1.0.0
 
 ###### 2026/08/02
 
 * `Función` Plugin Video Player con ID de plugin `video-player`, ID de acción `play-video`, motor `explorer-action` y variante `default`
-* `Función` Acción principal de Explorador de solo lectura mediante el protocolo v2, con un comparador MIME vacío, que solo coincide con las 23 extensiones de video actuales del host y requiere la compilación 5269 del host AutoJs6
+* `Función` Acción principal de Explorador de solo lectura mediante el protocolo v2, con un comparador MIME vacío, que solo coincide con las 23 extensiones de video actuales del host y requiere la compilación 5269
 * `Función` Entrada de Explorador protegida por firma con validación estricta de content URI de destino y padre, ClipData, origen, nombre para mostrar, tamaño, tipo MIME, extensión y concesiones, seguida de un reenvío mínimo a un reproductor no exportado
 * `Función` Entrada ACTION_VIEW exportada e independiente para content URI de video de solo lectura, con descarte de extras y ClipData no confiables, rechazo de concesiones prohibidas y protección contra bucles propios
 * `Función` Reproducción mediante Media3 ExoPlayer y PlayerView con inicio automático, controles estándar, enfoque de audio, gestión del cambio a salida de audio noisy, posición y estado de reproducción guardados, y pantalla encendida solo durante la reproducción activa
 * `Función` Recuperación segura Abrir con otra aplicación después de un fallo de reproducción, mediante Intents de solo lectura recién creados que excluyen explícitamente este plugin
-* `Función` Implementación JVM pura sin bibliotecas nativas, ABI sin restricciones mediante `supportedAbis = emptyArray()` y un APK independiente de ABI
 * `Función` Metadatos, texto de interfaz, instrucciones de uso, archivos README e historiales localizados en español, francés, ruso, árabe, japonés, coreano, inglés, chino simplificado, chino tradicional de Hong Kong y chino tradicional de Taiwán
 * `Dependencia` Añadido AndroidX Media3 ExoPlayer y UI versión 1.10.1
 * `Dependencia` Añadido runtime de Kotlin Parcelize versión 2.2.21

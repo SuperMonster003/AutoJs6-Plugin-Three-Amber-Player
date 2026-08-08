@@ -3,9 +3,9 @@
     <string name="action_back">返回</string>
     <string name="action_open_with_other_app">使用其他应用打开</string>
     <string name="action_play_video">播放视频</string>
-    <string name="app_name">AutoJs6 插件 - 视频播放器</string>
+    <string name="app_name">视频播放器</string>
     <string name="error_cannot_play_video">无法播放此视频 (%1$s)</string>
     <string name="error_invalid_request">视频请求无效</string>
     <string name="error_no_external_player">没有可用的其他视频播放器</string>
-    <string name="plugin_description">直接播放 AutoJs6 文件浏览器中的视频</string>
+    <string name="plugin_description">文件管理器插件. 直接播放视频文件</string>
 </resources>

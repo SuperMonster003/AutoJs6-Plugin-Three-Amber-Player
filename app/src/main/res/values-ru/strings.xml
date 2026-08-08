@@ -3,9 +3,9 @@
     <string name="action_back">Назад</string>
     <string name="action_open_with_other_app">Открыть в другом приложении</string>
     <string name="action_play_video">Воспроизвести видео</string>
-    <string name="app_name">Плагин AutoJs6 - Видеоплеер</string>
+    <string name="app_name">Видеоплеер</string>
     <string name="error_cannot_play_video">Не удалось воспроизвести это видео (%1$s)</string>
     <string name="error_invalid_request">Недействительный запрос видео</string>
     <string name="error_no_external_player">Другой видеоплеер недоступен</string>
-    <string name="plugin_description">Воспроизводит видео прямо из Проводника AutoJs6</string>
+    <string name="plugin_description">Плагин файлового менеджера. Прямое воспроизведение видеофайлов</string>
 </resources>

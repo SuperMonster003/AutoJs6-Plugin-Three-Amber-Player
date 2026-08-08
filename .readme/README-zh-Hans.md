@@ -2,10 +2,10 @@
 
 <div align="center">
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="autojs6-plugin-video-player-ic-launcher" border="0" width="128" />
+    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
   </p>
 
-  <p>以安全 content URI 处理为 AutoJs6 文件浏览器提供只读视频播放</p>
+  <p>文件管理器插件. 直接播放视频文件</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -39,7 +39,7 @@
 
 ******
 
-AutoJs6 视频播放器插件通过临时只读 content URI 播放由 AutoJs6 文件浏览器或其他 Android 应用提供的视频内容. 插件使用 AndroidX Media3 ExoPlayer, 且绝不修改源视频.
+视频播放器通过临时只读 content URI 播放文件管理器或其他 Android 应用提供的视频内容. 插件使用 AndroidX Media3 ExoPlayer, 且绝不修改源视频.
 
 ******
 
@@ -59,11 +59,11 @@ AutoJs6 视频播放器插件通过临时只读 content URI 播放由 AutoJs6 �
 
 ******
 
-AutoJs6 在 `app/src/main/java/org/autojs/autojs/ui/explorer/ExplorerView.kt` 的视频主打开路径, 以及 `app/src/main/java/org/autojs/autojs/ui/main/scripts/MediaInfoDialogManager.kt` 的播放动作中集成本插件.
+宿主将本插件用于视频主打开路径和播放动作.
 
 安装插件并保持启用, 可信且兼容后, 打开匹配的视频将以文件浏览器主查看器方式启动动作 `play-video`.
 
-如果插件缺失, 已禁用, 不可用, 不兼容或无法启动, AutoJs6 将回退到系统 `android.intent.action.VIEW` 路径, 由其他已安装的视频应用处理文件.
+如果插件缺失, 已禁用, 不可用, 不兼容或无法启动, 宿主将回退到系统 `android.intent.action.VIEW` 路径, 由其他已安装的视频应用处理文件.
 
 本插件仅匹配视频文件. 音频播放与图像查看仍是独立的插件能力, 不包含在此 APK 中.
 
@@ -85,7 +85,7 @@ MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V
 
 ******
 
-AutoJs6 使用以下标识发现并执行插件:
+宿主通过以下标识发现并执行插件:
 
 ```text
 service action: org.autojs.plugin.EXPLORER_ACTION
@@ -100,12 +100,11 @@ Explorer MIME types: empty
 external view action: android.intent.action.VIEW
 external MIME type: video/*
 required host build: 5269
-supported ABIs: unrestricted (supportedAbis = emptyArray())
 ```
 
 版本 1 为列出的视频扩展名提供只读文件浏览器主动作. 独立外部入口接受带有任意有效 `video/*` MIME 子类型的只读 content URI. 实际解码能力取决于 Media3 提取器和设备可用编解码器.
 
-插件完全使用 JVM 实现, 不包含原生库. 插件声明 `supportedAbis = emptyArray()`, 并以单一 ABI 无关 APK 发布. 需要 AutoJs6 宿主构建版本 5269 或更高版本.
+需要宿主构建版本 5269 或更高版本.
 
 ******
 
@@ -134,17 +133,23 @@ supported ABIs: unrestricted (supportedAbis = emptyArray())
 
 ******
 
+# v1.0.1
+
+###### 2026/08/08
+
+* `修复` 在插件中心启用时返回有效的 Explorer Action 服务绑定
+* `优化` 精简插件名称和描述, 并使用户文档表述更自然
+
 # v1.0.0
 
 ###### 2026/08/02
 
 * `新增` 视频播放器插件, 插件 ID 为 `video-player`, 动作 ID 为 `play-video`, 引擎为 `explorer-action`, 变体为 `default`
-* `新增` MIME 匹配器为空且仅按宿主当前 23 种视频扩展名精确匹配的协议 v2 只读文件浏览器主动作, 要求 AutoJs6 宿主构建版本 5269
+* `新增` MIME 匹配器为空且仅按宿主当前 23 种视频扩展名精确匹配的协议 v2 只读文件浏览器主动作, 要求宿主构建版本 5269
 * `新增` 受签名权限保护的文件浏览器入口, 严格验证目标与父级 content URI, ClipData, 来源, 显示名称, 大小, MIME 类型, 扩展名和授权, 随后以最小内容转发到非导出播放器
 * `新增` 面向只读视频 content URI 的独立导出 ACTION_VIEW 入口, 丢弃不可信 extras 与 ClipData, 拒绝禁止的授权并防止自回环
 * `新增` Media3 ExoPlayer 和 PlayerView 播放, 支持自动播放, 标准控件, 音频焦点, 音频输出变为嘈杂环境时的处理, 保存播放位置与播放状态, 以及仅在实际播放时保持屏幕常亮
 * `新增` 播放失败后安全地使用其他应用打开, 通过新建只读 Intent 并明确排除本插件实现恢复
-* `新增` 纯 JVM 实现且不包含原生库, 通过 `supportedAbis = emptyArray()` 声明 ABI 无限制, 并发布单一 ABI 无关 APK
 * `新增` 插件元数据, 界面文本, 使用说明, README 和 CHANGELOG 的多语言资源: 西班牙语/法语/俄语/阿拉伯语/日语/韩语/英语/简体中文/香港繁体/台湾繁体
 * `依赖` 附加 AndroidX Media3 ExoPlayer 和 UI 版本 1.10.1
 * `依赖` 附加 Kotlin Parcelize 运行时版本 2.2.21

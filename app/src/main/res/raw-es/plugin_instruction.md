@@ -1,8 +1,8 @@
 # Reproductor de video
 
-Video Player añade una acción principal de video de solo lectura al Explorador de AutoJs6. Usa AndroidX Media3 ExoPlayer y PlayerView, inicia la reproducción automáticamente, gestiona el enfoque de audio y los cambios a salida de audio noisy, y restaura la posición y el estado de reproducción.
+Video Player añade una acción principal de video de solo lectura al gestor de archivos. Usa AndroidX Media3 ExoPlayer y PlayerView, inicia la reproducción automáticamente, gestiona el enfoque de audio y los cambios a salida de audio noisy, y restaura la posición y el estado de reproducción.
 
-El plugin requiere AutoJs6 build 5269+. Cuando está instalado, activado, es de confianza y compatible, los archivos de video coincidentes se abren en este reproductor. Si falta o no está disponible, AutoJs6 recurre a la ruta Android ACTION_VIEW. La reproducción de audio y la visualización de imágenes siguen siendo capacidades de plugins independientes.
+El complemento requiere la compilación 5269 o posterior del host. Cuando está instalado, activado, es de confianza y compatible, los archivos de video coincidentes se abren en este reproductor. Si falta o no está disponible, el host recurre a la ruta Android ACTION_VIEW. La reproducción de audio y la visualización de imágenes siguen siendo capacidades de complementos independientes.
 
 Extensiones del Explorador:
 
@@ -10,7 +10,7 @@ Extensiones del Explorador:
 
 Límites de seguridad y privacidad:
 
-- La ejecución desde el Explorador requiere el permiso de plugin AutoJs6 de nivel signature.
+- La ejecución desde el gestor de archivos requiere el permiso de complemento de nivel signature.
 - El plugin acepta content URI con acceso temporal de solo lectura y nunca escribe el origen.
 - Se rechazan las concesiones de escritura y persistentes. El acceso prefix nunca se reenvía al reproductor.
 - Una entrada ACTION_VIEW separada solo acepta content URI de video de solo lectura y descarta los extras y ClipData recibidos.

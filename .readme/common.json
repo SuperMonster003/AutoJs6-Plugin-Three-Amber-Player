@@ -15,7 +15,6 @@
   "explorer_mime_types": "empty",
   "external_mime_type": "video/*",
   "required_host_build": "5269",
-  "supported_abis": "unrestricted (supportedAbis = emptyArray())",
   "supported_formats": "MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT",
   "media3_version": "1.10.1"
 }
