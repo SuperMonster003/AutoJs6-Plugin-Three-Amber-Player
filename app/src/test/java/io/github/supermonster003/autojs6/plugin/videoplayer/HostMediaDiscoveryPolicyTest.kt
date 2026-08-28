@@ -41,7 +41,10 @@ class HostMediaDiscoveryPolicyTest {
         )
 
         assertEquals(listOf("broadcast.mxf", "camera.wmv"), queue.items.map { it.displayName })
-        assertEquals("camera.wmv", queue.items[queue.startIndex].displayName)
+        val selected = queue.items[queue.startIndex]
+        assertEquals("camera.wmv", selected.displayName)
+        assertEquals("video/*", selected.mimeType)
+        assertEquals(10L, selected.size)
     }
 
     @Test

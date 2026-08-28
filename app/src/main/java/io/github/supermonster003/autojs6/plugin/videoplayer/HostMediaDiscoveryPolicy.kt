@@ -63,18 +63,18 @@ internal object HostMediaDiscoveryPolicy {
             }
             .associateBy(ExplorerSiblingItem::displayName)
             .toMutableMap()
-        videosByName.putIfAbsent(
-            selectedDisplayName,
-            ExplorerSiblingItem(
-                relativePath = selectedDisplayName,
-                displayName = selectedDisplayName,
-                kind = TARGET_KIND_FILE,
-                mimeType = selectedMimeType,
-                size = selectedSize,
-                lastModified = -1L,
-                readable = true,
-                symbolicLink = false,
-            ),
+        // The selected entry has already crossed the Explorer request boundary. Keep those exact
+        // values even when sibling discovery resolves a more specific MIME type for the same file;
+        // the internal hand-off validates the selected queue entry against this metadata.
+        videosByName[selectedDisplayName] = ExplorerSiblingItem(
+            relativePath = selectedDisplayName,
+            displayName = selectedDisplayName,
+            kind = TARGET_KIND_FILE,
+            mimeType = selectedMimeType,
+            size = selectedSize,
+            lastModified = -1L,
+            readable = true,
+            symbolicLink = false,
         )
 
         val sorted = videosByName.values.sortedWith { first, second ->
