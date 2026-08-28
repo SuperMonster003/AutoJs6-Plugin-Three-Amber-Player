@@ -47,11 +47,24 @@ Video Player lit le contenu vidéo fourni par le gestionnaire de fichiers ou une
 
 ******
 
-- Enregistre une action principale de l'explorateur en lecture seule pour un seul fichier via la version 2 du protocole partagé `org.autojs.plugin.EXPLORER_ACTION`.
+- Compatibilité légère de XVID dans MKV via le décodeur MPEG-4 Part 2 intégré de l’appareil, avec transfert explicite vers un autre lecteur lorsque le décodeur système est indisponible ou échoue.
+- Enregistre une action principale de l'explorateur en lecture seule via la version 12 du protocole partagé `org.autojs.plugin.EXPLORER_ACTION`, avec des capacités facultatives et bornées pour les fichiers frères et la progression.
 - Utilise AndroidX Media3 ExoPlayer et PlayerView pour la lecture automatique, les commandes standard, le focus audio, la gestion du passage à une sortie audio noisy et l'intégration aux codecs de l'appareil.
 - Restaure la position et l'intention de lecture ou de pause après une recréation, et maintient l'écran allumé uniquement pendant la lecture active de la vidéo.
 - Fournit une entrée `android.intent.action.VIEW` exportée distincte pour les content URI en lecture seule avec un type MIME `video/*`.
 - Propose une action sécurisée Ouvrir avec une autre application après un échec de lecture en reconstruisant un Intent de visualisation en lecture seule et en excluant ce plugin de la liste des candidats.
+- Offre une lecture immersive en plein écran avec gestes pour la luminosité, le volume et la navigation, sauts par double touche, vitesse temporaire par appui long et verrouillage des commandes.
+- Propose des vitesses de lecture de 0,25× à 3× ainsi que la bascule en un geste du mode d'affichage et de l'orientation de l'écran.
+- Mémorise localement la position de reprise indexée par des condensés du content URI, effacée une fois la vidéo terminée.
+- Permet de sélectionner les pistes audio et les sous-titres intégrés, désactive les sous-titres par défaut et signale clairement les pistes non prises en charge.
+- Propose la répétition de la vidéo actuelle, un panneau de métadonnées détaillé, l’orientation selon le format et l’incrustation vidéo sur API 26+ avec lecture/pause à distance.
+- Intègre MediaSession pour les commandes des écouteurs, du Bluetooth et du système, avec une notification multimédia affichant le titre et la progression.
+- Minuteur de 15, 30, 45 ou 60 minutes et de fin de vidéo, avec sensibilité persistante et saut par double appui de 5/10/30 secondes.
+- Zoom par pincement de 0,25× à 4× avec réinitialisation par double appui, temps cible lors du déplacement et miniatures facultatives en mémoire.
+- Captures de l’image actuelle sans autorisation sur Android 10+, enregistrées comme PNG séparés via MediaStore sans modifier la vidéo source.
+- Files d'attente vidéo du même dossier triées naturellement via Explorer Action v12, avec précédent / suivant, séquence, aléatoire, répétition d'un élément et lecture automatique du suivant.
+- Découverte des sous-titres externes .srt et .ass correspondants, y compris les suffixes de langue, désactivés par défaut et chargés uniquement après une sélection explicite.
+- Historique de reprise facultatif géré par l'hôte, désactivé par défaut, désactivable ou effaçable dans les réglages AutoJs6, sans marqueur de visionnage dans les listes de fichiers.
 
 ******
 
@@ -61,9 +74,9 @@ Video Player lit le contenu vidéo fourni par le gestionnaire de fichiers ou une
 
 L'hôte utilise ce plugin pour le chemin principal d'ouverture des vidéos et l'action Lire.
 
-Une fois le plugin installé, activé, approuvé et compatible, l'ouverture d'une vidéo correspondante lance l'action `play-video` comme visionneuse principale de l'explorateur.
+Une fois le plugin installé, activé, approuvé et compatible, l'ouverture de tout fichier reconnu comme vidéo par l'hôte lance l'action `play-video` comme visionneuse principale de l'explorateur.
 
-Si le plugin est absent, désactivé, indisponible, incompatible ou impossible à lancer, l'hôte revient à sa route système `android.intent.action.VIEW` afin qu'une autre application vidéo installée puisse traiter le fichier.
+Si le plugin est absent, désactivé, non autorisé, indisponible, incompatible ou impossible à lancer, un hôte compatible affiche des instructions de récupération. Le sélecteur d'applications système ne s'ouvre qu'après le choix explicite Ouvrir avec d'autres applications.
 
 Ce plugin reconnaît uniquement les fichiers vidéo. La lecture audio et l'affichage des images restent des capacités de plugins indépendantes et ne sont pas intégrés à cet APK.
 
@@ -73,7 +86,7 @@ Ce plugin reconnaît uniquement les fichiers vidéo. La lecture audio et l'affic
 
 ******
 
-L'action principale de l'explorateur utilise un filtre MIME vide et correspond exactement à ces 23 extensions vidéo de l'hôte uniquement:
+L'action principale de l'explorateur accepte `video/*` pour tous les types vidéo reconnus par l'hôte et conserve ces 23 filtres d'extension exacts pour la compatibilité avec les anciens hôtes:
 
 ```text
 MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT
@@ -96,15 +109,15 @@ variant: default
 Explorer action id: play-video
 Explorer placement: primary
 access mode: read-only
-Explorer MIME types: empty
+Explorer MIME types: video/*
 external view action: android.intent.action.VIEW
 external MIME type: video/*
-required host build: 5269
+required host build: 5276
 ```
 
-La version 1 fournit une action principale de l'explorateur en lecture seule pour les extensions vidéo indiquées. L'entrée externe indépendante accepte un content URI en lecture seule avec tout sous-type MIME `video/*` valide. Le décodage réel dépend des extracteurs Media3 et des codecs disponibles sur l'appareil.
+La version 1.4 fournit une action principale de l'explorateur en lecture seule selon le protocole v12. Un hôte compatible peut joindre des capacités par requête pour les frères directs et la progression de lecture ; les hôtes sans ces extensions facultatives conservent la lecture d'un seul fichier. L'entrée externe indépendante reste limitée à un content URI en lecture seule avec un sous-type MIME `video/*` valide.
 
-La version 5269 ou ultérieure de l'hôte est requise.
+Les fonctions complètes de coopération nécessitent AutoJs6 6.8.0 build 5276 ou ultérieur et Explorer Action v12 ; cette exigence ne sera pas relevée par les capacités futures du plugin.
 
 ******
 
@@ -112,7 +125,7 @@ La version 5269 ou ultérieure de l'hôte est requise.
 
 ******
 
-Le plugin ne demande aucune autorisation de stockage ou INTERNET. Sa frontière de l'explorateur protégée par signature valide la version 2 du protocole, la surface source, la version de l'hôte, les content URI cible et parent, l'ordre exact de ClipData, le nom affiché, la taille déclarée, le type MIME, l'extension et les indicateurs d'accès en lecture seule. Elle crée ensuite un nouvel Intent explicite pour le lecteur non exporté contenant uniquement l'URI cible, le type MIME, un nom affiché sûr, un élément ClipData cible et l'accès en lecture. La frontière publique ACTION_VIEW accepte séparément uniquement un content URI, un type MIME vidéo et l'accès en lecture exact, ignore tous les extras et ClipData entrants, puis reconstruit la même requête interne minimale.
+Le plugin ne demande aucune autorisation de stockage ou INTERNET. Sa frontière de l'explorateur protégée par signature valide l'enveloppe complète du protocole v12, l'unique cible sélectionnée, la relation au parent, ClipData, les métadonnées, la version de l'hôte et les accès en lecture seule. Les Host Sessions facultatives sont liées par l'hôte à l'UID du plugin et permettent seulement de lister le parent direct du fichier sélectionné et d'ouvrir celui-ci ou un frère direct lisible. Le lecteur privé valide une file opaque bornée et ne reçoit jamais de chemin de système de fichiers. La frontière publique ACTION_VIEW reste indépendante et limitée à un fichier.
 
 ******
 
@@ -120,12 +133,13 @@ Le plugin ne demande aucune autorisation de stockage ou INTERNET. Sa frontière 
 
 ******
 
-- Un content URI cible par demande de lecture.
+- L'explorateur part exactement d'un content URI sélectionné ; une Host Session facultative ne peut exposer que les frères directs lisibles et jamais un accès récursif aux dossiers.
 - L'exécution par l'explorateur nécessite l'autorisation de niveau signature `org.autojs.permission.PLUGIN`.
 - Les accès en écriture et persistants sont toujours refusés. L'accès prefix utilisé pour valider l'URI parent n'est jamais transmis au lecteur.
 - La frontière publique ACTION_VIEW refuse les accès en écriture, persistants et prefix.
 - Les candidats externes sont d'abord résolus, filtrés pour conserver les autres paquets, puis lancés avec un nouvel Intent en lecture seule.
-- Une extension répertoriée ne garantit pas la prise en charge du décodage sur tous les appareils. Media3 et les codecs de plateforme installés déterminent la compatibilité réelle de lecture.
+- L'historique de lecture de l'hôte est désactivé par défaut, ne stocke après consentement explicite que des condensés de chemins canoniques et des valeurs temporelles, et peut être désactivé ou effacé dans les réglages AutoJs6.
+- La reconnaissance comme vidéo ou une extension héritée répertoriée ne garantit pas le décodage sur tous les appareils. Media3 et les codecs de plateforme installés déterminent la compatibilité réelle de lecture.
 
 ******
 
@@ -133,26 +147,37 @@ Le plugin ne demande aucune autorisation de stockage ou INTERNET. Sa frontière 
 
 ******
 
-# v1.0.1
+# v1.4.0
 
-###### 2026/08/08
+###### 2026/08/28
 
-* `Correctif` Renvoyer une liaison de service Explorer Action valide lors de l'activation depuis le centre des plugins
-* `Amélioration` Raccourcir le nom et la description du plugin et rendre la documentation utilisateur plus naturelle
+* `Fonctionnalité` Création de files vidéo du même dossier triées naturellement via une Host Session Explorer Action v12 limitée à la requête et liée à l'UID, avec précédent / suivant, séquence, lecture aléatoire, répétition d'un élément et passage automatique au suivant
+* `Fonctionnalité` Détection des sous-titres externes .srt et .ass correspondants, y compris les variantes à suffixe de langue ; ils restent désactivés par défaut et ne sont chargés qu'après une sélection explicite
+* `Fonctionnalité` Historique de reprise facultatif géré par l'hôte : l'enregistrement est désactivé par défaut, peut être désactivé ou effacé dans les paramètres AutoJs6 et n'ajoute aucun indicateur vu à la liste des fichiers
+* `Correctif` Les requêtes Explorer classées comme vidéo par l'hôte étaient rejetées si leur extension ne figurait pas dans l'ancienne liste de 23 éléments ; les requêtes `video/*` approuvées sont désormais acceptées uniformément
+* `Amélioration` L'accès est limité au fichier sélectionné et aux fichiers frères directs lisibles, sans parcours récursif, écriture, autorisation persistante ni chemin en clair dans le plugin
+* `Amélioration` Les files sérialisées sont limitées à 128 vidéos, 8 sous-titres par vidéo et 128 associations de sous-titres au total, tout en conservant toujours l'élément sélectionné
+* `Amélioration` La compatibilité reste fixée à AutoJs6 6.8.0 build 5276 et Explorer Action v12 ; les hôtes sans extensions facultatives conservent en toute sécurité la lecture d'un seul fichier
+* `Dépendance` Mise à niveau de l'API Explorer Action intégrée du protocole v2 vers l'extension de session multimédia v12 rétrocompatible
 
-# v1.0.0
+# v1.3.1
 
-###### 2026/08/02
+###### 2026/08/27
 
-* `Fonctionnalité` Plugin Video Player avec ID de plugin `video-player`, ID d'action `play-video`, moteur `explorer-action` et variante `default`
-* `Fonctionnalité` Action principale de l'explorateur en lecture seule via le protocole v2, avec filtre MIME vide, correspondant uniquement aux 23 extensions vidéo actuelles de l'hôte et nécessitant la version 5269
-* `Fonctionnalité` Entrée de l'explorateur protégée par signature avec validation stricte des content URI cible et parent, de ClipData, de la source, du nom affiché, de la taille, du type MIME, de l'extension et des accès, suivie d'une transmission minimale vers un lecteur non exporté
-* `Fonctionnalité` Entrée ACTION_VIEW exportée et indépendante pour les content URI vidéo en lecture seule, avec abandon des extras et ClipData non fiables, refus des accès interdits et protection contre les boucles internes
-* `Fonctionnalité` Lecture Media3 ExoPlayer et PlayerView avec démarrage automatique, commandes standard, focus audio, gestion du passage à une sortie audio noisy, sauvegarde de la position et de l'état de lecture, et écran allumé uniquement pendant la lecture active
-* `Fonctionnalité` Récupération sécurisée Ouvrir avec une autre application après un échec de lecture, au moyen de nouveaux Intents en lecture seule qui excluent explicitement ce plugin
-* `Fonctionnalité` Métadonnées, texte d'interface, instructions d'utilisation, fichiers README et historiques localisés en espagnol, français, russe, arabe, japonais, coréen, anglais, chinois simplifié, chinois traditionnel de Hong Kong et chinois traditionnel de Taïwan
-* `Dépendance` Ajout de AndroidX Media3 ExoPlayer et UI version 1.10.1
-* `Dépendance` Ajout du runtime Kotlin Parcelize version 2.2.21
+* `Correctif` Ajout d’une couche légère de compatibilité XVID dans MKV qui confie les pistes XVID VFW/FourCC validées au décodeur MPEG-4 Part 2 intégré de l’appareil, sans transcodage ni modification de la source
+* `Correctif` Arrêt de la lecture audio seule lorsqu’aucun décodeur système compatible n’est disponible ou que le décodage échoue, avec une explication dédiée et l’ouverture dans une autre application
+
+# v1.3.0
+
+###### 2026/08/27
+
+* `Fonctionnalité` Minuteur: pause après 15, 30, 45 ou 60 minutes ou à la fin de la vidéo, avec gestion du conflit avec la répétition
+* `Fonctionnalité` Interaction avec l’image: zoom par pincement de 0,25× à 4×, réinitialisation par double appui et coordination avec les modes d’affichage existants
+* `Fonctionnalité` Aperçu du déplacement: temps cible et miniatures facultatives en mémoire, avec repli silencieux vers le temps seul
+* `Fonctionnalité` Captures de l’image actuelle sur Android 10+ enregistrées comme PNG séparés via MediaStore, sans autorisation de stockage ni modification de la source
+* `Fonctionnalité` Paramètres persistants des gestes pour une sensibilité faible, normale ou élevée et un saut par double appui de 5, 10 ou 30 secondes
+* `Amélioration` Les échéances du minuteur utilisent le temps écoulé et survivent à la recréation de la page sans dépendre des changements d’horloge
+* `Amélioration` L’extraction des miniatures regroupe les demandes rapides sur un seul thread et libère chaque bitmap temporaire devenu obsolète
 
 ##### Pour consulter davantage de versions
 

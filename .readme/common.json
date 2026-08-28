@@ -12,9 +12,9 @@
   "explorer_action_id": "play-video",
   "explorer_placement": "primary",
   "access_mode": "read-only",
-  "explorer_mime_types": "empty",
+  "explorer_mime_types": "video/*",
   "external_mime_type": "video/*",
-  "required_host_build": "5269",
+  "required_host_build": "5276",
   "supported_formats": "MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT",
   "media3_version": "1.10.1"
 }
