@@ -4,6 +4,63 @@
 
 ******
 
+# v1.4.0
+
+###### 2026/08/28
+
+* `Función` Colas de vídeos de la misma carpeta con orden natural mediante una Host Session de Explorer Action v12 limitada a la solicitud y vinculada al UID, con anterior / siguiente, secuencia, aleatorio, repetición individual y avance automático
+* `Función` Detección de subtítulos externos .srt y .ass coincidentes, incluidas variantes con sufijo de idioma; permanecen desactivados por defecto y solo se cargan tras una selección explícita
+* `Función` Historial de reanudación opcional administrado por el host: el registro está desactivado por defecto, se puede desactivar o borrar en los ajustes de AutoJs6 y no añade marcas de visto a la lista de archivos
+* `Corrección` Las solicitudes de Explorer clasificadas por el host como video se rechazaban si su extensión no figuraba en la lista heredada de 23 elementos; ahora se aceptan de manera uniforme las solicitudes `video/*` de confianza
+* `Mejora` El acceso se limita al archivo seleccionado y a archivos hermanos directos legibles, sin recorrido recursivo, escritura, permisos persistentes ni rutas en texto claro dentro del plugin
+* `Mejora` Las colas serializadas se limitan a 128 vídeos, 8 subtítulos por vídeo y 128 asociaciones de subtítulos en total, conservando siempre el elemento seleccionado
+* `Mejora` La compatibilidad permanece en AutoJs6 6.8.0 build 5276 y Explorer Action v12; los hosts sin extensiones opcionales conservan de forma segura la reproducción de un solo archivo
+* `Dependencia` Se actualizó la API Explorer Action incluida del protocolo v2 a la extensión de sesión multimedia v12 retrocompatible
+
+# v1.3.1
+
+###### 2026/08/27
+
+* `Corrección` Se añadió una capa ligera de compatibilidad XVID en MKV que expone las pistas XVID VFW/FourCC validadas al decodificador MPEG-4 Part 2 integrado del dispositivo, sin transcodificar ni modificar el archivo original
+* `Corrección` Se detiene la reproducción de solo audio si no hay un decodificador del sistema compatible o si falla la decodificación, con una explicación específica y la opción de abrir con otra aplicación
+
+# v1.3.0
+
+###### 2026/08/27
+
+* `Función` Temporizador: pausa tras 15, 30, 45 o 60 minutos o al finalizar el video actual, con gestión del conflicto con la repetición
+* `Función` Interacción con la imagen: zoom por pellizco de 0,25× a 4×, restablecimiento por doble toque y coordinación con los modos de ajuste existentes
+* `Función` Vista previa al arrastrar: tiempo de destino y miniaturas opcionales en memoria, con degradación silenciosa a solo el tiempo
+* `Función` Capturas del fotograma actual en Android 10+ guardadas como PNG independientes mediante MediaStore, sin permiso de almacenamiento ni modificación del origen
+* `Función` Ajustes persistentes de gestos para sensibilidad baja, normal o alta y saltos por doble toque de 5, 10 o 30 segundos
+* `Mejora` Los plazos del temporizador usan tiempo transcurrido y sobreviven a la recreación de la página sin depender de cambios del reloj
+* `Mejora` La extracción de miniaturas combina las solicitudes rápidas en un único hilo y libera cada bitmap temporal que queda obsoleto
+
+# v1.2.0
+
+###### 2026/08/27
+
+* `Función` Selección de pistas: cambia entre pistas de audio integradas con idioma y canales, y activa bajo demanda los subtítulos integrados, desactivados de forma predeterminada
+* `Función` Imagen en imagen en Android 8.0+: entrada automática al salir durante la reproducción, entrada manual, relación de aspecto del video y reproducción/pausa remota
+* `Función` Integración multimedia del sistema: controles MediaSession para auriculares y Bluetooth, más una notificación con título, acciones y progreso
+* `Función` Herramientas de reproducción: repetición del video actual, panel de información y selección de orientación una sola vez según la relación de aspecto
+* `Mejora` Las pistas no compatibles se marcan claramente y no se pueden seleccionar; los controles se ocultan cuando no hay una elección real
+* `Mejora` La solicitud interna estricta ahora conserva solo el tamaño declarado validado junto al nombre seguro para el panel de información
+* `Dependencia` Se añadió AndroidX Media3 Session 1.10.1
+
+# v1.1.0
+
+###### 2026/08/27
+
+* `Función` Controles gestuales: deslizamientos verticales en la mitad izquierda o derecha para el brillo o el volumen multimedia, deslizamientos horizontales para buscar, doble toque lateral para saltar 10 segundos, doble toque central para reproducir/pausar y pulsación larga para una velocidad temporal de 2×
+* `Función` Velocidad de reproducción: nueve niveles de 0,25× a 3×, con la velocidad actual resaltada en la barra de control cuando no es 1×
+* `Función` Pantalla completa inmersiva: barras del sistema ocultas con soporte para muescas de pantalla, barras de título y de control flotantes con ocultado automático, y cambio con un toque de la orientación de la pantalla y el modo de ajuste
+* `Función` Bloqueo de controles: un toque desactiva todos los controles y gestos para evitar toques accidentales
+* `Función` Memoria de reanudación: la reproducción continúa desde la última posición local indexada por un resumen SHA-256 del content URI, borrada al terminar y limitada a 200 entradas
+* `Mejora` Barra de control inferior reconstruida con reproducir/pausar, saltos de 10 segundos, barra de progreso arrastrable y visualización del progreso de búfer
+* `Mejora` El panel de error de reproducción ahora ofrece una acción de reintento junto a abrir con otra aplicación
+* `Mejora` Los cambios de configuración como la rotación ya no reconstruyen el reproductor para un cambio más fluido
+
 # v1.0.1
 
 ###### 2026/08/08

@@ -5,6 +5,77 @@
   "changelog_label_improvement": "Improvement",
   "changelog_label_dependency": "Dependency",
   "$data": {
+    "v1.4.0": {
+      "released_date": "2026/08/28",
+      "feature": [
+        "Built naturally ordered same-folder video queues through Explorer Action v12's request-scoped, UID-bound Host Session, with previous / next, sequence, shuffle, repeat-one, and automatic next-item playback",
+        "Discovered matching .srt and .ass sidecars, including language-suffix variants, kept subtitles off by default, and loaded them only after explicit selection",
+        "Added opt-in host-owned resume history: recording is off by default, can be disabled or cleared in AutoJs6 settings, and adds no watched marker to file lists"
+      ],
+      "fix": [
+        "Explorer requests classified by the host as video were rejected unless their extensions appeared in the legacy 23-item allowlist; trusted `video/*` requests are now accepted uniformly"
+      ],
+      "improvement": [
+        "Restricted sibling access to the selected file and readable direct siblings only, with no recursive directory traversal, writes, persistent grants, or plaintext paths in the plugin",
+        "Bound serialized queues to 128 videos, 8 sidecars per video, and 128 total subtitle attachments while always retaining the selected item",
+        "Kept compatibility at AutoJs6 6.8.0 build 5276 and Explorer Action v12; hosts without the optional extensions safely retain single-file playback"
+      ],
+      "dependency": [
+        "Upgraded the bundled Explorer Action API from protocol v2 to the backward-compatible v12 media-session extension"
+      ]
+    },
+    "v1.3.1": {
+      "released_date": "2026/08/27",
+      "fix": [
+        "Added a narrow XVID-in-MKV compatibility layer that exposes validated VFW/FourCC XVID tracks to the device's built-in MPEG-4 Part 2 decoder without transcoding or modifying the source",
+        "Stopped audio-only playback when no compatible system decoder exists or decoding fails, with a specific explanation and Open with another app recovery"
+      ]
+    },
+    "v1.3.0": {
+      "released_date": "2026/08/27",
+      "feature": [
+        "Sleep timer: pause after 15, 30, 45, or 60 minutes or when the current video ends, with repeat-mode conflict handling",
+        "Picture interaction: pinch zoom from 0.25× to 4×, double-tap reset while zoomed, and coordination with the existing resize modes",
+        "Scrub preview: a target-time bubble plus best-effort in-memory thumbnails that silently fall back to time only",
+        "Android 10+ current-frame screenshots saved as separate PNG files through MediaStore without storage permission or source modification",
+        "Persistent gesture settings for low, normal, or high sensitivity and 5, 10, or 30-second double-tap seeking"
+      ],
+      "improvement": [
+        "Sleep deadlines use elapsed realtime and survive playback-page state recreation without depending on wall-clock changes",
+        "Thumbnail extraction coalesces rapid scrub requests on one worker and releases every transient bitmap when it becomes stale"
+      ]
+    },
+    "v1.2.0": {
+      "released_date": "2026/08/27",
+      "feature": [
+        "Track selection: switch among embedded audio tracks with language and channel details, and opt into embedded subtitles that remain off by default",
+        "Picture-in-picture on Android 8.0+: automatic entry when leaving during playback, a manual entry, video aspect ratio matching, and remote play/pause",
+        "System media integration: MediaSession headset and Bluetooth controls plus a media-style notification with title, playback actions, and progress",
+        "Playback utilities: repeat-current mode, a video information panel, and one-time aspect-based orientation selection"
+      ],
+      "improvement": [
+        "Unsupported tracks are clearly marked and cannot be selected; track controls stay hidden when no real choice is available",
+        "The strict internal request now preserves only the validated declared size alongside the safe display name for the information panel"
+      ],
+      "dependency": [
+        "Added AndroidX Media3 Session version 1.10.1"
+      ]
+    },
+    "v1.1.0": {
+      "released_date": "2026/08/27",
+      "feature": [
+        "Gesture controls: vertical swipes on the left or right half adjust brightness or media volume, horizontal swipes seek, side double taps jump 10 seconds, a center double tap toggles play/pause, and a long press engages a temporary 2× speed",
+        "Playback speed: nine selectable rates from 0.25× to 3×, with the control bar highlighting the current rate when it is not 1×",
+        "Immersive fullscreen: hidden system bars with display cutout support, floating auto-hiding title and control bars, and one-tap screen orientation and resize mode switching",
+        "Control lock: one tap disables every control and gesture to prevent accidental touches",
+        "Resume memory: playback continues from the last local position keyed by a SHA-256 digest of the content URI, cleared after finishing and capped at 200 entries"
+      ],
+      "improvement": [
+        "Rebuilt bottom control bar with play/pause, 10-second jumps, a draggable progress bar, and buffered progress display",
+        "Playback error panel now offers a retry action next to opening with another app",
+        "Interface configuration changes such as rotation no longer rebuild the player for smoother switching"
+      ]
+    },
     "v1.0.1": {
       "released_date": "2026/08/08",
       "fix": [
