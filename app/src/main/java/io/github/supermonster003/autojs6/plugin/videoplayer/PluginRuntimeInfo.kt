@@ -15,14 +15,15 @@ internal object VideoPlayerPlugin {
     const val ID = "video-player"
     const val ACTION_ID = "play-video"
     const val VARIANT = "default"
-    const val REQUIRED_HOST_VERSION = 5269L
+    const val PROTOCOL_VERSION = 12
+    const val REQUIRED_HOST_VERSION = 5276L
     const val LABEL_RESOURCE_NAME = "action_play_video"
     const val LABEL_FALLBACK = "Play video"
     const val ACTIVITY_CLASS_NAME =
         "io.github.supermonster003.autojs6.plugin.videoplayer.ExplorerActionActivity"
     const val ACTION_PRIORITY = 20
 
-    val MIME_TYPES = emptyArray<String>()
+    val MIME_TYPES = arrayOf("video/*")
 
     val EXTENSIONS = arrayOf(
         "mp4",
@@ -73,7 +74,7 @@ internal fun Context.videoPlayerPluginInfo(): PluginInfo {
         supportedAbis = emptyArray()
         capabilities = Bundle().apply {
             putLong(PluginCapabilityKeys.REQUIRES_HOST_VERSION, VideoPlayerPlugin.REQUIRED_HOST_VERSION)
-            putInt(ExplorerActionCapabilityKeys.PROTOCOL_VERSION, ExplorerActionProtocol.VERSION)
+            putInt(ExplorerActionCapabilityKeys.PROTOCOL_VERSION, VideoPlayerPlugin.PROTOCOL_VERSION)
         }
     }
 }
@@ -86,8 +87,11 @@ internal fun videoPlayerActionCatalog(): Bundle {
         putString(ExplorerActionCatalogKeys.ACTIVITY_CLASS_NAME, VideoPlayerPlugin.ACTIVITY_CLASS_NAME)
         putInt(ExplorerActionCatalogKeys.PRIORITY, VideoPlayerPlugin.ACTION_PRIORITY)
         putInt(ExplorerActionCatalogKeys.TARGET_KIND, ExplorerActionValues.TARGET_FILE)
+        putInt(ExplorerActionCatalogKeys.CARDINALITY, ExplorerActionValues.CARDINALITY_SINGLE)
         putInt(ExplorerActionCatalogKeys.ACCESS_MODE, ExplorerActionValues.ACCESS_READ_ONLY)
         putInt(ExplorerActionCatalogKeys.PLACEMENT, ExplorerActionValues.PLACEMENT_PRIMARY)
+        putBoolean(ExplorerActionCatalogKeys.READ_SIBLINGS, true)
+        putBoolean(ExplorerActionCatalogKeys.PLAYBACK_PROGRESS, true)
         putStringArrayList(
             ExplorerActionCatalogKeys.MIME_TYPES,
             ArrayList(VideoPlayerPlugin.MIME_TYPES.asList()),
@@ -98,7 +102,7 @@ internal fun videoPlayerActionCatalog(): Bundle {
         )
     }
     return Bundle().apply {
-        putInt(ExplorerActionCatalogKeys.PROTOCOL_VERSION, ExplorerActionProtocol.VERSION)
+        putInt(ExplorerActionCatalogKeys.PROTOCOL_VERSION, VideoPlayerPlugin.PROTOCOL_VERSION)
         putParcelableArrayList(ExplorerActionCatalogKeys.ACTIONS, arrayListOf(action))
     }
 }

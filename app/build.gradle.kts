@@ -131,6 +131,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.material)
     implementation("androidx.media3:media3-exoplayer:1.10.1")
+    implementation("androidx.media3:media3-session:1.10.1")
     implementation("androidx.media3:media3-ui:1.10.1")
 
     testImplementation(libs.junit)

@@ -9,10 +9,11 @@ import android.os.Build
 
 internal object ExternalPlaybackLauncher {
 
-    fun open(activity: Activity, request: AndroidPlaybackRequest): Boolean = runCatching {
+    fun open(activity: Activity, item: AndroidPlaybackItem): Boolean = runCatching {
+        val externalUri = item.externalUri ?: return false
         val baseIntent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(request.targetUri, request.mimeType)
-            clipData = ClipData.newRawUri(request.displayName, request.targetUri)
+            setDataAndType(externalUri, item.mimeType)
+            clipData = ClipData.newRawUri(item.displayName, externalUri)
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
         val components = queryActivities(activity.packageManager, baseIntent)

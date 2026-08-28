@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_audio_track"
+        android:icon="@drawable/ic_audiotrack"
+        android:title="@string/action_audio_track"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_subtitle_track"
+        android:icon="@drawable/ic_subtitles"
+        android:title="@string/action_subtitle_track"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_repeat"
+        android:icon="@drawable/ic_sequence"
+        android:title="@string/playback_mode_sequence"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_playlist"
+        android:icon="@drawable/ic_queue"
+        android:title="@string/action_playlist"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_previous_video"
+        android:icon="@drawable/ic_previous"
+        android:title="@string/action_previous_video"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_next_video"
+        android:icon="@drawable/ic_next"
+        android:title="@string/action_next_video"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_picture_in_picture"
+        android:icon="@drawable/ic_picture_in_picture"
+        android:title="@string/action_picture_in_picture"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_sleep_timer"
+        android:icon="@drawable/ic_timer"
+        android:title="@string/action_sleep_timer"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_screenshot"
+        android:icon="@drawable/ic_photo_camera"
+        android:title="@string/action_screenshot"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_gesture_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/action_gesture_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_video_info"
+        android:icon="@drawable/ic_info"
+        android:title="@string/action_video_info"
+        app:showAsAction="never" />
+
+</menu>

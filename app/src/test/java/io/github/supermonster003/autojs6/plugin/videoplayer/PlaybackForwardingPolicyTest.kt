@@ -10,9 +10,10 @@ import org.autojs.plugin.explorer.api.ExplorerActionValues
 class PlaybackForwardingPolicyTest {
 
     @Test
-    fun explorerForwarding_keepsOnlyTargetReadGrantAndDisplayName() {
+    fun explorerForwarding_keepsOnlyTargetReadGrantAndSafeMetadata() {
         val spec = PlaybackForwardingPolicy.fromExplorer(
             ValidatedExplorerRequest(
+                targetId = "target-id",
                 targetUri = TARGET_URI,
                 parentUri = "content://authority/root/videos",
                 displayName = "sample.mp4",
@@ -28,8 +29,12 @@ class PlaybackForwardingPolicyTest {
         assertFalse(spec.grantWrite)
         assertFalse(spec.grantPersistable)
         assertFalse(spec.grantPrefix)
+        assertEquals(99L, spec.declaredSize)
         assertEquals(
-            mapOf(VideoRequestPolicy.DISPLAY_NAME_EXTRA to "sample.mp4"),
+            mapOf(
+                VideoRequestPolicy.DISPLAY_NAME_EXTRA to "sample.mp4",
+                VideoRequestPolicy.DECLARED_SIZE_EXTRA to 99L,
+            ),
             spec.extras,
         )
     }
@@ -39,18 +44,33 @@ class PlaybackForwardingPolicyTest {
         val spec = PlaybackForwardingPolicy.fromExternal(
             ValidatedExternalRequest(TARGET_URI, "video/x-matroska"),
             "unsafe/\u202Ename.mkv",
+            123L,
         )
 
         assertEquals("unsafename.mkv", spec.displayName)
         assertEquals("video/x-matroska", spec.mimeType)
-        assertEquals(setOf(VideoRequestPolicy.DISPLAY_NAME_EXTRA), spec.extras.keys)
+        assertEquals(123L, spec.declaredSize)
+        assertEquals(
+            setOf(
+                VideoRequestPolicy.DISPLAY_NAME_EXTRA,
+                VideoRequestPolicy.DECLARED_SIZE_EXTRA,
+            ),
+            spec.extras.keys,
+        )
         assertEquals(listOf(TARGET_URI), spec.clipUris)
         assertTrue(spec.grantRead)
         assertFalse(spec.grantWrite || spec.grantPersistable || spec.grantPrefix)
+
+        val unknownSize = PlaybackForwardingPolicy.fromExternal(
+            ValidatedExternalRequest(TARGET_URI, "video/x-matroska"),
+            "sample.mkv",
+            -99L,
+        )
+        assertEquals(VideoRequestPolicy.UNKNOWN_DECLARED_SIZE, unknownSize.declaredSize)
     }
 
     @Test
-    fun catalog_coversCurrentHostVideoExtensionsWithoutDuplicates() {
+    fun catalog_acceptsHostVideoMimeAndKeepsLegacyExtensionsWithoutDuplicates() {
         val expected = listOf(
             "mp4", "mpeg4", "mpg4", "avi", "mkv", "mov", "flv", "webm", "m4v", "3gp",
             "mpeg", "3g2", "3gp2", "3gpp", "f4v", "m2t", "m2ts", "mts", "ts", "mpg",
@@ -59,10 +79,11 @@ class PlaybackForwardingPolicyTest {
 
         assertEquals(expected, VideoPlayerPlugin.EXTENSIONS.asList())
         assertEquals(expected.size, VideoPlayerPlugin.EXTENSIONS.toSet().size)
-        assertTrue(VideoPlayerPlugin.MIME_TYPES.isEmpty())
-        assertEquals(2, ExplorerActionProtocol.VERSION)
+        assertEquals(listOf("video/*"), VideoPlayerPlugin.MIME_TYPES.asList())
+        assertEquals(12, ExplorerActionProtocol.VERSION)
         assertEquals(2, ExplorerActionValues.PLACEMENT_PRIMARY)
-        assertEquals(5269L, VideoPlayerPlugin.REQUIRED_HOST_VERSION)
+        assertEquals(12, VideoPlayerPlugin.PROTOCOL_VERSION)
+        assertEquals(5276L, VideoPlayerPlugin.REQUIRED_HOST_VERSION)
     }
 
     private companion object {

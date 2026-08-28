@@ -8,7 +8,7 @@ import org.junit.Test
 class VideoRequestPolicyTest {
 
     @Test
-    fun explorerRequest_acceptsExactProtocolV2Envelope() {
+    fun explorerRequest_acceptsExactProtocolV12Envelope() {
         val result = VideoRequestPolicy.validateExplorer(validExplorerEnvelope())
 
         assertNotNull(result)
@@ -20,11 +20,28 @@ class VideoRequestPolicyTest {
     }
 
     @Test
+    fun explorerRequest_acceptsAnySafeNameWhenTrustedHostDeclaresVideo() {
+        val target = "content://authority/root/videos/camera.wmv"
+        val result = VideoRequestPolicy.validateExplorer(
+            validExplorerEnvelope().copy(
+                targetUri = target,
+                displayName = "camera.wmv",
+                clipItems = listOf(ClipItemEnvelope(target)),
+                mimeType = "video/*",
+            ),
+        )
+
+        assertNotNull(result)
+        assertEquals("camera.wmv", result?.displayName)
+        assertEquals("video/*", result?.mimeType)
+    }
+
+    @Test
     fun explorerRequest_rejectsWrongIdentitySourceOrHostBuild() {
         listOf(
             validExplorerEnvelope().copy(action = VideoRequestPolicy.EXTERNAL_VIEW_ACTION),
             validExplorerEnvelope().copy(actionId = "other-action"),
-            validExplorerEnvelope().copy(protocolVersion = 1),
+            validExplorerEnvelope().copy(protocolVersion = 11),
             validExplorerEnvelope().copy(sourceSurface = "dialog"),
             validExplorerEnvelope().copy(hostVersionCode = VideoPlayerPlugin.REQUIRED_HOST_VERSION - 1),
             validExplorerEnvelope().copy(hostVersionCode = null),
@@ -62,14 +79,13 @@ class VideoRequestPolicyTest {
     }
 
     @Test
-    fun explorerRequest_requiresExactTargetAndParentClipItems() {
+    fun explorerRequest_requiresOneExactTargetClipItem() {
         listOf(
             emptyList(),
-            listOf(ClipItemEnvelope(TARGET_URI)),
-            listOf(ClipItemEnvelope(TARGET_URI), ClipItemEnvelope(PARENT_URI), ClipItemEnvelope(TARGET_URI)),
-            listOf(ClipItemEnvelope(PARENT_URI), ClipItemEnvelope(TARGET_URI)),
-            listOf(ClipItemEnvelope(TARGET_URI, hasText = true), ClipItemEnvelope(PARENT_URI)),
-            listOf(ClipItemEnvelope(TARGET_URI), ClipItemEnvelope(PARENT_URI, hasIntent = true)),
+            listOf(ClipItemEnvelope(TARGET_URI), ClipItemEnvelope(PARENT_URI)),
+            listOf(ClipItemEnvelope(PARENT_URI)),
+            listOf(ClipItemEnvelope(TARGET_URI, hasText = true)),
+            listOf(ClipItemEnvelope(TARGET_URI, hasIntent = true)),
         ).forEach { clipItems ->
             assertNull(
                 VideoRequestPolicy.validateExplorer(
@@ -86,6 +102,10 @@ class VideoRequestPolicyTest {
             validExplorerEnvelope().copy(displayName = "sample\u202Emp4"),
             validExplorerEnvelope().copy(displayName = "sample.exe"),
             validExplorerEnvelope().copy(declaredSize = -1L),
+            validExplorerEnvelope().copy(lastModified = -2L),
+            validExplorerEnvelope().copy(targetKind = 2),
+            validExplorerEnvelope().copy(targetCount = 2),
+            validExplorerEnvelope().copy(targetId = "bad id"),
             validExplorerEnvelope().copy(mimeType = "application/octet-stream"),
             validExplorerEnvelope().copy(mimeType = "Video/mp4"),
             validExplorerEnvelope().copy(mimeType = "video/mp4; charset=utf-8"),
@@ -93,13 +113,6 @@ class VideoRequestPolicyTest {
             assertNull(VideoRequestPolicy.validateExplorer(envelope))
         }
 
-        val unsupportedTarget = "content://authority/root/videos/sample.bin"
-        val unsupported = validExplorerEnvelope().copy(
-            targetUri = unsupportedTarget,
-            displayName = "sample.bin",
-            clipItems = listOf(ClipItemEnvelope(unsupportedTarget), ClipItemEnvelope(PARENT_URI)),
-        )
-        assertNull(VideoRequestPolicy.validateExplorer(unsupported))
     }
 
     @Test
@@ -132,10 +145,16 @@ class VideoRequestPolicyTest {
             clipItems = listOf(ClipItemEnvelope(TARGET_URI)),
             grants = EXTERNAL_GRANTS,
             displayName = "sample.mp4",
+            declaredSize = 42L,
             mimeType = "video/mp4",
-            extraKeys = setOf(VideoRequestPolicy.DISPLAY_NAME_EXTRA),
+            extraKeys = setOf(
+                VideoRequestPolicy.DISPLAY_NAME_EXTRA,
+                VideoRequestPolicy.DECLARED_SIZE_EXTRA,
+            ),
         )
-        assertNotNull(VideoRequestPolicy.validateInternal(valid))
+        val validated = VideoRequestPolicy.validateInternal(valid)
+        assertNotNull(validated)
+        assertEquals(42L, validated?.declaredSize)
 
         listOf(
             valid.copy(action = VideoRequestPolicy.EXTERNAL_VIEW_ACTION),
@@ -145,9 +164,17 @@ class VideoRequestPolicyTest {
             valid.copy(extraKeys = emptySet()),
             valid.copy(extraKeys = valid.extraKeys + "untrusted"),
             valid.copy(displayName = "bad/name.mp4"),
+            valid.copy(declaredSize = -2L),
         ).forEach { envelope ->
             assertNull(VideoRequestPolicy.validateInternal(envelope))
         }
+
+        assertEquals(
+            VideoRequestPolicy.UNKNOWN_DECLARED_SIZE,
+            VideoRequestPolicy.validateInternal(
+                valid.copy(declaredSize = VideoRequestPolicy.UNKNOWN_DECLARED_SIZE),
+            )?.declaredSize,
+        )
     }
 
     @Test
@@ -166,12 +193,18 @@ class VideoRequestPolicyTest {
         protocolVersion = VideoRequestPolicy.PROTOCOL_VERSION,
         sourceSurface = VideoRequestPolicy.SOURCE_SURFACE_MAIN,
         hostVersionCode = VideoPlayerPlugin.REQUIRED_HOST_VERSION,
+        requestId = "123e4567-e89b-12d3-a456-426614174000",
         targetUri = TARGET_URI,
         parentUri = PARENT_URI,
-        clipItems = listOf(ClipItemEnvelope(TARGET_URI), ClipItemEnvelope(PARENT_URI)),
+        parentDisplayPath = "/storage/emulated/0/videos",
+        clipItems = listOf(ClipItemEnvelope(TARGET_URI)),
         grants = EXPLORER_GRANTS,
+        targetCount = 1,
+        targetId = "target-id",
+        targetKind = 1,
         displayName = "sample.mp4",
         declaredSize = 42L,
+        lastModified = 1L,
         mimeType = "video/mp4",
     )
 

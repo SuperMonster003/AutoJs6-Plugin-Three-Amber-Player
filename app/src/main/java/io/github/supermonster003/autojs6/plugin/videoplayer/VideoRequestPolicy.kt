@@ -4,6 +4,7 @@ import java.net.URI
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.util.Locale
+import java.util.UUID
 
 internal data class GrantEnvelope(
     val read: Boolean,
@@ -25,12 +26,18 @@ internal data class ExplorerRequestEnvelope(
     val protocolVersion: Int?,
     val sourceSurface: String?,
     val hostVersionCode: Long?,
+    val requestId: String?,
     val targetUri: String?,
     val parentUri: String?,
+    val parentDisplayPath: String?,
     val clipItems: List<ClipItemEnvelope>,
     val grants: GrantEnvelope,
+    val targetCount: Int,
+    val targetId: String?,
+    val targetKind: Int?,
     val displayName: String?,
     val declaredSize: Long?,
+    val lastModified: Long?,
     val mimeType: String?,
 )
 
@@ -47,11 +54,13 @@ internal data class InternalRequestEnvelope(
     val clipItems: List<ClipItemEnvelope>,
     val grants: GrantEnvelope,
     val displayName: String?,
+    val declaredSize: Long?,
     val mimeType: String?,
     val extraKeys: Set<String>,
 )
 
 internal data class ValidatedExplorerRequest(
+    val targetId: String,
     val targetUri: String,
     val parentUri: String,
     val displayName: String,
@@ -62,6 +71,7 @@ internal data class ValidatedExplorerRequest(
 internal data class ValidatedPlaybackRequest(
     val targetUri: String,
     val displayName: String,
+    val declaredSize: Long,
     val mimeType: String,
 )
 
@@ -78,14 +88,17 @@ internal object VideoRequestPolicy {
     const val INTERNAL_PLAY_ACTION =
         "io.github.supermonster003.autojs6.plugin.videoplayer.action.PLAY_VALIDATED"
     const val SOURCE_SURFACE_MAIN = "main"
-    const val PROTOCOL_VERSION = 2
+    const val PROTOCOL_VERSION = 12
     const val DISPLAY_NAME_EXTRA =
         "io.github.supermonster003.autojs6.plugin.videoplayer.extra.DISPLAY_NAME"
+    const val DECLARED_SIZE_EXTRA =
+        "io.github.supermonster003.autojs6.plugin.videoplayer.extra.DECLARED_SIZE"
+    const val UNKNOWN_DECLARED_SIZE = -1L
     const val MAX_DISPLAY_NAME_LENGTH = 255
+    private const val MAX_REQUEST_ID_LENGTH = 36
+    private const val TARGET_KIND_FILE = 1
 
     private val mimeTokenPattern = Regex("[a-z0-9][a-z0-9!#$&^_.+-]*")
-    private val supportedExtensions = VideoPlayerPlugin.EXTENSIONS.toSet()
-
     fun validateExplorer(envelope: ExplorerRequestEnvelope): ValidatedExplorerRequest? {
         if (envelope.action != EXPLORER_EXECUTE_ACTION) return null
         if (envelope.actionId != VideoPlayerPlugin.ACTION_ID) return null
@@ -93,23 +106,25 @@ internal object VideoRequestPolicy {
         if (envelope.sourceSurface != SOURCE_SURFACE_MAIN) return null
         if ((envelope.hostVersionCode ?: return null) < VideoPlayerPlugin.REQUIRED_HOST_VERSION) return null
         if (!envelope.grants.isExplorerReadOnly()) return null
+        if (canonicalRequestId(envelope.requestId) == null) return null
+        if (validateParentDisplayPath(envelope.parentDisplayPath) == null) return null
+        if (envelope.targetCount != 1 || envelope.targetKind != TARGET_KIND_FILE) return null
+        val targetId = validateOpaqueId(envelope.targetId) ?: return null
 
         val target = parsePlainContentUri(envelope.targetUri) ?: return null
         val parent = parsePlainContentUri(envelope.parentUri) ?: return null
-        if (!target.isStrictDescendantOf(parent)) return null
+        if (!target.isDirectChildOf(parent)) return null
 
-        if (envelope.clipItems.size != 2) return null
+        if (envelope.clipItems.size != 1) return null
         if (!envelope.clipItems[0].isExactUri(target.original)) return null
-        if (!envelope.clipItems[1].isExactUri(parent.original)) return null
 
         val displayName = validateExactDisplayName(envelope.displayName, target) ?: return null
-        if (displayName.substringAfterLast('.', "").lowercase(Locale.ROOT) !in supportedExtensions) {
-            return null
-        }
         val declaredSize = envelope.declaredSize?.takeIf { it >= 0L } ?: return null
+        if ((envelope.lastModified ?: return null) < UNKNOWN_DECLARED_SIZE) return null
         val mimeType = normalizeVideoMimeType(envelope.mimeType) ?: return null
 
         return ValidatedExplorerRequest(
+            targetId = targetId,
             targetUri = target.original,
             parentUri = parent.original,
             displayName = displayName,
@@ -133,10 +148,11 @@ internal object VideoRequestPolicy {
         if (envelope.clipItems.size != 1 || !envelope.clipItems[0].isExactUri(target.original)) {
             return null
         }
-        if (envelope.extraKeys != setOf(DISPLAY_NAME_EXTRA)) return null
+        if (envelope.extraKeys != setOf(DISPLAY_NAME_EXTRA, DECLARED_SIZE_EXTRA)) return null
         val displayName = validateSafeDisplayName(envelope.displayName) ?: return null
+        val declaredSize = envelope.declaredSize?.takeIf { it >= UNKNOWN_DECLARED_SIZE } ?: return null
         val mimeType = normalizeVideoMimeType(envelope.mimeType) ?: return null
-        return ValidatedPlaybackRequest(target.original, displayName, mimeType)
+        return ValidatedPlaybackRequest(target.original, displayName, declaredSize, mimeType)
     }
 
     fun sanitizeExternalDisplayName(candidate: String?, fallback: String?): String {
@@ -189,35 +205,57 @@ internal object VideoRequestPolicy {
         return name
     }
 
-    private fun parsePlainContentUri(value: String?): ParsedContentUri? = try {
-        val original = value ?: return null
-        val uri = URI(original)
-        if (uri.scheme != "content" || uri.isOpaque) return null
-        val authority = uri.rawAuthority ?: return null
-        if (authority.isBlank() || '@' in authority || ':' in authority || '%' in authority) return null
-        if (uri.rawQuery != null || uri.rawFragment != null) return null
-        val rawPath = uri.rawPath ?: return null
-        if (!rawPath.startsWith('/') || rawPath.length <= 1 || rawPath.endsWith('/')) return null
-        val rawSegments = rawPath.removePrefix("/").split('/')
-        if (rawSegments.any(String::isEmpty)) return null
-        val decodedSegments = rawSegments.map { rawSegment ->
-            URLDecoder.decode(rawSegment.replace("+", "%2B"), StandardCharsets.UTF_8.name())
+    private fun validateOpaqueId(value: String?): String? {
+        val id = value ?: return null
+        if (id.length !in 1..128) return null
+        return id.takeIf { candidate ->
+            candidate.none { it.isWhitespace() || isUnsafeUnicodeCharacter(it) }
         }
-        if (decodedSegments.any { segment ->
-                segment.isEmpty() || segment == "." || segment == ".." ||
-                    segment.any(::isUnsafeUriCharacter) || '\uFFFD' in segment
-            }
-        ) {
-            return null
-        }
-        ParsedContentUri(original, authority, decodedSegments)
-    } catch (_: IllegalArgumentException) {
-        null
     }
 
-    private fun ParsedContentUri.isStrictDescendantOf(parent: ParsedContentUri): Boolean =
+    private fun canonicalRequestId(value: String?): String? {
+        val requestId = value?.takeIf { it.length <= MAX_REQUEST_ID_LENGTH } ?: return null
+        val parsed = runCatching { UUID.fromString(requestId) }.getOrNull() ?: return null
+        return requestId.takeIf { parsed.toString().equals(requestId, ignoreCase = true) }
+    }
+
+    private fun validateParentDisplayPath(value: String?): String? {
+        val path = value ?: return null
+        if (path.length !in 1..16_384) return null
+        return path.takeIf { candidate -> candidate.none(::isUnsafeUnicodeCharacter) }
+    }
+
+    private fun parsePlainContentUri(value: String?): ParsedContentUri? {
+        return try {
+            val original = value ?: return null
+            val uri = URI(original)
+            if (uri.scheme != "content" || uri.isOpaque) return null
+            val authority = uri.rawAuthority ?: return null
+            if (authority.isBlank() || '@' in authority || ':' in authority || '%' in authority) return null
+            if (uri.rawQuery != null || uri.rawFragment != null) return null
+            val rawPath = uri.rawPath ?: return null
+            if (!rawPath.startsWith('/') || rawPath.length <= 1 || rawPath.endsWith('/')) return null
+            val rawSegments = rawPath.removePrefix("/").split('/')
+            if (rawSegments.any(String::isEmpty)) return null
+            val decodedSegments = rawSegments.map { rawSegment ->
+                URLDecoder.decode(rawSegment.replace("+", "%2B"), StandardCharsets.UTF_8.name())
+            }
+            if (decodedSegments.any { segment ->
+                    segment.isEmpty() || segment == "." || segment == ".." ||
+                            segment.any(::isUnsafeUriCharacter) || '\uFFFD' in segment
+                }
+            ) {
+                return null
+            }
+            ParsedContentUri(original, authority, decodedSegments)
+        } catch (_: IllegalArgumentException) {
+            null
+        }
+    }
+
+    private fun ParsedContentUri.isDirectChildOf(parent: ParsedContentUri): Boolean =
         authority == parent.authority &&
-            segments.size > parent.segments.size &&
+            segments.size == parent.segments.size + 1 &&
             segments.take(parent.segments.size) == parent.segments
 
     private fun isUnsafeDisplayCharacter(character: Char): Boolean =
@@ -241,12 +279,13 @@ internal data class ForwardedPlaybackSpec(
     val targetUri: String,
     val mimeType: String,
     val displayName: String,
+    val declaredSize: Long,
     val clipUris: List<String>,
     val grantRead: Boolean,
     val grantWrite: Boolean,
     val grantPersistable: Boolean,
     val grantPrefix: Boolean,
-    val extras: Map<String, String>,
+    val extras: Map<String, Any>,
 )
 
 internal object PlaybackForwardingPolicy {
@@ -255,31 +294,39 @@ internal object PlaybackForwardingPolicy {
         targetUri = request.targetUri,
         mimeType = request.mimeType,
         displayName = request.displayName,
+        declaredSize = request.declaredSize,
     )
 
     fun fromExternal(
         request: ValidatedExternalRequest,
         displayName: String,
+        declaredSize: Long = VideoRequestPolicy.UNKNOWN_DECLARED_SIZE,
     ): ForwardedPlaybackSpec = build(
         targetUri = request.targetUri,
         mimeType = request.mimeType,
         displayName = VideoRequestPolicy.sanitizeExternalDisplayName(displayName, null),
+        declaredSize = declaredSize.takeIf { it >= 0L } ?: VideoRequestPolicy.UNKNOWN_DECLARED_SIZE,
     )
 
     private fun build(
         targetUri: String,
         mimeType: String,
         displayName: String,
+        declaredSize: Long,
     ) = ForwardedPlaybackSpec(
         action = VideoRequestPolicy.INTERNAL_PLAY_ACTION,
         targetUri = targetUri,
         mimeType = mimeType,
         displayName = displayName,
+        declaredSize = declaredSize,
         clipUris = listOf(targetUri),
         grantRead = true,
         grantWrite = false,
         grantPersistable = false,
         grantPrefix = false,
-        extras = mapOf(VideoRequestPolicy.DISPLAY_NAME_EXTRA to displayName),
+        extras = mapOf(
+            VideoRequestPolicy.DISPLAY_NAME_EXTRA to displayName,
+            VideoRequestPolicy.DECLARED_SIZE_EXTRA to declaredSize,
+        ),
     )
 }

@@ -14,10 +14,11 @@ class ExternalViewActivity : Activity() {
             if (request == null) {
                 Toast.makeText(this, R.string.error_invalid_request, Toast.LENGTH_SHORT).show()
             } else {
-                val displayName = ContentDisplayNameResolver.resolve(this, request.targetUri)
+                val metadata = ContentPlaybackMetadataResolver.resolve(this, request.targetUri)
                 val spec = PlaybackForwardingPolicy.fromExternal(
                     ValidatedExternalRequest(request.targetUri.toString(), request.mimeType),
-                    displayName,
+                    metadata.displayName,
+                    metadata.declaredSize,
                 )
                 runCatching { startActivity(VideoIntentFactory.createInternal(this, spec)) }
                     .onFailure {
