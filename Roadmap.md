@@ -186,7 +186,7 @@
 - [x] 本地与宿主续播历史统一为只保留最近打开且未播完的一个视频; 打开其他视频立即清除旧记录, 播放完成不记录, 持久化仅包含 SHA-256 身份摘要与时间数值.
 - [x] 应用与插件固定显示名改为不可翻译的 `3-Ember Player`; 源码命名空间改为 `io.github.supermonster003.autojs6.plugin.threeemberplayer`, 保留既有 application ID `io.github.supermonster003.autojs6.plugin.videoplayer` 与插件 ID `video-player` 以兼容覆盖升级和宿主授权.
 - [x] 10 种语言的设置、主题、更新、说明与 v2.0.0 发行历史同步; 版本升级至 2.0.0 (11), 64 项 JVM 测试与 6 项 Android 仪器化测试零失败, lint 0 error.
-- [x] 设备矩阵验收: Android 9 无宿主环境验证独立启动、设置页、跟随项禁用回退、Material 500 色板、自定义色对话框、真实 XVID/MKV 播放、未播完续播及播完清除; Android 12 宿主环境验证 AutoJs6 外观契约、插件清单/服务绑定与单条历史. R8 签名 APK 已归档至 `releases/autojs6-plugin-three-ember-player-v2.0.0-a1d6866b.apk` (2,912,471 bytes), CRC32 `A1D6866B`, SHA-256 `48482597685653AE60EDCAC36C0D8DD816BB0DD39F3AFC645EA5C758E1943FCF`, APK Signature Scheme v2 校验通过.
+- [x] 设备矩阵验收: Android 9 无宿主环境验证独立启动、设置页、跟随项禁用回退、Material 500 色板、自定义色对话框、真实 XVID/MKV 播放、未播完续播及播完清除; Android 12 宿主环境验证 AutoJs6 外观契约、插件清单/服务绑定与单条历史. R8 签名 APK 已归档至 `releases/autojs6-plugin-three-ember-player-v2.0.0-09718fb9.apk` (2,912,475 bytes), CRC32 `09718FB9`, SHA-256 `9E743D1F0CC9F2D001D00E40227756E4B9DD727713EF30CB589888AA0EE0BD69`, APK Signature Scheme v2 校验通过.
 
 ******
 
