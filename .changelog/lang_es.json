@@ -5,6 +5,22 @@
   "changelog_label_improvement": "Mejora",
   "changelog_label_dependency": "Dependencia",
   "$data": {
+    "v2.0.0": {
+      "released_date": "2026/08/29",
+      "feature": [
+        "Se añadió un sistema de color detallado basado en HCT que genera desde un solo color roles semánticos accesibles para modos claro y oscuro, barras, controles, superficies, contornos y errores, con 19 preajustes Material 500 localizados y RGB personalizado con vista previa",
+        "Se añadió una pantalla de inicio y un reproductor independiente para un archivo, además de ajustes propios de idioma, modo nocturno, color, reanudación, actualizaciones, historial e información de la aplicación y el desarrollador",
+        "El idioma, el modo nocturno y el color siguen AutoJs6 de forma predeterminada mediante su contrato oficial de solo lectura; si el host no está disponible, las opciones siguen visibles pero deshabilitadas y usan los valores predeterminados",
+        "Se añadieron comprobaciones manuales y automáticas diarias, gestión de versiones ignoradas e historial localizado integrado"
+      ],
+      "fix": [
+        "Seguir AutoJs6 ahora es fiable gracias a la entrada protegida de información del plugin requerida por el proveedor de ajustes del host"
+      ],
+      "improvement": [
+        "La reanudación recuerda exactamente el último vídeo abierto, descarta de inmediato el anterior al abrir otro y nunca conserva una reproducción terminada, tanto en el historial local como en el del host",
+        "El nombre fijo de aplicación y plugin pasa a ser 3-Ember Player y el espacio de nombres fuente, threeemberplayer, conservando los ID existentes para permitir actualizaciones"
+      ]
+    },
     "v1.4.0": {
       "released_date": "2026/08/28",
       "feature": [

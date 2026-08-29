@@ -5,6 +5,22 @@
   "changelog_label_improvement": "Improvement",
   "changelog_label_dependency": "Dependency",
   "$data": {
+    "v2.0.0": {
+      "released_date": "2026/08/29",
+      "feature": [
+        "Added a detailed HCT-based color system that generates accessible light and dark semantic roles for toolbars, controls, surfaces, outlines, and errors from one source color, with 19 localized Material 500 presets and live-preview custom RGB colors",
+        "Added a launcher and standalone single-file player mode, plus a dedicated settings screen for language, night mode, theme color, resume behavior, updates, release history, and app/developer information",
+        "Language, night mode, and source color now follow AutoJs6 by default through its official read-only settings contract; unavailable host choices remain visible but disabled and fall back to app defaults",
+        "Added manual and daily automatic update checks, ignored-version management, and localized bundled release history"
+      ],
+      "fix": [
+        "Made Follow AutoJs6 reliable by exposing the protected plugin-info service entry required by the host settings provider"
+      ],
+      "improvement": [
+        "Resume playback now remembers exactly one most recently opened video, immediately discards it when another video opens, and never keeps completed playback in either standalone or host-managed history",
+        "Renamed the fixed app and plugin display name to 3-Ember Player and the source namespace to threeemberplayer while retaining the established application and plugin IDs for upgrade compatibility"
+      ]
+    },
     "v1.4.0": {
       "released_date": "2026/08/28",
       "feature": [

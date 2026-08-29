@@ -1,8 +1,10 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
+  <h1>3-Ember Player</h1>
+
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
+    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
   </p>
 
   <p>Plugin de gestionnaire de fichiers. Lire directement les fichiers vidéo</p>
@@ -39,7 +41,7 @@ Le fichier README.md actuel prend en charge les langues suivantes:
 
 ******
 
-Video Player lit le contenu vidéo fourni par le gestionnaire de fichiers ou une autre application Android au moyen d'un accès temporaire en lecture seule à un content URI. Il utilise AndroidX Media3 ExoPlayer et ne modifie jamais la vidéo source.
+3-Ember Player est à la fois un plugin du gestionnaire de fichiers AutoJs6 et un lecteur vidéo autonome simple. Il accepte des content URI temporaires en lecture seule, utilise AndroidX Media3 ExoPlayer et ne modifie jamais la vidéo source.
 
 ******
 
@@ -55,7 +57,7 @@ Video Player lit le contenu vidéo fourni par le gestionnaire de fichiers ou une
 - Propose une action sécurisée Ouvrir avec une autre application après un échec de lecture en reconstruisant un Intent de visualisation en lecture seule et en excluant ce plugin de la liste des candidats.
 - Offre une lecture immersive en plein écran avec gestes pour la luminosité, le volume et la navigation, sauts par double touche, vitesse temporaire par appui long et verrouillage des commandes.
 - Propose des vitesses de lecture de 0,25× à 3× ainsi que la bascule en un geste du mode d'affichage et de l'orientation de l'écran.
-- Mémorise localement la position de reprise indexée par des condensés du content URI, effacée une fois la vidéo terminée.
+- L’historique de reprise conserve exactement la dernière vidéo inachevée sous forme d’un condensé d’identité SHA-256 et de valeurs temporelles ; l’ouverture d’une autre vidéo l’efface immédiatement et une lecture terminée n’est jamais conservée.
 - Permet de sélectionner les pistes audio et les sous-titres intégrés, désactive les sous-titres par défaut et signale clairement les pistes non prises en charge.
 - Propose la répétition de la vidéo actuelle, un panneau de métadonnées détaillé, l’orientation selon le format et l’incrustation vidéo sur API 26+ avec lecture/pause à distance.
 - Intègre MediaSession pour les commandes des écouteurs, du Bluetooth et du système, avec une notification multimédia affichant le titre et la progression.
@@ -64,7 +66,8 @@ Video Player lit le contenu vidéo fourni par le gestionnaire de fichiers ou une
 - Captures de l’image actuelle sans autorisation sur Android 10+, enregistrées comme PNG séparés via MediaStore sans modifier la vidéo source.
 - Files d'attente vidéo du même dossier triées naturellement via Explorer Action v12, avec précédent / suivant, séquence, aléatoire, répétition d'un élément et lecture automatique du suivant.
 - Découverte des sous-titres externes .srt et .ass correspondants, y compris les suffixes de langue, désactivés par défaut et chargés uniquement après une sélection explicite.
-- Historique de reprise facultatif géré par l'hôte, désactivé par défaut, désactivable ou effaçable dans les réglages AutoJs6, sans marqueur de visionnage dans les listes de fichiers.
+- Génère des rôles sémantiques clairs et sombres lisibles depuis une couleur HCT, suit AutoJs6 par défaut et propose 19 couleurs Material 500 localisées ainsi qu’un RGB personnalisé prévisualisé.
+- Fournit un lanceur autonome et des paramètres de langue, nuit et couleur suivant l’hôte, reprise d’une seule vidéo, vérifications manuelles et automatiques, versions ignorées, historique et informations sur l’application et le développeur.
 
 ******
 
@@ -104,6 +107,8 @@ L'hôte découvre et exécute le plugin avec les identités suivantes:
 service action: org.autojs.plugin.EXPLORER_ACTION
 execute action: org.autojs.plugin.EXPLORER_ACTION_EXECUTE
 plugin id: video-player
+source namespace: io.github.supermonster003.autojs6.plugin.threeemberplayer
+stable application id: io.github.supermonster003.autojs6.plugin.videoplayer
 engine: explorer-action
 variant: default
 Explorer action id: play-video
@@ -115,7 +120,7 @@ external MIME type: video/*
 required host build: 5276
 ```
 
-La version 1.4 fournit une action principale de l'explorateur en lecture seule selon le protocole v12. Un hôte compatible peut joindre des capacités par requête pour les frères directs et la progression de lecture ; les hôtes sans ces extensions facultatives conservent la lecture d'un seul fichier. L'entrée externe indépendante reste limitée à un content URI en lecture seule avec un sous-type MIME `video/*` valide.
+La version 2.0 fournit une action principale de l'explorateur en lecture seule selon le protocole v12. Un hôte compatible peut joindre des capacités par requête pour les frères directs et la progression de lecture ; les hôtes sans ces extensions facultatives conservent la lecture d'un seul fichier. L'entrée externe indépendante reste limitée à un content URI en lecture seule avec un sous-type MIME `video/*` valide.
 
 Les fonctions complètes de coopération nécessitent AutoJs6 6.8.0 build 5276 ou ultérieur et Explorer Action v12 ; cette exigence ne sera pas relevée par les capacités futures du plugin.
 
@@ -125,7 +130,7 @@ Les fonctions complètes de coopération nécessitent AutoJs6 6.8.0 build 5276 o
 
 ******
 
-Le plugin ne demande aucune autorisation de stockage ou INTERNET. Sa frontière de l'explorateur protégée par signature valide l'enveloppe complète du protocole v12, l'unique cible sélectionnée, la relation au parent, ClipData, les métadonnées, la version de l'hôte et les accès en lecture seule. Les Host Sessions facultatives sont liées par l'hôte à l'UID du plugin et permettent seulement de lister le parent direct du fichier sélectionné et d'ouvrir celui-ci ou un frère direct lisible. Le lecteur privé valide une file opaque bornée et ne reçoit jamais de chemin de système de fichiers. La frontière publique ACTION_VIEW reste indépendante et limitée à un fichier.
+L’application ne demande aucune autorisation de stockage et n’écrit jamais les vidéos sources. Internet sert uniquement aux vérifications des versions GitHub lancées par l’utilisateur ou quotidiennes. Sa frontière de l'explorateur protégée par signature valide l'enveloppe complète du protocole v12, l'unique cible sélectionnée, la relation au parent, ClipData, les métadonnées, la version de l'hôte et les accès en lecture seule. Les Host Sessions facultatives sont liées par l'hôte à l'UID du plugin et permettent seulement de lister le parent direct du fichier sélectionné et d'ouvrir celui-ci ou un frère direct lisible. Le lecteur privé valide une file opaque bornée et ne reçoit jamais de chemin de système de fichiers. La frontière publique ACTION_VIEW reste indépendante et limitée à un fichier.
 
 ******
 
@@ -138,7 +143,7 @@ Le plugin ne demande aucune autorisation de stockage ou INTERNET. Sa frontière 
 - Les accès en écriture et persistants sont toujours refusés. L'accès prefix utilisé pour valider l'URI parent n'est jamais transmis au lecteur.
 - La frontière publique ACTION_VIEW refuse les accès en écriture, persistants et prefix.
 - Les candidats externes sont d'abord résolus, filtrés pour conserver les autres paquets, puis lancés avec un nouvel Intent en lecture seule.
-- L'historique de lecture de l'hôte est désactivé par défaut, ne stocke après consentement explicite que des condensés de chemins canoniques et des valeurs temporelles, et peut être désactivé ou effacé dans les réglages AutoJs6.
+- L’historique de reprise conserve exactement la dernière vidéo inachevée sous forme d’un condensé d’identité SHA-256 et de valeurs temporelles ; l’ouverture d’une autre vidéo l’efface immédiatement et une lecture terminée n’est jamais conservée.
 - La reconnaissance comme vidéo ou une extension héritée répertoriée ne garantit pas le décodage sur tous les appareils. Media3 et les codecs de plateforme installés déterminent la compatibilité réelle de lecture.
 
 ******
@@ -146,6 +151,18 @@ Le plugin ne demande aucune autorisation de stockage ou INTERNET. Sa frontière 
 ### Historique des versions
 
 ******
+
+# v2.0.0
+
+###### 2026/08/29
+
+* `Fonctionnalité` Ajout d’un système de couleurs HCT détaillé qui génère depuis une seule couleur des rôles sémantiques lisibles en modes clair et sombre pour barres, commandes, surfaces, contours et erreurs, avec 19 couleurs Material 500 localisées et un RGB personnalisé prévisualisé
+* `Fonctionnalité` Ajout d’un écran de lancement et d’un lecteur autonome pour un fichier, ainsi que de paramètres dédiés à la langue, au mode nuit, à la couleur, à la reprise, aux mises à jour, à l’historique et aux informations sur l’application et le développeur
+* `Fonctionnalité` La langue, le mode nuit et la couleur suivent AutoJs6 par défaut via son contrat officiel en lecture seule ; si l’hôte est indisponible, les choix restent visibles mais désactivés et reviennent aux valeurs par défaut
+* `Fonctionnalité` Ajout de la vérification manuelle et automatique quotidienne, de la gestion des versions ignorées et d’un historique localisé intégré
+* `Correctif` Le suivi d’AutoJs6 est désormais fiable grâce à l’entrée protégée d’informations du plugin requise par le fournisseur de paramètres de l’hôte
+* `Amélioration` La reprise mémorise exactement la dernière vidéo ouverte, efface immédiatement l’ancienne à l’ouverture d’une autre et ne conserve jamais une lecture terminée, dans l’historique local comme celui de l’hôte
+* `Amélioration` Le nom fixe de l’application et du plugin devient 3-Ember Player et l’espace de noms source threeemberplayer, tout en conservant les identifiants publiés pour les mises à niveau
 
 # v1.4.0
 
@@ -166,18 +183,6 @@ Le plugin ne demande aucune autorisation de stockage ou INTERNET. Sa frontière 
 
 * `Correctif` Ajout d’une couche légère de compatibilité XVID dans MKV qui confie les pistes XVID VFW/FourCC validées au décodeur MPEG-4 Part 2 intégré de l’appareil, sans transcodage ni modification de la source
 * `Correctif` Arrêt de la lecture audio seule lorsqu’aucun décodeur système compatible n’est disponible ou que le décodage échoue, avec une explication dédiée et l’ouverture dans une autre application
-
-# v1.3.0
-
-###### 2026/08/27
-
-* `Fonctionnalité` Minuteur: pause après 15, 30, 45 ou 60 minutes ou à la fin de la vidéo, avec gestion du conflit avec la répétition
-* `Fonctionnalité` Interaction avec l’image: zoom par pincement de 0,25× à 4×, réinitialisation par double appui et coordination avec les modes d’affichage existants
-* `Fonctionnalité` Aperçu du déplacement: temps cible et miniatures facultatives en mémoire, avec repli silencieux vers le temps seul
-* `Fonctionnalité` Captures de l’image actuelle sur Android 10+ enregistrées comme PNG séparés via MediaStore, sans autorisation de stockage ni modification de la source
-* `Fonctionnalité` Paramètres persistants des gestes pour une sensibilité faible, normale ou élevée et un saut par double appui de 5, 10 ou 30 secondes
-* `Amélioration` Les échéances du minuteur utilisent le temps écoulé et survivent à la recréation de la page sans dépendre des changements d’horloge
-* `Amélioration` L’extraction des miniatures regroupe les demandes rapides sur un seul thread et libère chaque bitmap temporaire devenu obsolète
 
 ##### Pour consulter davantage de versions
 

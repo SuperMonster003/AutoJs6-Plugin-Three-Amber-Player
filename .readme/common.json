@@ -1,4 +1,5 @@
 {
+  "product_name": "3-Ember Player",
   "repo_url": "https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player",
   "repo_slug": "SuperMonster003/AutoJs6-Plugin-Video-Player",
   "docs_autojs6_url": "https://docs.autojs6.com",
@@ -7,6 +8,8 @@
   "plugin_execute_action": "org.autojs.plugin.EXPLORER_ACTION_EXECUTE",
   "external_view_action": "android.intent.action.VIEW",
   "plugin_id": "video-player",
+  "source_namespace": "io.github.supermonster003.autojs6.plugin.threeemberplayer",
+  "stable_application_id": "io.github.supermonster003.autojs6.plugin.videoplayer",
   "plugin_engine": "explorer-action",
   "plugin_variant": "default",
   "explorer_action_id": "play-video",

@@ -1,8 +1,10 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
+  <h1>3-Ember Player</h1>
+
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
+    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
   </p>
 
   <p>文件管理器插件. 直接播放视频文件</p>
@@ -39,7 +41,7 @@
 
 ******
 
-视频播放器通过临时只读 content URI 播放文件管理器或其他 Android 应用提供的视频内容. 插件使用 AndroidX Media3 ExoPlayer, 且绝不修改源视频.
+3-Ember Player 既是 AutoJs6 文件管理器插件, 也是独立的简易视频播放器. 应用接受临时只读 content URI, 使用 AndroidX Media3 ExoPlayer, 且绝不修改源视频.
 
 ******
 
@@ -55,7 +57,7 @@
 - 播放失败后提供安全的使用其他应用打开动作, 重新构建只读查看 Intent 并从候选列表排除本插件.
 - 全屏沉浸式播放, 支持手势调节亮度, 音量与播放进度, 双击跳转, 长按倍速与控制锁定.
 - 0.25× 至 3× 倍速播放, 画面缩放模式与屏幕方向一键切换.
-- 基于 content URI 摘要的本地播放进度记忆, 播完自动清除.
+- 续播历史只保留最近打开且未播完的一个视频, 内容仅为 SHA-256 身份摘要与时间数值; 打开其他视频时立即清除旧记录, 播放完毕永不保留位置.
 - 支持内嵌音轨与字幕选择, 字幕默认关闭, 不支持的轨道会清晰标记.
 - 提供单曲循环, 详细媒体信息, 基于画面比例的方向建议及 API 26+ 画中画远程播放/暂停.
 - 通过 MediaSession 支持耳机, 蓝牙与系统媒体控制, 并以媒体通知显示标题和播放进度.
@@ -64,7 +66,8 @@
 - Android 10+ 可免权限将当前画面通过 MediaStore 保存为独立 PNG, 且不修改源视频.
 - 通过 Explorer Action v12 构建同目录视频自然排序队列, 支持上一个 / 下一个, 顺序, 随机, 单项循环及自动连播下一项.
 - 发现同名 .srt / .ass 外挂字幕及语言后缀变体, 字幕默认关闭, 仅在用户显式选择后加载.
-- 由宿主管理的可选续播历史默认关闭, 可在 AutoJs6 设置中关闭或清除, 且文件列表不显示已看标记.
+- 由一个 HCT 色源生成兼顾可读性的亮色与暗色语义配色, 默认跟随 AutoJs6, 并提供 19 个本地化 Material 500 预置色及带实时预览的自定义 RGB 颜色.
+- 提供独立启动页面及设置页, 可配置跟随宿主的语言 / 夜间模式 / 颜色、单一视频续播、手动与自动更新、已忽略版本、发行历史及应用与开发者信息.
 
 ******
 
@@ -104,6 +107,8 @@ MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V
 service action: org.autojs.plugin.EXPLORER_ACTION
 execute action: org.autojs.plugin.EXPLORER_ACTION_EXECUTE
 plugin id: video-player
+source namespace: io.github.supermonster003.autojs6.plugin.threeemberplayer
+stable application id: io.github.supermonster003.autojs6.plugin.videoplayer
 engine: explorer-action
 variant: default
 Explorer action id: play-video
@@ -115,7 +120,7 @@ external MIME type: video/*
 required host build: 5276
 ```
 
-版本 1.4 提供协议 v12 只读文件浏览器主动作. 兼容宿主可附加请求级直接同级读取与播放进度能力; 不支持这些可选扩展的宿主保留单文件播放. 独立外部入口仍仅接受带有效 `video/*` MIME 子类型的只读 content URI.
+版本 2.0 提供协议 v12 只读文件浏览器主动作. 兼容宿主可附加请求级直接同级读取与播放进度能力; 不支持这些可选扩展的宿主保留单文件播放. 独立外部入口仍仅接受带有效 `video/*` MIME 子类型的只读 content URI.
 
 完整宿主协同能力需要 AutoJs6 6.8.0 build 5276 或更高版本及 Explorer Action v12; 后续插件能力不会提高此要求.
 
@@ -125,7 +130,7 @@ required host build: 5276
 
 ******
 
-插件不请求存储或 INTERNET 权限. 受签名权限保护的文件浏览器边界会验证完整协议 v12 信封, 精确的单个选中目标, 父子关系, ClipData, 元数据, 宿主构建版本和只读授权. 可选 Host Session 由宿主绑定到插件 UID, 仅允许列出选中文件的直接父目录以及打开选中文件或可读直接同级文件. 私有播放器只接收经验证的有界不透明队列, 不接收文件系统路径. 公共 ACTION_VIEW 边界保持独立且仅支持单文件.
+应用不请求存储权限且绝不写入源视频. 互联网权限仅用于用户主动触发或每日一次的 GitHub 发行版检查. 受签名权限保护的文件浏览器边界会验证完整协议 v12 信封, 精确的单个选中目标, 父子关系, ClipData, 元数据, 宿主构建版本和只读授权. 可选 Host Session 由宿主绑定到插件 UID, 仅允许列出选中文件的直接父目录以及打开选中文件或可读直接同级文件. 私有播放器只接收经验证的有界不透明队列, 不接收文件系统路径. 公共 ACTION_VIEW 边界保持独立且仅支持单文件.
 
 ******
 
@@ -138,7 +143,7 @@ required host build: 5276
 - 始终拒绝写入和持久授权. 用于验证文件浏览器父级 URI 的前缀访问权绝不会转发到播放器.
 - 公共 ACTION_VIEW 边界拒绝写入, 持久和前缀授权.
 - 外部回退候选应用会先被解析, 再筛选为其他软件包, 最后通过新建的只读 Intent 启动.
-- 宿主播放历史默认关闭, 仅在用户显式启用后保存规范路径摘要与时间数值, 并可在 AutoJs6 设置中关闭或清除.
+- 续播历史只保留最近打开且未播完的一个视频, 内容仅为 SHA-256 身份摘要与时间数值; 打开其他视频时立即清除旧记录, 播放完毕永不保留位置.
 - 被识别为视频或命中列出的旧版扩展名均不保证在每台设备上都能解码. 实际播放支持取决于 Media3 和已安装的平台编解码器.
 
 ******
@@ -146,6 +151,18 @@ required host build: 5276
 ### 版本历史
 
 ******
+
+# v2.0.0
+
+###### 2026/08/29
+
+* `新增` 新增基于 HCT 的细致单一色源系统: 由一个颜色生成适用于亮色与暗色外观的工具栏、控件、表面、轮廓、错误等高可读性语义色, 提供 19 个本地化 Material 500 预置色及带实时预览的自定义 RGB 颜色
+* `新增` 新增启动页面与独立单文件播放器模式, 并提供独立设置页面, 包含语言、夜间模式、主题色、续播、更新、发行历史及应用与开发者信息
+* `新增` 语言、夜间模式和色源默认通过 AutoJs6 官方只读设置契约跟随宿主; 宿主不可用时仍显示但禁用对应选项, 并回退至应用默认值
+* `新增` 新增手动与每日自动检查更新、已忽略版本管理及本地化内置发行历史
+* `修复` 通过公开宿主设置提供器要求的受保护插件信息服务入口, 确保跟随 AutoJs6 功能可靠可用
+* `优化` 续播现在只记忆最近打开的一个视频, 打开其他视频时立即丢弃旧记录, 独立历史和宿主历史均不会保留已播放完毕的位置
+* `优化` 应用与插件固定显示名更改为 3-Ember Player, 源码命名空间更改为 threeemberplayer, 同时保留既有应用 ID 和插件 ID 以兼容覆盖升级
 
 # v1.4.0
 
@@ -166,18 +183,6 @@ required host build: 5276
 
 * `修复` 新增轻量 XVID-in-MKV 兼容层: 将严格验证的 VFW/FourCC XVID 轨道交给设备内置 MPEG-4 Part 2 解码器, 不转码且不修改源文件
 * `修复` 设备没有兼容系统解码器或解码失败时停止仅音频播放, 显示专项说明并提供使用其他应用打开
-
-# v1.3.0
-
-###### 2026/08/27
-
-* `新增` 睡眠定时器: 可在 15, 30, 45 或 60 分钟后, 或当前视频播放结束时暂停, 并处理与单曲循环的模式冲突
-* `新增` 画面交互: 0.25× 至 4× 双指捏合缩放, 缩放态双击复位, 并与现有画面缩放模式联动
-* `新增` 拖动预览: 显示目标时间气泡及尽力提取的内存缩略图, 提取失败时静默回退为仅显示时间
-* `新增` Android 10+ 当前帧截图通过 MediaStore 保存为独立 PNG, 无需存储权限且不修改源视频
-* `新增` 持久化手势设置: 低/标准/高三档灵敏度及 5/10/30 秒双击跳转
-* `优化` 睡眠截止时间使用系统运行时长计算, 不受墙上时钟变化影响, 并可随播放页状态重建恢复
-* `优化` 缩略图提取以单一工作线程合并快速拖动请求, 过期的临时位图会被及时释放
 
 ##### 查看更多版本
 

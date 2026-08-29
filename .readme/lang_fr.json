@@ -5,7 +5,7 @@
   "h3_languages_with_ascii": "Langues (Languages)",
   "p_languages_all_supported_for_readme": "Le fichier README.md actuel prend en charge les langues suivantes",
   "h3_introduction": "Introduction",
-  "p_introduction": "Video Player lit le contenu vidéo fourni par le gestionnaire de fichiers ou une autre application Android au moyen d'un accès temporaire en lecture seule à un content URI. Il utilise AndroidX Media3 ExoPlayer et ne modifie jamais la vidéo source.",
+  "p_introduction": "3-Ember Player est à la fois un plugin du gestionnaire de fichiers AutoJs6 et un lecteur vidéo autonome simple. Il accepte des content URI temporaires en lecture seule, utilise AndroidX Media3 ExoPlayer et ne modifie jamais la vidéo source.",
   "h3_functions": "Fonctionnalités",
   "features": [
     "Compatibilité légère de XVID dans MKV via le décodeur MPEG-4 Part 2 intégré de l’appareil, avec transfert explicite vers un autre lecteur lorsque le décodeur système est indisponible ou échoue.",
@@ -16,7 +16,7 @@
     "Propose une action sécurisée Ouvrir avec une autre application après un échec de lecture en reconstruisant un Intent de visualisation en lecture seule et en excluant ce plugin de la liste des candidats.",
     "Offre une lecture immersive en plein écran avec gestes pour la luminosité, le volume et la navigation, sauts par double touche, vitesse temporaire par appui long et verrouillage des commandes.",
     "Propose des vitesses de lecture de 0,25× à 3× ainsi que la bascule en un geste du mode d'affichage et de l'orientation de l'écran.",
-    "Mémorise localement la position de reprise indexée par des condensés du content URI, effacée une fois la vidéo terminée.",
+    "L’historique de reprise conserve exactement la dernière vidéo inachevée sous forme d’un condensé d’identité SHA-256 et de valeurs temporelles ; l’ouverture d’une autre vidéo l’efface immédiatement et une lecture terminée n’est jamais conservée.",
     "Permet de sélectionner les pistes audio et les sous-titres intégrés, désactive les sous-titres par défaut et signale clairement les pistes non prises en charge.",
     "Propose la répétition de la vidéo actuelle, un panneau de métadonnées détaillé, l’orientation selon le format et l’incrustation vidéo sur API 26+ avec lecture/pause à distance.",
     "Intègre MediaSession pour les commandes des écouteurs, du Bluetooth et du système, avec une notification multimédia affichant le titre et la progression.",
@@ -25,7 +25,8 @@
     "Captures de l’image actuelle sans autorisation sur Android 10+, enregistrées comme PNG séparés via MediaStore sans modifier la vidéo source.",
     "Files d'attente vidéo du même dossier triées naturellement via Explorer Action v12, avec précédent / suivant, séquence, aléatoire, répétition d'un élément et lecture automatique du suivant.",
     "Découverte des sous-titres externes .srt et .ass correspondants, y compris les suffixes de langue, désactivés par défaut et chargés uniquement après une sélection explicite.",
-    "Historique de reprise facultatif géré par l'hôte, désactivé par défaut, désactivable ou effaçable dans les réglages AutoJs6, sans marqueur de visionnage dans les listes de fichiers."
+    "Génère des rôles sémantiques clairs et sombres lisibles depuis une couleur HCT, suit AutoJs6 par défaut et propose 19 couleurs Material 500 localisées ainsi qu’un RGB personnalisé prévisualisé.",
+    "Fournit un lanceur autonome et des paramètres de langue, nuit et couleur suivant l’hôte, reprise d’une seule vidéo, vérifications manuelles et automatiques, versions ignorées, historique et informations sur l’application et le développeur."
   ],
   "h3_host_integration": "Intégration à l'hôte",
   "p_host_integration_location": "L'hôte utilise ce plugin pour le chemin principal d'ouverture des vidéos et l'action Lire.",
@@ -36,10 +37,10 @@
   "p_supported_formats": "L'action principale de l'explorateur accepte `video/*` pour tous les types vidéo reconnus par l'hôte et conserve ces 23 filtres d'extension exacts pour la compatibilité avec les anciens hôtes",
   "h3_plugin_interface": "Interface du plugin",
   "p_plugin_interface": "L'hôte découvre et exécute le plugin avec les identités suivantes",
-  "p_plugin_scope": "La version 1.4 fournit une action principale de l'explorateur en lecture seule selon le protocole v12. Un hôte compatible peut joindre des capacités par requête pour les frères directs et la progression de lecture ; les hôtes sans ces extensions facultatives conservent la lecture d'un seul fichier. L'entrée externe indépendante reste limitée à un content URI en lecture seule avec un sous-type MIME `video/*` valide.",
+  "p_plugin_scope": "La version 2.0 fournit une action principale de l'explorateur en lecture seule selon le protocole v12. Un hôte compatible peut joindre des capacités par requête pour les frères directs et la progression de lecture ; les hôtes sans ces extensions facultatives conservent la lecture d'un seul fichier. L'entrée externe indépendante reste limitée à un content URI en lecture seule avec un sous-type MIME `video/*` valide.",
   "p_plugin_packaging": "Les fonctions complètes de coopération nécessitent AutoJs6 6.8.0 build 5276 ou ultérieur et Explorer Action v12 ; cette exigence ne sera pas relevée par les capacités futures du plugin.",
   "h3_security": "Sécurité",
-  "p_security": "Le plugin ne demande aucune autorisation de stockage ou INTERNET. Sa frontière de l'explorateur protégée par signature valide l'enveloppe complète du protocole v12, l'unique cible sélectionnée, la relation au parent, ClipData, les métadonnées, la version de l'hôte et les accès en lecture seule. Les Host Sessions facultatives sont liées par l'hôte à l'UID du plugin et permettent seulement de lister le parent direct du fichier sélectionné et d'ouvrir celui-ci ou un frère direct lisible. Le lecteur privé valide une file opaque bornée et ne reçoit jamais de chemin de système de fichiers. La frontière publique ACTION_VIEW reste indépendante et limitée à un fichier.",
+  "p_security": "L’application ne demande aucune autorisation de stockage et n’écrit jamais les vidéos sources. Internet sert uniquement aux vérifications des versions GitHub lancées par l’utilisateur ou quotidiennes. Sa frontière de l'explorateur protégée par signature valide l'enveloppe complète du protocole v12, l'unique cible sélectionnée, la relation au parent, ClipData, les métadonnées, la version de l'hôte et les accès en lecture seule. Les Host Sessions facultatives sont liées par l'hôte à l'UID du plugin et permettent seulement de lister le parent direct du fichier sélectionné et d'ouvrir celui-ci ou un frère direct lisible. Le lecteur privé valide une file opaque bornée et ne reçoit jamais de chemin de système de fichiers. La frontière publique ACTION_VIEW reste indépendante et limitée à un fichier.",
   "h3_security_limits": "Limites de sécurité",
   "security_limits": [
     "L'explorateur part exactement d'un content URI sélectionné ; une Host Session facultative ne peut exposer que les frères directs lisibles et jamais un accès récursif aux dossiers.",
@@ -47,7 +48,7 @@
     "Les accès en écriture et persistants sont toujours refusés. L'accès prefix utilisé pour valider l'URI parent n'est jamais transmis au lecteur.",
     "La frontière publique ACTION_VIEW refuse les accès en écriture, persistants et prefix.",
     "Les candidats externes sont d'abord résolus, filtrés pour conserver les autres paquets, puis lancés avec un nouvel Intent en lecture seule.",
-    "L'historique de lecture de l'hôte est désactivé par défaut, ne stocke après consentement explicite que des condensés de chemins canoniques et des valeurs temporelles, et peut être désactivé ou effacé dans les réglages AutoJs6.",
+    "L’historique de reprise conserve exactement la dernière vidéo inachevée sous forme d’un condensé d’identité SHA-256 et de valeurs temporelles ; l’ouverture d’une autre vidéo l’efface immédiatement et une lecture terminée n’est jamais conservée.",
     "La reconnaissance comme vidéo ou une extension héritée répertoriée ne garantit pas le décodage sur tous les appareils. Media3 et les codecs de plateforme installés déterminent la compatibilité réelle de lecture."
   ],
   "h3_release_history": "Historique des versions",

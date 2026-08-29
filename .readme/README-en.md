@@ -1,8 +1,10 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
+  <h1>3-Ember Player</h1>
+
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
+    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
   </p>
 
   <p>File manager plugin. Play video files directly</p>
@@ -39,7 +41,7 @@ The current README.md supports the following languages:
 
 ******
 
-Video Player plays video content supplied by the file manager or another Android application through temporary read-only content URI access. It uses AndroidX Media3 ExoPlayer and never modifies the source video.
+3-Ember Player is both an AutoJs6 file-manager plugin and a standalone simple video player. It accepts temporary read-only content URIs, uses AndroidX Media3 ExoPlayer, and never modifies the source video.
 
 ******
 
@@ -55,7 +57,7 @@ Video Player plays video content supplied by the file manager or another Android
 - Offers a safe Open with another app action after playback failure by rebuilding a read-only view intent and excluding this plugin from the candidate list.
 - Fullscreen immersive playback with gestures for brightness, volume and seeking, double-tap jumps, a long-press speed boost, and a control lock.
 - Playback speeds from 0.25× to 3× with one-tap resize mode and screen orientation switching.
-- Local resume memory keyed by content URI digests, cleared once a video finishes.
+- Resume history retains exactly one most recently opened unfinished video as a SHA-256 identity digest plus time values; opening another video clears it immediately, and completed playback is never retained.
 - Embedded audio-track and subtitle selection with subtitles off by default and unsupported tracks clearly identified.
 - Current-video repeat, a detailed metadata panel, aspect-based orientation, and API 26+ picture-in-picture with remote play/pause.
 - MediaSession integration for headset, Bluetooth, and system controls, plus a media-style notification with title and playback progress.
@@ -64,7 +66,8 @@ Video Player plays video content supplied by the file manager or another Android
 - Permission-free current-frame screenshots on Android 10+ saved as separate PNG files through MediaStore without modifying the source video.
 - Naturally ordered same-folder video queues through Explorer Action v12, with previous / next, sequence, shuffle, repeat-one, and automatic next-item playback.
 - Matching .srt and .ass sidecars, including language suffixes, discovered with subtitles off by default and loaded only after explicit selection.
-- Opt-in host-owned resume history that is off by default, can be disabled or cleared in AutoJs6 settings, and adds no watched marker to file lists.
+- Builds accessible light and dark semantic roles from one HCT source color, follows AutoJs6 by default, and offers 19 localized Material 500 presets plus live-preview custom RGB colors.
+- Provides a standalone launcher and settings for host-following language, night mode and color, single-video resume behavior, manual and automatic update checks, ignored versions, release history, and app/developer information.
 
 ******
 
@@ -104,6 +107,8 @@ The host discovers and executes the plugin with the following identities:
 service action: org.autojs.plugin.EXPLORER_ACTION
 execute action: org.autojs.plugin.EXPLORER_ACTION_EXECUTE
 plugin id: video-player
+source namespace: io.github.supermonster003.autojs6.plugin.threeemberplayer
+stable application id: io.github.supermonster003.autojs6.plugin.videoplayer
 engine: explorer-action
 variant: default
 Explorer action id: play-video
@@ -115,7 +120,7 @@ external MIME type: video/*
 required host build: 5276
 ```
 
-Version 1.4 provides a protocol v12 primary read-only Explorer action. A compatible host may attach request-scoped direct-sibling and playback-progress capabilities; hosts without those optional extensions retain single-file playback. The independent external entry accepts a read-only content URI with any valid `video/*` MIME subtype.
+Version 2.0 provides a protocol v12 primary read-only Explorer action. A compatible host may attach request-scoped direct-sibling and playback-progress capabilities; hosts without those optional extensions retain single-file playback. The independent external entry accepts a read-only content URI with any valid `video/*` MIME subtype.
 
 AutoJs6 6.8.0 build 5276 or later and Explorer Action v12 are required for the full host-cooperation features; this requirement will not be raised for later plugin capabilities.
 
@@ -125,7 +130,7 @@ AutoJs6 6.8.0 build 5276 or later and Explorer Action v12 are required for the f
 
 ******
 
-The plugin requests no storage or INTERNET permission. Its signature-protected Explorer boundary validates the complete protocol v12 envelope, exact single selected target, parent relationship, ClipData, metadata, host build, and read-only grants. Optional Host Sessions are pinned by the host to the plugin UID and permit only listing the selected file's direct parent and opening the selected file or a readable direct sibling. The private player validates a bounded opaque queue and never receives a filesystem path. The public ACTION_VIEW boundary remains independent and single-file only.
+The app requests no storage permission and never writes source videos. Internet access is used only for user-triggered or daily GitHub release checks. Its signature-protected Explorer boundary validates the complete protocol v12 envelope, exact single selected target, parent relationship, ClipData, metadata, host build, and read-only grants. Optional Host Sessions are pinned by the host to the plugin UID and permit only listing the selected file's direct parent and opening the selected file or a readable direct sibling. The private player validates a bounded opaque queue and never receives a filesystem path. The public ACTION_VIEW boundary remains independent and single-file only.
 
 ******
 
@@ -138,7 +143,7 @@ The plugin requests no storage or INTERNET permission. Its signature-protected E
 - Write and persistable grants are always rejected. Prefix access used to validate the Explorer parent URI is never forwarded to the player.
 - The public ACTION_VIEW boundary rejects write, persistable, and prefix grants.
 - External fallback candidates are resolved first, filtered to other packages, and launched with a newly built read-only intent.
-- Host playback history is disabled by default, stores only canonical-path digests and time values after explicit opt-in, and can be disabled or cleared in AutoJs6 settings.
+- Resume history retains exactly one most recently opened unfinished video as a SHA-256 identity digest plus time values; opening another video clears it immediately, and completed playback is never retained.
 - Recognition as video or a listed legacy extension does not guarantee decoding support on every device. Media3 and the installed platform codecs determine actual playback support.
 
 ******
@@ -146,6 +151,18 @@ The plugin requests no storage or INTERNET permission. Its signature-protected E
 ### Release history
 
 ******
+
+# v2.0.0
+
+###### 2026/08/29
+
+* `Feature` Added a detailed HCT-based color system that generates accessible light and dark semantic roles for toolbars, controls, surfaces, outlines, and errors from one source color, with 19 localized Material 500 presets and live-preview custom RGB colors
+* `Feature` Added a launcher and standalone single-file player mode, plus a dedicated settings screen for language, night mode, theme color, resume behavior, updates, release history, and app/developer information
+* `Feature` Language, night mode, and source color now follow AutoJs6 by default through its official read-only settings contract; unavailable host choices remain visible but disabled and fall back to app defaults
+* `Feature` Added manual and daily automatic update checks, ignored-version management, and localized bundled release history
+* `Fix` Made Follow AutoJs6 reliable by exposing the protected plugin-info service entry required by the host settings provider
+* `Improvement` Resume playback now remembers exactly one most recently opened video, immediately discards it when another video opens, and never keeps completed playback in either standalone or host-managed history
+* `Improvement` Renamed the fixed app and plugin display name to 3-Ember Player and the source namespace to threeemberplayer while retaining the established application and plugin IDs for upgrade compatibility
 
 # v1.4.0
 
@@ -166,18 +183,6 @@ The plugin requests no storage or INTERNET permission. Its signature-protected E
 
 * `Fix` Added a narrow XVID-in-MKV compatibility layer that exposes validated VFW/FourCC XVID tracks to the device's built-in MPEG-4 Part 2 decoder without transcoding or modifying the source
 * `Fix` Stopped audio-only playback when no compatible system decoder exists or decoding fails, with a specific explanation and Open with another app recovery
-
-# v1.3.0
-
-###### 2026/08/27
-
-* `Feature` Sleep timer: pause after 15, 30, 45, or 60 minutes or when the current video ends, with repeat-mode conflict handling
-* `Feature` Picture interaction: pinch zoom from 0.25× to 4×, double-tap reset while zoomed, and coordination with the existing resize modes
-* `Feature` Scrub preview: a target-time bubble plus best-effort in-memory thumbnails that silently fall back to time only
-* `Feature` Android 10+ current-frame screenshots saved as separate PNG files through MediaStore without storage permission or source modification
-* `Feature` Persistent gesture settings for low, normal, or high sensitivity and 5, 10, or 30-second double-tap seeking
-* `Improvement` Sleep deadlines use elapsed realtime and survive playback-page state recreation without depending on wall-clock changes
-* `Improvement` Thumbnail extraction coalesces rapid scrub requests on one worker and releases every transient bitmap when it becomes stale
 
 ##### For more releases
 

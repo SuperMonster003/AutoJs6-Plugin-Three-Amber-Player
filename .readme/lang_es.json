@@ -5,7 +5,7 @@
   "h3_languages_with_ascii": "Idiomas (Languages)",
   "p_languages_all_supported_for_readme": "El README.md actual admite los siguientes idiomas",
   "h3_introduction": "Introducción",
-  "p_introduction": "Video Player reproduce contenido de video proporcionado por el gestor de archivos u otra aplicación Android mediante acceso temporal de solo lectura a un content URI. Usa AndroidX Media3 ExoPlayer y nunca modifica el video de origen.",
+  "p_introduction": "3-Ember Player es tanto un plugin del gestor de archivos de AutoJs6 como un reproductor de vídeo independiente y sencillo. Acepta content URI temporales de solo lectura, usa AndroidX Media3 ExoPlayer y nunca modifica el vídeo de origen.",
   "h3_functions": "Funciones",
   "features": [
     "Compatibilidad ligera con XVID en MKV mediante el decodificador MPEG-4 Part 2 integrado del dispositivo, con recuperación explícita mediante otro reproductor cuando el decodificador del sistema no está disponible o falla.",
@@ -16,7 +16,7 @@
     "Ofrece una acción segura Abrir con otra aplicación tras un fallo de reproducción mediante la reconstrucción de un Intent de visualización de solo lectura y la exclusión de este plugin de la lista de candidatos.",
     "Ofrece reproducción inmersiva a pantalla completa con gestos para brillo, volumen y búsqueda, saltos con doble toque, velocidad temporal con pulsación larga y bloqueo de controles.",
     "Proporciona velocidades de reproducción de 0,25× a 3× y cambio con un toque del modo de ajuste y la orientación de la pantalla.",
-    "Recuerda localmente la posición de reanudación indexada por resúmenes del content URI, borrada al terminar el video.",
+    "El historial de reanudación conserva exactamente el último vídeo sin terminar como un resumen SHA-256 de identidad y valores de tiempo; abrir otro vídeo lo borra de inmediato y nunca se conserva una reproducción terminada.",
     "Selecciona pistas de audio y subtítulos integrados, con los subtítulos desactivados de forma predeterminada y las pistas no compatibles claramente identificadas.",
     "Ofrece repetición del video actual, un panel de metadatos detallado, orientación según la relación de aspecto e imagen en imagen en API 26+ con reproducción/pausa remota.",
     "Integra MediaSession para controles de auriculares, Bluetooth y del sistema, además de una notificación multimedia con título y progreso.",
@@ -25,7 +25,8 @@
     "Capturas del fotograma actual sin permisos en Android 10+, guardadas como PNG independientes mediante MediaStore sin modificar el video de origen.",
     "Colas de videos de la misma carpeta con orden natural mediante Explorer Action v12, con anterior / siguiente, secuencia, aleatorio, repetición de uno y reproducción automática del siguiente elemento.",
     "Descubre subtítulos externos .srt y .ass coincidentes, incluidos sufijos de idioma, desactivados de forma predeterminada y cargados solo tras una selección explícita.",
-    "Historial de reanudación opcional administrado por el host, desactivado de forma predeterminada, desactivable o borrable en los ajustes de AutoJs6 y sin marcas de visto en la lista de archivos."
+    "Genera roles semánticos accesibles claros y oscuros desde un color HCT, sigue AutoJs6 de forma predeterminada y ofrece 19 preajustes Material 500 localizados y RGB personalizado con vista previa.",
+    "Ofrece un lanzador independiente y ajustes de idioma, noche y color que siguen al host, reanudación de un único vídeo, comprobaciones manuales y automáticas, versiones ignoradas, historial e información de la aplicación y el desarrollador."
   ],
   "h3_host_integration": "Integración con el host",
   "p_host_integration_location": "El host usa este complemento para la ruta principal de apertura de video y la acción Reproducir.",
@@ -36,10 +37,10 @@
   "p_supported_formats": "La acción principal del Explorador acepta `video/*` para todos los tipos de video reconocidos por el host y conserva estos 23 comparadores exactos de extensión para mantener la compatibilidad con hosts anteriores",
   "h3_plugin_interface": "Interfaz del plugin",
   "p_plugin_interface": "El host descubre y ejecuta el complemento con las siguientes identidades",
-  "p_plugin_scope": "La versión 1.4 proporciona una acción principal de Explorador de solo lectura con protocolo v12. Un host compatible puede adjuntar capacidades por solicitud para hermanos directos y progreso de reproducción; los hosts sin estas extensiones opcionales conservan la reproducción de un único archivo. La entrada externa independiente sigue aceptando solo un content URI de lectura con un subtipo MIME `video/*` válido.",
+  "p_plugin_scope": "La versión 2.0 proporciona una acción principal de Explorador de solo lectura con protocolo v12. Un host compatible puede adjuntar capacidades por solicitud para hermanos directos y progreso de reproducción; los hosts sin estas extensiones opcionales conservan la reproducción de un único archivo. La entrada externa independiente sigue aceptando solo un content URI de lectura con un subtipo MIME `video/*` válido.",
   "p_plugin_packaging": "Las funciones completas de cooperación requieren AutoJs6 6.8.0 build 5276 o posterior y Explorer Action v12; este requisito no aumentará con capacidades futuras del plugin.",
   "h3_security": "Seguridad",
-  "p_security": "El plugin no solicita permisos de almacenamiento ni de INTERNET. Su límite del Explorador protegido por firma valida el sobre completo del protocolo v12, el único destino seleccionado, la relación con el padre, ClipData, metadatos, compilación del host y concesiones de solo lectura. Las Host Session opcionales quedan vinculadas por el host al UID del plugin y solo permiten listar el padre directo del archivo seleccionado y abrir este o un hermano directo legible. El reproductor privado valida una cola opaca acotada y nunca recibe una ruta del sistema de archivos. El límite público ACTION_VIEW permanece independiente y de un único archivo.",
+  "p_security": "La aplicación no solicita permisos de almacenamiento y nunca escribe los vídeos de origen. Internet se usa solo para comprobaciones de versiones de GitHub iniciadas por el usuario o diarias. Su límite del Explorador protegido por firma valida el sobre completo del protocolo v12, el único destino seleccionado, la relación con el padre, ClipData, metadatos, compilación del host y concesiones de solo lectura. Las Host Session opcionales quedan vinculadas por el host al UID del plugin y solo permiten listar el padre directo del archivo seleccionado y abrir este o un hermano directo legible. El reproductor privado valida una cola opaca acotada y nunca recibe una ruta del sistema de archivos. El límite público ACTION_VIEW permanece independiente y de un único archivo.",
   "h3_security_limits": "Límites de seguridad",
   "security_limits": [
     "El Explorador parte exactamente de un content URI seleccionado; una Host Session opcional solo puede exponer hermanos directos legibles y nunca acceso recursivo a directorios.",
@@ -47,7 +48,7 @@
     "Las concesiones de escritura y persistentes siempre se rechazan. El acceso prefix utilizado para validar el URI padre nunca se reenvía al reproductor.",
     "El límite público ACTION_VIEW rechaza concesiones de escritura, persistentes y prefix.",
     "Los candidatos externos se resuelven primero, se filtran para conservar otros paquetes y se inician con un Intent de solo lectura recién creado.",
-    "El historial de reproducción del host está desactivado de forma predeterminada, solo guarda resúmenes de rutas canónicas y valores de tiempo tras la aceptación explícita, y puede desactivarse o borrarse en los ajustes de AutoJs6.",
+    "El historial de reanudación conserva exactamente el último vídeo sin terminar como un resumen SHA-256 de identidad y valores de tiempo; abrir otro vídeo lo borra de inmediato y nunca se conserva una reproducción terminada.",
     "El reconocimiento como video o una extensión heredada incluida no garantiza compatibilidad de decodificación en todos los dispositivos. Media3 y los códecs de plataforma instalados determinan la compatibilidad real de reproducción."
   ],
   "h3_release_history": "Historial de versiones",

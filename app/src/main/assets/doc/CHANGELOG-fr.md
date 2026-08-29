@@ -4,6 +4,18 @@
 
 ******
 
+# v2.0.0
+
+###### 2026/08/29
+
+* `Fonctionnalité` Ajout d’un système de couleurs HCT détaillé qui génère depuis une seule couleur des rôles sémantiques lisibles en modes clair et sombre pour barres, commandes, surfaces, contours et erreurs, avec 19 couleurs Material 500 localisées et un RGB personnalisé prévisualisé
+* `Fonctionnalité` Ajout d’un écran de lancement et d’un lecteur autonome pour un fichier, ainsi que de paramètres dédiés à la langue, au mode nuit, à la couleur, à la reprise, aux mises à jour, à l’historique et aux informations sur l’application et le développeur
+* `Fonctionnalité` La langue, le mode nuit et la couleur suivent AutoJs6 par défaut via son contrat officiel en lecture seule ; si l’hôte est indisponible, les choix restent visibles mais désactivés et reviennent aux valeurs par défaut
+* `Fonctionnalité` Ajout de la vérification manuelle et automatique quotidienne, de la gestion des versions ignorées et d’un historique localisé intégré
+* `Correctif` Le suivi d’AutoJs6 est désormais fiable grâce à l’entrée protégée d’informations du plugin requise par le fournisseur de paramètres de l’hôte
+* `Amélioration` La reprise mémorise exactement la dernière vidéo ouverte, efface immédiatement l’ancienne à l’ouverture d’une autre et ne conserve jamais une lecture terminée, dans l’historique local comme celui de l’hôte
+* `Amélioration` Le nom fixe de l’application et du plugin devient 3-Ember Player et l’espace de noms source threeemberplayer, tout en conservant les identifiants publiés pour les mises à niveau
+
 # v1.4.0
 
 ###### 2026/08/28

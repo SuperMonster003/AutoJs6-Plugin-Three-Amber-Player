@@ -1,8 +1,10 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
+  <h1>3-Ember Player</h1>
+
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
+    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
   </p>
 
   <p>檔案管理器外掛程式. 直接播放影片檔案</p>
@@ -39,7 +41,7 @@
 
 ******
 
-影片播放器透過臨時唯讀 content URI 播放檔案管理器或其他 Android 應用程式提供的影片內容. 插件使用 AndroidX Media3 ExoPlayer, 且絕不修改來源影片.
+3-Ember Player 既是 AutoJs6 檔案管理器外掛程式, 亦是獨立的簡易影片播放器. 應用程式接受臨時唯讀 content URI, 使用 AndroidX Media3 ExoPlayer, 且絕不修改來源影片.
 
 ******
 
@@ -55,7 +57,7 @@
 - 播放失敗後提供安全的使用其他應用程式開啟動作, 重新建立唯讀檢視 Intent 並從候選清單排除此外掛程式.
 - 全螢幕沉浸式播放, 支援手勢調節亮度, 音量與播放進度, 雙按跳轉, 長按倍速與控制鎖定.
 - 0.25× 至 3× 倍速播放, 畫面縮放模式與螢幕方向一鍵切換.
-- 基於 content URI 摘要的本機播放進度記憶, 播完自動清除.
+- 接續播放記錄只保留最近開啟且未播完的一個影片, 內容僅為 SHA-256 身分摘要與時間數值; 開啟其他影片時立即清除舊記錄, 播放完畢不會保留位置.
 - 支援內嵌音軌與字幕選擇, 字幕預設關閉, 不支援的軌道會清楚標示.
 - 提供單曲循環, 詳細媒體資訊, 按畫面比例建議方向及 API 26+ 畫中畫遙控播放/暫停.
 - 透過 MediaSession 支援耳機, 藍牙與系統媒體控制, 並以媒體通知顯示標題和播放進度.
@@ -64,7 +66,8 @@
 - Android 10+ 可免權限將目前畫面透過 MediaStore 儲存為獨立 PNG, 且不修改來源影片.
 - 透過 Explorer Action v12 建立同目錄影片自然排序佇列, 支援上一個 / 下一個, 順序, 隨機, 單項循環及自動連播下一項.
 - 探索同名 .srt / .ass 外掛字幕及語言後綴變體, 字幕預設關閉, 只在使用者明確選擇後載入.
-- 由主程式管理的可選續播歷史預設關閉, 可在 AutoJs6 設定中關閉或清除, 且檔案清單不顯示已看標記.
+- 由單一 HCT 色源產生清晰的亮色與暗色語意配色, 預設跟隨 AutoJs6, 並提供 19 個本地化 Material 500 預置色及可即時預覽的自訂 RGB 色彩.
+- 提供獨立啟動頁面及設定頁, 可設定跟隨主程式的語言 / 夜間模式 / 色彩、單一影片接續播放、手動與自動更新、已忽略版本、發行記錄及應用程式與開發者資訊.
 
 ******
 
@@ -104,6 +107,8 @@ MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V
 service action: org.autojs.plugin.EXPLORER_ACTION
 execute action: org.autojs.plugin.EXPLORER_ACTION_EXECUTE
 plugin id: video-player
+source namespace: io.github.supermonster003.autojs6.plugin.threeemberplayer
+stable application id: io.github.supermonster003.autojs6.plugin.videoplayer
 engine: explorer-action
 variant: default
 Explorer action id: play-video
@@ -115,7 +120,7 @@ external MIME type: video/*
 required host build: 5276
 ```
 
-版本 1.4 提供通訊協定 v12 唯讀檔案瀏覽器主要動作. 相容主程式可附加要求級直接同級讀取與播放進度能力; 不支援這些可選擴充的主程式保留單檔播放. 獨立外部入口仍只接受帶有效 `video/*` MIME 子類型的唯讀 content URI.
+版本 2.0 提供通訊協定 v12 唯讀檔案瀏覽器主要動作. 相容主程式可附加要求級直接同級讀取與播放進度能力; 不支援這些可選擴充的主程式保留單檔播放. 獨立外部入口仍只接受帶有效 `video/*` MIME 子類型的唯讀 content URI.
 
 完整主程式協同能力需要 AutoJs6 6.8.0 build 5276 或更新版本及 Explorer Action v12; 後續外掛程式能力不會提高此要求.
 
@@ -125,7 +130,7 @@ required host build: 5276
 
 ******
 
-外掛程式不要求儲存空間或 INTERNET 權限. 受簽章權限保護的檔案瀏覽器邊界會驗證完整通訊協定 v12 信封, 精確的單一選取目標, 父子關係, ClipData, 元資料, 主程式組建版本和唯讀授權. 可選 Host Session 由主程式綁定至外掛程式 UID, 只允許列出選取檔案的直接父目錄及開啟選取檔案或可讀直接同級檔案. 私有播放器只接收已驗證的有界不透明佇列, 不接收檔案系統路徑. 公開 ACTION_VIEW 邊界保持獨立且只支援單檔.
+應用程式不要求儲存權限且絕不寫入來源影片. 互聯網權限只用於使用者主動觸發或每日一次的 GitHub 發行版檢查. 受簽章權限保護的檔案瀏覽器邊界會驗證完整通訊協定 v12 信封, 精確的單一選取目標, 父子關係, ClipData, 元資料, 主程式組建版本和唯讀授權. 可選 Host Session 由主程式綁定至外掛程式 UID, 只允許列出選取檔案的直接父目錄及開啟選取檔案或可讀直接同級檔案. 私有播放器只接收已驗證的有界不透明佇列, 不接收檔案系統路徑. 公開 ACTION_VIEW 邊界保持獨立且只支援單檔.
 
 ******
 
@@ -138,7 +143,7 @@ required host build: 5276
 - 一律拒絕寫入和持久授權. 用於驗證檔案瀏覽器父層 URI 的前綴存取權絕不會轉送到播放器.
 - 公開 ACTION_VIEW 邊界拒絕寫入, 持久和前綴授權.
 - 外部回復候選應用程式會先被解析, 再篩選為其他套件, 最後透過新建的唯讀 Intent 啟動.
-- 主程式播放歷史預設關閉, 只在使用者明確啟用後儲存規範路徑摘要與時間數值, 並可在 AutoJs6 設定中關閉或清除.
+- 接續播放記錄只保留最近開啟且未播完的一個影片, 內容僅為 SHA-256 身分摘要與時間數值; 開啟其他影片時立即清除舊記錄, 播放完畢不會保留位置.
 - 識別為影片或符合列出的舊版副檔名均不保證在每部裝置上都能解碼. 實際播放支援取決於 Media3 和已安裝的平台編解碼器.
 
 ******
@@ -146,6 +151,18 @@ required host build: 5276
 ### 版本記錄
 
 ******
+
+# v2.0.0
+
+###### 2026/08/29
+
+* `新增` 新增以 HCT 建立的細緻單一色源系統: 由一個色彩產生適用於亮色與暗色外觀的工具列、控制、表面、輪廓及錯誤等清晰語意色, 提供 19 個本地化 Material 500 預置色及可即時預覽的自訂 RGB 色彩
+* `新增` 新增啟動頁面與獨立單檔案播放器模式, 並提供獨立設定頁面, 包含語言、夜間模式、主題色彩、接續播放、更新、發行記錄及應用程式與開發者資訊
+* `新增` 語言、夜間模式和色源預設透過 AutoJs6 官方唯讀設定契約跟隨主程式; 主程式不可用時仍顯示但停用相應選項, 並使用應用程式預設值
+* `新增` 新增手動與每日自動檢查更新、已忽略版本管理及本地化內置發行記錄
+* `修復` 公開主程式設定提供者要求的受保護外掛程式資訊服務入口, 確保跟隨 AutoJs6 功能可靠可用
+* `優化` 接續播放現在只記住最近開啟的一個影片, 開啟其他影片時立即捨棄舊記錄, 獨立及主程式記錄均不會保留已播放完畢的位置
+* `優化` 應用程式與外掛程式固定顯示名稱改為 3-Ember Player, 原始碼命名空間改為 threeemberplayer, 同時保留既有應用程式及外掛程式 ID 以兼容覆蓋更新
 
 # v1.4.0
 
@@ -166,18 +183,6 @@ required host build: 5276
 
 * `修復` 新增輕量 XVID-in-MKV 相容層: 將嚴格驗證的 VFW/FourCC XVID 軌道交由裝置內置 MPEG-4 Part 2 解碼器處理, 不轉碼且不修改來源檔案
 * `修復` 裝置沒有相容系統解碼器或解碼失敗時停止只播放音訊, 顯示專項說明並提供使用其他應用程式開啟
-
-# v1.3.0
-
-###### 2026/08/27
-
-* `新增` 睡眠計時器: 可在 15, 30, 45 或 60 分鐘後, 或目前影片結束時暫停, 並處理與單曲循環的模式衝突
-* `新增` 畫面互動: 0.25× 至 4× 雙指捏合縮放, 縮放時雙按復位, 並與現有畫面縮放模式聯動
-* `新增` 拖曳預覽: 顯示目標時間氣泡及盡力提取的記憶體縮圖, 提取失敗時靜默退回只顯示時間
-* `新增` Android 10+ 目前畫面截圖透過 MediaStore 儲存為獨立 PNG, 無需儲存權限且不修改來源影片
-* `新增` 持久化手勢設定: 低/一般/高三檔靈敏度及 5/10/30 秒雙按跳轉
-* `優化` 睡眠截止時間使用系統運行時間計算, 不受時鐘變更影響, 並可隨播放頁狀態重建恢復
-* `優化` 縮圖提取以單一工作執行緒合併快速拖曳要求, 過期的臨時點陣圖會及時釋放
 
 ##### 查看更多版本
 

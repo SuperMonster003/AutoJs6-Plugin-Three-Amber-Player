@@ -1,8 +1,10 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
+  <h1>{{ product_name }}</h1>
+
   <p>
-    <img src="{{ repo_url }}/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="video-player-ic-launcher" border="0" width="128" />
+    <img src="{{ repo_url }}/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
   </p>
 
   <p>{{ text_plugin_synopsis }}</p>
@@ -78,6 +80,8 @@
 service action: {{ plugin_action }}
 execute action: {{ plugin_execute_action }}
 plugin id: {{ plugin_id }}
+source namespace: {{ source_namespace }}
+stable application id: {{ stable_application_id }}
 engine: {{ plugin_engine }}
 variant: {{ plugin_variant }}
 Explorer action id: {{ explorer_action_id }}

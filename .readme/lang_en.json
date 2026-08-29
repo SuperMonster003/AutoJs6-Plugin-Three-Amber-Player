@@ -5,7 +5,7 @@
   "h3_languages_with_ascii": "Languages",
   "p_languages_all_supported_for_readme": "The current README.md supports the following languages",
   "h3_introduction": "Introduction",
-  "p_introduction": "Video Player plays video content supplied by the file manager or another Android application through temporary read-only content URI access. It uses AndroidX Media3 ExoPlayer and never modifies the source video.",
+  "p_introduction": "3-Ember Player is both an AutoJs6 file-manager plugin and a standalone simple video player. It accepts temporary read-only content URIs, uses AndroidX Media3 ExoPlayer, and never modifies the source video.",
   "h3_functions": "Features",
   "features": [
     "Lightweight XVID-in-MKV compatibility through the device's built-in MPEG-4 Part 2 decoder, with explicit external-player recovery when the system decoder is unavailable or fails.",
@@ -16,7 +16,7 @@
     "Offers a safe Open with another app action after playback failure by rebuilding a read-only view intent and excluding this plugin from the candidate list.",
     "Fullscreen immersive playback with gestures for brightness, volume and seeking, double-tap jumps, a long-press speed boost, and a control lock.",
     "Playback speeds from 0.25× to 3× with one-tap resize mode and screen orientation switching.",
-    "Local resume memory keyed by content URI digests, cleared once a video finishes.",
+    "Resume history retains exactly one most recently opened unfinished video as a SHA-256 identity digest plus time values; opening another video clears it immediately, and completed playback is never retained.",
     "Embedded audio-track and subtitle selection with subtitles off by default and unsupported tracks clearly identified.",
     "Current-video repeat, a detailed metadata panel, aspect-based orientation, and API 26+ picture-in-picture with remote play/pause.",
     "MediaSession integration for headset, Bluetooth, and system controls, plus a media-style notification with title and playback progress.",
@@ -25,7 +25,8 @@
     "Permission-free current-frame screenshots on Android 10+ saved as separate PNG files through MediaStore without modifying the source video.",
     "Naturally ordered same-folder video queues through Explorer Action v12, with previous / next, sequence, shuffle, repeat-one, and automatic next-item playback.",
     "Matching .srt and .ass sidecars, including language suffixes, discovered with subtitles off by default and loaded only after explicit selection.",
-    "Opt-in host-owned resume history that is off by default, can be disabled or cleared in AutoJs6 settings, and adds no watched marker to file lists."
+    "Builds accessible light and dark semantic roles from one HCT source color, follows AutoJs6 by default, and offers 19 localized Material 500 presets plus live-preview custom RGB colors.",
+    "Provides a standalone launcher and settings for host-following language, night mode and color, single-video resume behavior, manual and automatic update checks, ignored versions, release history, and app/developer information."
   ],
   "h3_host_integration": "Host integration",
   "p_host_integration_location": "The host uses this plugin for the primary video-open path and the Play action.",
@@ -36,10 +37,10 @@
   "p_supported_formats": "The primary Explorer action accepts `video/*` for every video type recognized by the host and retains these 23 exact extension matchers for compatibility with older hosts",
   "h3_plugin_interface": "Plugin interface",
   "p_plugin_interface": "The host discovers and executes the plugin with the following identities",
-  "p_plugin_scope": "Version 1.4 provides a protocol v12 primary read-only Explorer action. A compatible host may attach request-scoped direct-sibling and playback-progress capabilities; hosts without those optional extensions retain single-file playback. The independent external entry accepts a read-only content URI with any valid `video/*` MIME subtype.",
+  "p_plugin_scope": "Version 2.0 provides a protocol v12 primary read-only Explorer action. A compatible host may attach request-scoped direct-sibling and playback-progress capabilities; hosts without those optional extensions retain single-file playback. The independent external entry accepts a read-only content URI with any valid `video/*` MIME subtype.",
   "p_plugin_packaging": "AutoJs6 6.8.0 build 5276 or later and Explorer Action v12 are required for the full host-cooperation features; this requirement will not be raised for later plugin capabilities.",
   "h3_security": "Security",
-  "p_security": "The plugin requests no storage or INTERNET permission. Its signature-protected Explorer boundary validates the complete protocol v12 envelope, exact single selected target, parent relationship, ClipData, metadata, host build, and read-only grants. Optional Host Sessions are pinned by the host to the plugin UID and permit only listing the selected file's direct parent and opening the selected file or a readable direct sibling. The private player validates a bounded opaque queue and never receives a filesystem path. The public ACTION_VIEW boundary remains independent and single-file only.",
+  "p_security": "The app requests no storage permission and never writes source videos. Internet access is used only for user-triggered or daily GitHub release checks. Its signature-protected Explorer boundary validates the complete protocol v12 envelope, exact single selected target, parent relationship, ClipData, metadata, host build, and read-only grants. Optional Host Sessions are pinned by the host to the plugin UID and permit only listing the selected file's direct parent and opening the selected file or a readable direct sibling. The private player validates a bounded opaque queue and never receives a filesystem path. The public ACTION_VIEW boundary remains independent and single-file only.",
   "h3_security_limits": "Safety limits",
   "security_limits": [
     "Explorer starts from exactly one selected content URI; an optional Host Session can expose only readable direct siblings and never recursive directory access.",
@@ -47,7 +48,7 @@
     "Write and persistable grants are always rejected. Prefix access used to validate the Explorer parent URI is never forwarded to the player.",
     "The public ACTION_VIEW boundary rejects write, persistable, and prefix grants.",
     "External fallback candidates are resolved first, filtered to other packages, and launched with a newly built read-only intent.",
-    "Host playback history is disabled by default, stores only canonical-path digests and time values after explicit opt-in, and can be disabled or cleared in AutoJs6 settings.",
+    "Resume history retains exactly one most recently opened unfinished video as a SHA-256 identity digest plus time values; opening another video clears it immediately, and completed playback is never retained.",
     "Recognition as video or a listed legacy extension does not guarantee decoding support on every device. Media3 and the installed platform codecs determine actual playback support."
   ],
   "h3_release_history": "Release history",
