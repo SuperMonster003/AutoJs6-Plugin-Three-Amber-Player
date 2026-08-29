@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#3949AB</color>
-    <color name="color_primary_dark">#1A237E</color>
-    <color name="color_secondary">#00ACC1</color>
-    <color name="toolbar_text">#FFFFFFFF</color>
-    <color name="window_background">#FF000000</color>
+    <color name="color_primary">#FFFFDEAD</color>
+    <color name="color_primary_dark">#FFFFDEAD</color>
+    <color name="color_secondary">#FFFFDEAD</color>
+    <color name="queue_handle">#40000000</color>
+    <color name="toolbar_text">#FF000000</color>
+    <color name="window_background">#FFFFFFFF</color>
 </resources>

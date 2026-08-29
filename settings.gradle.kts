@@ -1,6 +1,6 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "autojs6-plugin-video-player"
+rootProject.name = "autojs6-plugin-three-ember-player"
 
 pluginManagement {
     repositories {

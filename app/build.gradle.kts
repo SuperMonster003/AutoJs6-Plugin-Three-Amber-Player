@@ -11,21 +11,27 @@ plugins {
     id("com.android.application")
 }
 
-val globalApplicationId = "io.github.supermonster003.autojs6.plugin.videoplayer"
+val sourceNamespace = "io.github.supermonster003.autojs6.plugin.threeemberplayer"
+
+// Keep the published application ID stable so existing installations, AutoJs6's official
+// catalog entry and per-package authorization upgrade in place after the product rename.
+val stableApplicationId = "io.github.supermonster003.autojs6.plugin.videoplayer"
 
 val buildTypeDebug = "debug"
 val buildTypeRelease = "release"
 
 android {
-    namespace = globalApplicationId
+    namespace = sourceNamespace
     compileSdk = versions.sdkVersionCompile
 
     defaultConfig {
-        applicationId = globalApplicationId
+        applicationId = stableApplicationId
         minSdk = versions.sdkVersionMin
         targetSdk = versions.sdkVersionTarget
         versionCode = versions.appVersionCode
         versionName = versions.appVersionName
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         resValue("string", "plugin_author", "SuperMonster003")
         resValue("string", "plugin_version_date", utils.getDateString("MMM d, yyyy", "GMT+08:00"))
@@ -69,6 +75,7 @@ android {
 
     buildFeatures {
         aidl = true
+        buildConfig = true
         resValues = true
         viewBinding = true
     }
@@ -122,19 +129,24 @@ androidComponents {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.21")
     implementation("org.jetbrains.kotlin:kotlin-parcelize-runtime:2.2.21")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
     implementation(files("$rootDir/libs/common-plugin-api.aar"))
     implementation(files("$rootDir/libs/explorer-action-api.aar"))
 
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
+    implementation(libs.constraintlayout)
     implementation(libs.core.ktx)
     implementation(libs.material)
+    implementation(libs.recyclerview)
     implementation("androidx.media3:media3-exoplayer:1.10.1")
     implementation("androidx.media3:media3-session:1.10.1")
     implementation("androidx.media3:media3-ui:1.10.1")
 
     testImplementation(libs.junit)
+    androidTestImplementation(libs.test.ext.junit)
+    androidTestImplementation(libs.test.runner)
 }
 
 tasks {
