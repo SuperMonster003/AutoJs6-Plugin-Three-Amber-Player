@@ -26,6 +26,13 @@ Herramientas de subtítulos y reproducción precisa:
 - El menú de subtítulos puede cargar temporalmente un archivo .srt o .ass de hasta 4 MiB, detectar en memoria BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 y desplazar un subtítulo externo ±600,0 segundos en pasos de 0,1 segundos. No se conserva ningún permiso persistente.
 - Pausa la reproducción para mostrar los botones de fotograma anterior/siguiente (mantenlos pulsados para repetir) y el bucle A–B. Un bucle A–B activo impide avanzar por la cola; elegir después un modo de repetición o el temporizador de fin de vídeo lo borra.
 
+Pantalla, accesibilidad y reproducción en segundo plano:
+
+- El panel de información identifica HDR10, HLG o SDR y los datos de color disponibles. Las capturas pueden incluir subtítulos y compartirse; el reflejo y el refuerzo advertido de +3 a +15 dB se limitan a la sesión.
+- TalkBack mantiene visibles los controles con nombre y cada gesto tiene un botón o menú equivalente. El reproductor admite texto/pantalla al 200 % y foco visible de teclado/DPAD, Espacio/Intro, búsqueda izquierda/derecha según el paso configurado y teclas MediaSession.
+- Media3 gestiona el ritmo de pulsaciones del auricular: una pulsación alterna reproducción/pausa, la doble pulsación de un dispositivo externo avanza si hay un siguiente elemento y un comando Previous explícito retrocede. No se añade un detector de triple pulsación no estándar.
+- Continuar el audio en segundo plano está desactivado de forma predeterminada y requiere permiso de notificaciones. Si PiP no está disponible, entrega el reproductor existente a un servicio privado multimedia en primer plano con controles de notificación; PiP tiene prioridad y desactivar el ajuste, finalizar, un error o salir explícitamente detiene el servicio. FOREGROUND_SERVICE y FOREGROUND_SERVICE_MEDIA_PLAYBACK se usan solo para este ciclo activado voluntariamente y el acceso URI sigue siendo temporal.
+
 Extensiones del Explorador:
 
 - MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT.

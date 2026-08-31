@@ -2,8 +2,12 @@
 
 package io.github.supermonster003.autojs6.plugin.threeemberplayer
 
+import android.Manifest
 import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
+import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.autojs.plugin.common.api.IPluginInfoProvider
@@ -90,6 +94,30 @@ class PluginContractInstrumentationTest {
             IPluginInfoProvider::class.java.name,
             PluginInfoService().onBind(Intent()).interfaceDescriptor,
         )
+    }
+
+    @Test
+    fun backgroundPlaybackDeclaresOnlyItsReviewedOrdinaryPermissionsAndPrivateMediaService() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val packageInfo = context.packageManager.getPackageInfo(
+            context.packageName,
+            PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES,
+        )
+        val permissions = packageInfo.requestedPermissions.orEmpty().toSet()
+        assertTrue(Manifest.permission.FOREGROUND_SERVICE in permissions)
+        assertTrue(Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK in permissions)
+        assertTrue(Manifest.permission.POST_NOTIFICATIONS in permissions)
+
+        val service = packageInfo.services.orEmpty().single {
+            it.name == BackgroundPlaybackService::class.java.name
+        }
+        assertFalse(service.exported)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            assertEquals(
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK,
+                service.foregroundServiceType,
+            )
+        }
     }
 
     private companion object {

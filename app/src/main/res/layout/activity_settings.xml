@@ -9,8 +9,9 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
         android:theme="@style/AppTheme.Toolbar"
         app:navigationContentDescription="@string/action_back"
         app:navigationIcon="@drawable/ic_arrow_back"
@@ -142,6 +143,40 @@
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/remember_playback_mode_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:textOff=""
+                    android:textOn=""
+                    app:showText="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/continue_audio_in_background_setting"
+                style="@style/SettingsSwitchRow">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/continue_audio_in_background_title"
+                        style="@style/SettingsRowTitle"
+                        android:text="@string/setting_continue_audio_in_background" />
+
+                    <TextView
+                        android:id="@+id/continue_audio_in_background_summary"
+                        style="@style/SettingsRowSummary"
+                        android:text="@string/setting_continue_audio_in_background_summary" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/continue_audio_in_background_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"

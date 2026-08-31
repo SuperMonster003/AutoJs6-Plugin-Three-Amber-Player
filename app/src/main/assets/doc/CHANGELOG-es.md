@@ -4,6 +4,16 @@
 
 ******
 
+# v3.0.0
+
+###### 2026/08/31
+
+* `Función` Revisión completa de accesibilidad del reproductor: controles con nombre y estado dinámico, controles persistentes durante la exploración táctil de TalkBack, equivalente de botón o menú para cada gesto, orden de foco determinista y diseños verificados con texto y pantalla al 200 %
+* `Función` Compatibilidad con teclado y mando: anillos de foco visibles, navegación DPAD, reproducción/pausa con Espacio/Intro, búsqueda izquierda/derecha según el paso configurado de 5/10/30 segundos y teclas multimedia mediante MediaSession
+* `Función` Audio opcional en segundo plano, desactivado de forma predeterminada: tras conceder permiso de notificaciones, la reproducción activa puede pasar sin cortes a un servicio multimedia en primer plano con controles de notificación cuando PiP no está disponible
+* `Mejora` PiP siempre tiene prioridad; desactivar el ajuste, finalizar la reproducción, un error o salir deliberadamente detiene el servicio, mientras que tocar la notificación recupera el mismo reproductor y la posición continua
+* `Mejora` El comportamiento de los auriculares sigue Media3: una pulsación alterna reproducción/pausa, la doble pulsación del dispositivo avanza si existe un siguiente elemento y un comando Previous explícito retrocede; no se impone un temporizador de triple pulsación no estándar
+
 # v2.3.0
 
 ###### 2026/08/31

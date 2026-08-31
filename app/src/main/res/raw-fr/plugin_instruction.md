@@ -26,6 +26,13 @@ Outils de sous-titres et de lecture précise:
 - Le menu des sous-titres peut charger temporairement un fichier .srt ou .ass de 4 Mio maximum, détecter en mémoire BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 et décaler un sous-titre externe de ±600,0 secondes par pas de 0,1 seconde. Aucune autorisation persistante n'est conservée.
 - Mettez la lecture en pause pour afficher les boutons image précédente/suivante (maintenez-les pour répéter) et la boucle A–B. Une boucle A–B active empêche le passage à l'élément suivant ; choisir ensuite un mode de répétition ou le minuteur de fin de vidéo l'efface.
 
+Affichage, accessibilité et lecture en arrière-plan:
+
+- Le panneau d'informations identifie HDR10, HLG ou SDR et les données colorimétriques disponibles. Les captures peuvent inclure les sous-titres et être partagées; le miroir et l'amplification avertie de +3 à +15 dB restent limités à la session.
+- TalkBack garde les commandes nommées visibles et chaque geste possède un équivalent par bouton ou menu. Le lecteur tolère une échelle texte/affichage de 200 % et prend en charge le focus visible clavier/DPAD, Espace/Entrée, la recherche gauche/droite selon le pas réglé et les touches MediaSession.
+- Media3 gère le rythme des appuis du casque: un appui bascule lecture/pause, le double appui d'un appareil externe avance si la file contient un élément suivant et une commande Previous explicite revient en arrière. Aucun détecteur de triple appui non standard n'est ajouté.
+- Continuer le son en arrière-plan est désactivé par défaut et exige l'autorisation des notifications. Si le PiP est indisponible, le lecteur existant passe à un service privé de premier plan de lecture multimédia avec commandes de notification; le PiP est prioritaire, et désactiver le réglage, terminer, rencontrer une erreur ou quitter explicitement arrête le service. FOREGROUND_SERVICE et FOREGROUND_SERVICE_MEDIA_PLAYBACK servent uniquement à ce cycle activé volontairement, et l'accès URI reste temporaire.
+
 Extensions de l'explorateur:
 
 - MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT.

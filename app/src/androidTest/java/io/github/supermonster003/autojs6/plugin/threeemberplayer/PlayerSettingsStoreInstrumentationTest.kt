@@ -43,6 +43,12 @@ class PlayerSettingsStoreInstrumentationTest {
             assertTrue(PlayerSettingsStore(context).includeSubtitlesInScreenshots)
             store.setIncludeSubtitlesInScreenshots(false)
             assertFalse(PlayerSettingsStore(context).includeSubtitlesInScreenshots)
+
+            assertFalse(store.continueAudioInBackground)
+            store.setContinueAudioInBackground(true)
+            assertTrue(PlayerSettingsStore(context).continueAudioInBackground)
+            store.setContinueAudioInBackground(false)
+            assertFalse(PlayerSettingsStore(context).continueAudioInBackground)
         } finally {
             restore(preferences, backup)
         }

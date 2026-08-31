@@ -1,6 +1,7 @@
 package io.github.supermonster003.autojs6.plugin.threeemberplayer
 
 import android.content.Context
+import androidx.core.content.edit
 
 internal data class PlayerGestureSettings(
     val sensitivity: GestureSensitivity,
@@ -65,6 +66,13 @@ internal class PlayerSettingsStore(context: Context) {
         preferences.edit().putBoolean(KEY_INCLUDE_SUBTITLES_IN_SCREENSHOTS, enabled).apply()
     }
 
+    val continueAudioInBackground: Boolean
+        get() = preferences.getBoolean(KEY_CONTINUE_AUDIO_IN_BACKGROUND, false)
+
+    fun setContinueAudioInBackground(enabled: Boolean) {
+        preferences.edit { putBoolean(KEY_CONTINUE_AUDIO_IN_BACKGROUND, enabled) }
+    }
+
     fun readSubtitleStyle(): SubtitleStyleSettings = SubtitleStyleSettings(
         textScale = SubtitleStylePolicy.enumOrDefault(
             preferences.getString(KEY_SUBTITLE_TEXT_SCALE, null),
@@ -102,6 +110,7 @@ internal class PlayerSettingsStore(context: Context) {
         const val KEY_REMEMBER_PLAYBACK_MODE = "remember_playback_mode"
         const val KEY_PLAYBACK_MODE = "playback_mode"
         const val KEY_INCLUDE_SUBTITLES_IN_SCREENSHOTS = "include_subtitles_in_screenshots"
+        const val KEY_CONTINUE_AUDIO_IN_BACKGROUND = "continue_audio_in_background"
         const val KEY_SUBTITLE_TEXT_SCALE = "subtitle_text_scale"
         const val KEY_SUBTITLE_FOREGROUND = "subtitle_foreground"
         const val KEY_SUBTITLE_BACKGROUND = "subtitle_background"

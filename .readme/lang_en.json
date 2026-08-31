@@ -24,6 +24,9 @@
     "Tricky format fallback: a lightweight built-in XVID-in-MKV compatibility layer; when the device cannot decode a video, a clear message is shown and playback can be handed to another player.",
     "Themes your way: one seed color generates readable light and dark palettes, following AutoJs6 by default, with 19 presets and a custom RGB color with live preview.",
     "Works standalone: comes with a launcher icon and a settings page, opens videos through the system file picker, and can act as a video player in the system \"Open with\" menu.",
+    "Display and output tools: inspect HDR10/HLG/SDR and available color details, copy the information panel, optionally include subtitles in a shared screenshot, mirror the session image, or use a warned session-only volume boost up to +15 dB.",
+    "Accessible without gestures: TalkBack keeps named controls available, every gesture has a button or menu equivalent, layouts tolerate 200% text and display scale, and keyboard/DPAD focus, Space/Enter, seek and MediaSession keys are supported.",
+    "Optional background audio: off by default and enabled only with notification permission; when PiP is unavailable, the existing player moves to a media-playback foreground service with notification controls and stops on completion or when the setting is disabled. PiP always takes priority.",
     "Read-only by design: no storage permission, source videos are never written; the network is used only for update checks."
   ],
   "h3_usage": "Install and Use",

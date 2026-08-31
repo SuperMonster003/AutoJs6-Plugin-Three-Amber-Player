@@ -24,6 +24,9 @@
     "Respaldo para formatos difíciles: una capa ligera integrada de compatibilidad para XVID en MKV; cuando el dispositivo no puede decodificar un video, se muestra un aviso claro y la reproducción puede pasarse a otro reproductor.",
     "Temas a tu gusto: un solo color semilla genera paletas claras y oscuras legibles, siguiendo AutoJs6 de forma predeterminada, con 19 colores predefinidos y un color RGB personalizado con vista previa en vivo.",
     "Funciona por su cuenta: incluye un icono en la pantalla de inicio y una página de ajustes, abre videos mediante el selector de archivos del sistema y puede actuar como reproductor de video en el menú \"Abrir con\" del sistema.",
+    "Pantalla y salida: consulta HDR10/HLG/SDR y los datos de color disponibles, copia el panel, incluye opcionalmente subtítulos en una captura compartible, refleja la imagen de la sesión o usa un refuerzo advertido de hasta +15 dB.",
+    "Accesible sin gestos: TalkBack mantiene controles con nombre, cada gesto tiene un botón o menú equivalente, los diseños admiten texto y pantalla al 200 %, y se permiten foco de teclado/DPAD, Espacio/Intro, búsqueda y teclas MediaSession.",
+    "Audio opcional en segundo plano: desactivado de forma predeterminada y disponible solo con permiso de notificaciones; si PiP no está disponible, el reproductor existente pasa a un servicio multimedia en primer plano con controles de notificación y se detiene al terminar o al desactivar la opción. PiP siempre tiene prioridad.",
     "Solo lectura por diseño: sin permiso de almacenamiento, los videos de origen nunca se escriben; la red se usa únicamente para comprobar actualizaciones."
   ],
   "h3_usage": "Instalación y uso",

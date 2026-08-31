@@ -75,6 +75,24 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_brightness"
+        android:icon="@drawable/ic_brightness"
+        android:title="@string/action_brightness"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_volume"
+        android:icon="@drawable/ic_volume_up"
+        android:title="@string/action_volume"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_zoom"
+        android:icon="@drawable/ic_aspect_ratio"
+        android:title="@string/action_zoom"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_gesture_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/action_gesture_settings"

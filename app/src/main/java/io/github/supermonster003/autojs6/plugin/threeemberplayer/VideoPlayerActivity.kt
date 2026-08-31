@@ -29,12 +29,15 @@ import android.provider.Settings
 import android.text.format.Formatter
 import android.util.Rational
 import android.view.Display
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.SurfaceView
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.accessibility.AccessibilityManager
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -80,7 +83,9 @@ import io.github.supermonster003.autojs6.plugin.threeemberplayer.settings.AppPre
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.VideoThemePaletteGenerator
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.VideoThemeViewStyler
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.VideoThemedActivity
+import java.lang.ref.WeakReference
 import java.util.Collections
+import java.util.UUID
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
@@ -111,7 +116,7 @@ private sealed interface ManualSubtitleResolution {
 }
 
 @androidx.annotation.OptIn(UnstableApi::class)
-class VideoPlayerActivity : VideoThemedActivity() {
+class VideoPlayerActivity : VideoThemedActivity(), BackgroundPlaybackClient {
 
     private lateinit var binding: ActivityVideoPlayerBinding
     private lateinit var request: AndroidPlaybackRequest
@@ -122,6 +127,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private lateinit var insetsController: WindowInsetsControllerCompat
     private lateinit var trackController: PlayerTrackController
     private lateinit var systemIntegration: PlayerSystemIntegration
+    private var backgroundAudioEnabled = false
     private var hostProgressClient: HostPlaybackProgressClient? = null
     private var queueDialog: BottomSheetDialog? = null
     private var queueSheetBinding: BottomSheetVideoQueueBinding? = null
@@ -131,7 +137,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private var frameCapture: PlayerFrameCapture? = null
     private var transformedTextureView: TextureView? = null
     private var transformedTextureAttachedToPlayer = false
-    private val loudnessEnhancer = PlayerLoudnessEnhancer()
+    private var loudnessEnhancer = PlayerLoudnessEnhancer()
     private var scrubThumbnailProvider: ScrubThumbnailProvider? = null
     private var requestAccepted = false
 
@@ -180,8 +186,19 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private var screenshotInProgress = false
     private var scrubPreviewPosition = 0L
     private var scrubPreviewBitmap: Bitmap? = null
-    private val subtitleSourceRegistry = SubtitleSourceRegistry()
+    private var subtitleSourceRegistry = SubtitleSourceRegistry()
     private val subtitleEncodingWarnings = Collections.synchronizedSet(HashSet<String>())
+    private lateinit var accessibilityManager: AccessibilityManager
+    private lateinit var backgroundPlaybackSessionId: String
+    private var backgroundOwnershipTransferred = false
+    private val touchExplorationStateListener = AccessibilityManager.TouchExplorationStateChangeListener {
+        if (!::binding.isInitialized) return@TouchExplorationStateChangeListener
+        if (it) {
+            if (controlsLocked) revealUnlockButton() else showControls()
+        } else {
+            postponeControlsAutoHide()
+        }
+    }
     private val unsupportedHdrWarnings = HashSet<String>()
     private var subtitleOffsetMs = 0L
     private var subtitleRouteRevision = 0L
@@ -237,7 +254,15 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val resolvedRequest = AndroidVideoIntentPolicy.resolveInternal(intent)
+        val requestedBackgroundSessionId = intent.getStringExtra(
+            BackgroundPlaybackService.EXTRA_SESSION_ID,
+        )
+        val backgroundRequest = requestedBackgroundSessionId
+            ?.takeIf {
+                intent.action == BackgroundPlaybackService.ACTION_RESUME_BACKGROUND_PLAYBACK
+            }
+            ?.let(BackgroundPlaybackCoordinator::playbackRequest)
+        val resolvedRequest = backgroundRequest ?: AndroidVideoIntentPolicy.resolveInternal(intent)
         if (resolvedRequest == null) {
             Toast.makeText(this, R.string.error_invalid_request, Toast.LENGTH_SHORT).show()
             finish()
@@ -245,6 +270,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
         request = resolvedRequest
         requestAccepted = true
+        backgroundPlaybackSessionId = requestedBackgroundSessionId ?: UUID.randomUUID().toString()
+        BackgroundPlaybackCoordinator.stopIfDifferent(backgroundPlaybackSessionId)
+        BackgroundPlaybackCoordinator.registerClient(backgroundPlaybackSessionId, this)
         activeMediaItemIndex = request.startIndex
         resumeMediaItemIndex = request.startIndex
         hostProgressClient = request.hostSession?.let { session ->
@@ -254,13 +282,24 @@ class VideoPlayerActivity : VideoThemedActivity() {
         appPreferenceStore = AppPreferenceStore(this)
         if (!appPreferenceStore.rememberPlaybackPosition) positionStore.clearAll()
         settingsStore = PlayerSettingsStore(this)
+        backgroundAudioEnabled = settingsStore.continueAudioInBackground &&
+            BackgroundPlaybackPermissionPolicy.canPostControls(this)
+        if (settingsStore.continueAudioInBackground && !backgroundAudioEnabled) {
+            settingsStore.setContinueAudioInBackground(false)
+            BackgroundPlaybackCoordinator.stopForDisabledSetting()
+        }
         playbackMode = VideoPlaybackModePolicy.normalizeForItemCount(
             settingsStore.readPlaybackMode(),
             request.items.size,
         )
         gestureSettings = settingsStore.read()
+        if (backgroundAudioEnabled) {
+            BackgroundPlaybackCoordinator.prepare(this, request.displayName)
+        }
         subtitleStyle = settingsStore.readSubtitleStyle()
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        accessibilityManager = getSystemService(ACCESSIBILITY_SERVICE) as AccessibilityManager
+        accessibilityManager.addTouchExplorationStateChangeListener(touchExplorationStateListener)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             frameCapture = PlayerFrameCapture(this)
         }
@@ -288,7 +327,17 @@ class VideoPlayerActivity : VideoThemedActivity() {
             onSubtitleSelectionChanged = ::updateToolbarMenu,
             onDialogDismissed = ::postponeControlsAutoHide,
         )
-        systemIntegration = PlayerSystemIntegration(this)
+        systemIntegration = PlayerSystemIntegration(
+            activity = this,
+            notificationId = BackgroundPlaybackService.NOTIFICATION_ID.takeIf {
+                backgroundAudioEnabled
+            },
+            notificationChannelId = if (backgroundAudioEnabled) {
+                BackgroundPlaybackService.NOTIFICATION_CHANNEL_ID
+            } else {
+                PlayerSystemIntegration.NOTIFICATION_CHANNEL_ID
+            },
+        )
         restorePlaybackState(savedInstanceState)
         setUpWindow()
         setUpControls()
@@ -303,10 +352,28 @@ class VideoPlayerActivity : VideoThemedActivity() {
     override fun onStart() {
         super.onStart()
         if (requestAccepted) {
-            initializePlayer()
+            val backgroundPlayback = BackgroundPlaybackCoordinator.reclaim(backgroundPlaybackSessionId)
+            if (backgroundPlayback != null) {
+                adoptBackgroundPlayback(backgroundPlayback)
+            } else {
+                initializePlayer()
+            }
+            if (canUseBackgroundAudio() && player != null &&
+                !inPictureInPicture &&
+                !isInPictureInPictureMode
+            ) {
+                BackgroundPlaybackCoordinator.prepare(this, request.displayName)
+            }
             mainHandler.removeCallbacks(progressRunnable)
             mainHandler.post(progressRunnable)
         }
+    }
+
+    override fun onPause() {
+        if (requestAccepted && !inPictureInPicture && player != null) {
+            handoffToBackgroundPlayback()
+        }
+        super.onPause()
     }
 
     override fun onStop() {
@@ -316,6 +383,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
             mainHandler.removeCallbacks(progressRunnable)
             savePlaybackPosition()
             releasePlayer()
+            if (!backgroundOwnershipTransferred) BackgroundPlaybackCoordinator.stopPrepared()
         }
         super.onStop()
     }
@@ -327,6 +395,12 @@ class VideoPlayerActivity : VideoThemedActivity() {
             releasePlayer()
         }
         dismissQueuePanel()
+        if (::backgroundPlaybackSessionId.isInitialized) {
+            BackgroundPlaybackCoordinator.unregisterClient(backgroundPlaybackSessionId, this)
+        }
+        if (::accessibilityManager.isInitialized) {
+            accessibilityManager.removeTouchExplorationStateChangeListener(touchExplorationStateListener)
+        }
         if (pipReceiverRegistered) {
             unregisterReceiver(pictureInPictureActionReceiver)
             pipReceiverRegistered = false
@@ -341,11 +415,21 @@ class VideoPlayerActivity : VideoThemedActivity() {
             frameCapture?.close()
             frameCapture = null
         }
-        if (requestAccepted) {
+        if (requestAccepted && !backgroundOwnershipTransferred) {
             request.hostSession?.let { session -> runCatching { session.close() } }
         }
         mainHandler.removeCallbacksAndMessages(null)
         super.onDestroy()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+    }
+
+    override fun onBackgroundPlaybackTerminated() {
+        backgroundOwnershipTransferred = true
+        if (!isFinishing) finishAndRemoveTask()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -353,13 +437,94 @@ class VideoPlayerActivity : VideoThemedActivity() {
         binding.playerView.post { applyVideoTransform() }
     }
 
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (!requestAccepted || !::binding.isInitialized || !::gestureSettings.isInitialized) {
+            return super.dispatchKeyEvent(event)
+        }
+        val key = when (event.keyCode) {
+            KeyEvent.KEYCODE_SPACE -> PlaybackInputKey.SPACE
+            KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_NUMPAD_ENTER,
+            -> PlaybackInputKey.ENTER
+            KeyEvent.KEYCODE_DPAD_CENTER -> PlaybackInputKey.DPAD_CENTER
+            KeyEvent.KEYCODE_DPAD_LEFT -> PlaybackInputKey.DPAD_LEFT
+            KeyEvent.KEYCODE_DPAD_RIGHT -> PlaybackInputKey.DPAD_RIGHT
+            KeyEvent.KEYCODE_DPAD_UP -> PlaybackInputKey.DPAD_UP
+            KeyEvent.KEYCODE_DPAD_DOWN -> PlaybackInputKey.DPAD_DOWN
+            else -> PlaybackInputKey.OTHER
+        }
+        val phase = when (event.action) {
+            KeyEvent.ACTION_DOWN -> PlaybackKeyPhase.DOWN
+            KeyEvent.ACTION_UP -> PlaybackKeyPhase.UP
+            else -> return super.dispatchKeyEvent(event)
+        }
+        val action = PlayerKeyPolicy.resolve(
+            key = key,
+            phase = phase,
+            focus = playbackFocusTarget(),
+            controlsVisible = controlsVisible,
+            repeatCount = event.repeatCount,
+        )
+        return when (action) {
+            PlaybackKeyAction.DELEGATE -> super.dispatchKeyEvent(event)
+            PlaybackKeyAction.CONSUME -> true
+            PlaybackKeyAction.FOCUS_PLAY_PAUSE -> {
+                showControls()
+                binding.playPauseButton.requestFocus()
+                super.dispatchKeyEvent(event)
+            }
+            PlaybackKeyAction.TOGGLE_PLAY_PAUSE -> {
+                showControls()
+                togglePlayPause()
+                postponeControlsAutoHide()
+                true
+            }
+            PlaybackKeyAction.SEEK_BACK,
+            PlaybackKeyAction.SEEK_FORWARD,
+            -> {
+                showControls()
+                val delta = if (action == PlaybackKeyAction.SEEK_BACK) {
+                    -gestureSettings.doubleTapSeekMs
+                } else {
+                    gestureSettings.doubleTapSeekMs
+                }
+                seekBy(delta)
+                player?.let { exoPlayer ->
+                    showSeekOsd(
+                        if (delta < 0L) R.drawable.ic_fast_rewind else R.drawable.ic_fast_forward,
+                        exoPlayer,
+                    )
+                }
+                postponeControlsAutoHide()
+                true
+            }
+        }
+    }
+
+    private fun playbackFocusTarget(): PlaybackFocusTarget {
+        if (!controlsVisible) return PlaybackFocusTarget.PLAYBACK_SURFACE
+        val focused = currentFocus ?: return PlaybackFocusTarget.NONE
+        if (!focused.isShown || focused === binding.root || focused === binding.playerView ||
+            focused === binding.gestureArea
+        ) {
+            return PlaybackFocusTarget.PLAYBACK_SURFACE
+        }
+        return if (focused === binding.timeBar) {
+            PlaybackFocusTarget.TIME_BAR
+        } else {
+            PlaybackFocusTarget.CONTROL
+        }
+    }
+
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        if (Build.VERSION.SDK_INT in Build.VERSION_CODES.O until Build.VERSION_CODES.S &&
-            canEnterPictureInPicture()
-        ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && canEnterPictureInPicture() &&
             enterPictureInPicture()
+        ) {
+            BackgroundPlaybackCoordinator.stopPrepared()
+            return
         }
+        handoffToBackgroundPlayback()
     }
 
     override fun onPictureInPictureModeChanged(
@@ -369,6 +534,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         inPictureInPicture = isInPictureInPictureMode
         if (isInPictureInPictureMode) {
+            BackgroundPlaybackCoordinator.stopPrepared()
             controlsVisibleBeforePictureInPicture = controlsVisible
             mainHandler.removeCallbacks(hideControlsRunnable)
             binding.topBar.isVisible = false
@@ -646,6 +812,18 @@ class VideoPlayerActivity : VideoThemedActivity() {
                     showVolumeBoostDialog()
                     true
                 }
+                R.id.action_brightness -> {
+                    showBrightnessDialog()
+                    true
+                }
+                R.id.action_volume -> {
+                    showVolumeDialog()
+                    true
+                }
+                R.id.action_zoom -> {
+                    showZoomDialog()
+                    true
+                }
                 R.id.action_gesture_settings -> {
                     showGestureSettingsDialog()
                     true
@@ -663,11 +841,11 @@ class VideoPlayerActivity : VideoThemedActivity() {
             postponeControlsAutoHide()
         }
         binding.seekBackButton.setOnClickListener {
-            seekBy(-PlayerGesturePolicy.DOUBLE_TAP_SEEK_MS)
+            seekBy(-gestureSettings.doubleTapSeekMs)
             postponeControlsAutoHide()
         }
         binding.seekForwardButton.setOnClickListener {
-            seekBy(PlayerGesturePolicy.DOUBLE_TAP_SEEK_MS)
+            seekBy(gestureSettings.doubleTapSeekMs)
             postponeControlsAutoHide()
         }
         bindFrameStepButton(binding.frameBackButton, direction = -1)
@@ -705,39 +883,68 @@ class VideoPlayerActivity : VideoThemedActivity() {
         binding.timeBar.addListener(scrubListener)
         updateSpeedButton()
         updatePrecisionControls()
+        updateControlAccessibility()
         updateToolbarMenu()
+    }
+
+    private fun updateControlAccessibility() {
+        if (!::binding.isInitialized || !::gestureSettings.isInitialized) return
+        val seconds = (gestureSettings.doubleTapSeekMs / 1_000L).coerceAtLeast(1L)
+        binding.seekBackButton.contentDescription = getString(
+            R.string.action_seek_back_seconds,
+            seconds,
+        )
+        binding.seekForwardButton.contentDescription = getString(
+            R.string.action_seek_forward_seconds,
+            seconds,
+        )
+        updatePlayPauseButton()
+        updateSpeedButton()
+        binding.resizeButton.contentDescription = getString(
+            R.string.control_state_description,
+            getString(R.string.action_resize_mode),
+            resizeAccessibilityValue(),
+        )
+        binding.rotateButton.contentDescription = getString(
+            R.string.control_state_description,
+            getString(R.string.action_rotate_screen),
+            getString(orientationModeLabel()),
+        )
     }
 
     private fun initializePlayer() {
         if (player != null) return
         xvidFourCcCompatibilityApplied = false
         val mediaItems = buildMediaItems()
+        val activityReference = WeakReference(this)
         val extractorsFactory = XvidCompatibleExtractorsFactory(
             onCompatibilityApplied = {
-                xvidFourCcCompatibilityApplied = true
+                activityReference.get()?.xvidFourCcCompatibilityApplied = true
             },
         )
         val upstreamFactory: DataSource.Factory = request.hostSession?.let { session ->
             DefaultDataSource.Factory(
-                this,
+                applicationContext,
                 ExplorerSessionDataSource.Factory(
                     session = session,
                     routesByUri = request.hostFileRoutesByUri(),
                 ),
             )
-        } ?: DefaultDataSource.Factory(this)
+        } ?: DefaultDataSource.Factory(applicationContext)
         val mediaSourceFactory = DefaultMediaSourceFactory(
             SubtitleTransformingDataSource.Factory(
                 upstreamFactory = upstreamFactory,
                 registry = subtitleSourceRegistry,
-                onUncertainEncoding = ::showSubtitleEncodingWarning,
+                onUncertainEncoding = { route ->
+                    activityReference.get()?.showSubtitleEncodingWarning(route)
+                },
             ),
             extractorsFactory,
         )
-        player = ExoPlayer.Builder(this)
+        player = ExoPlayer.Builder(applicationContext)
             .setMediaSourceFactory(mediaSourceFactory)
-            .setSeekBackIncrementMs(PlayerGesturePolicy.DOUBLE_TAP_SEEK_MS)
-            .setSeekForwardIncrementMs(PlayerGesturePolicy.DOUBLE_TAP_SEEK_MS)
+            .setSeekBackIncrementMs(gestureSettings.doubleTapSeekMs)
+            .setSeekForwardIncrementMs(gestureSettings.doubleTapSeekMs)
             .build().also { exoPlayer ->
                 exoPlayer.setAudioAttributes(
                     AudioAttributes.Builder()
@@ -934,6 +1141,125 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
     }
 
+    private fun handoffToBackgroundPlayback(): Boolean {
+        val exoPlayer = player ?: return false
+        val canContinueInBackground = canUseBackgroundAudio()
+        val playbackActive = exoPlayer.playWhenReady &&
+            exoPlayer.playbackState != Player.STATE_IDLE &&
+            exoPlayer.playbackState != Player.STATE_ENDED
+        val target = BackgroundPlaybackPolicy.exitTarget(
+            inPictureInPicture = inPictureInPicture,
+            backgroundAudioEnabled = canContinueInBackground,
+            playbackActive = playbackActive,
+            activityFinishing = isFinishing,
+        )
+        if (target != PlaybackExitTarget.BACKGROUND_AUDIO) return false
+        if (speedBoostActive) {
+            speedBoostActive = false
+            exoPlayer.setPlaybackSpeed(playbackSpeed)
+        }
+        val value = BackgroundPlaybackHandoff(
+            sessionId = backgroundPlaybackSessionId,
+            player = exoPlayer,
+            request = request,
+            subtitleSourceRegistry = subtitleSourceRegistry,
+            loudnessEnhancer = loudnessEnhancer,
+            hostProgressClient = hostProgressClient,
+            foregroundTrackSelectionParameters = exoPlayer.trackSelectionParameters,
+            activeMediaItemIndex = exoPlayer.currentMediaItemIndex,
+            playbackMode = playbackMode,
+            abLoopState = abLoopState,
+            sleepTimerMode = sleepTimerMode,
+            sleepTimerDeadlineElapsedRealtimeMs = sleepTimerDeadlineElapsedRealtimeMs,
+            volumeBoostLevel = volumeBoostLevel,
+        )
+        if (!BackgroundPlaybackCoordinator.handoff(this, intent, value)) return false
+
+        savePlaybackPosition()
+        capturePlaybackState()
+        stopFrameRepeat()
+        systemIntegration.detach()
+        trackController.clearAvailability()
+        transformedTextureView?.takeIf { transformedTextureAttachedToPlayer }?.let {
+            exoPlayer.clearVideoTextureView(it)
+        }
+        transformedTextureAttachedToPlayer = false
+        binding.playerView.player = null
+        exoPlayer.removeListener(playerListener)
+        player = null
+        disposeTransformedTextureView()
+        setKeepScreenOn(false)
+
+        // Ownership of these session resources moved to the foreground service. Fresh empty
+        // instances keep this Activity's eventual onDestroy cleanup idempotent.
+        subtitleSourceRegistry = SubtitleSourceRegistry()
+        loudnessEnhancer = PlayerLoudnessEnhancer()
+        hostProgressClient = null
+        backgroundOwnershipTransferred = true
+        return true
+    }
+
+    private fun canUseBackgroundAudio(): Boolean {
+        if (!backgroundAudioEnabled) return false
+        if (settingsStore.continueAudioInBackground &&
+            BackgroundPlaybackPermissionPolicy.canPostControls(this)
+        ) {
+            return true
+        }
+        backgroundAudioEnabled = false
+        settingsStore.setContinueAudioInBackground(false)
+        BackgroundPlaybackCoordinator.stopForDisabledSetting()
+        return false
+    }
+
+    private fun adoptBackgroundPlayback(value: BackgroundPlaybackHandoff) {
+        if (player != null || value.sessionId != backgroundPlaybackSessionId) return
+        request = value.request
+        hostProgressClient = value.hostProgressClient
+        subtitleSourceRegistry.clear()
+        subtitleSourceRegistry = value.subtitleSourceRegistry
+        loudnessEnhancer.close()
+        loudnessEnhancer = value.loudnessEnhancer
+        playbackMode = value.playbackMode
+        abLoopState = value.abLoopState
+        sleepTimerMode = value.sleepTimerMode
+        sleepTimerDeadlineElapsedRealtimeMs = value.sleepTimerDeadlineElapsedRealtimeMs
+        volumeBoostLevel = value.volumeBoostLevel
+        val exoPlayer = value.player
+        player = exoPlayer
+        activeMediaItemIndex = exoPlayer.currentMediaItemIndex.coerceIn(request.items.indices)
+        resumeMediaItemIndex = activeMediaItemIndex
+        resumePosition = exoPlayer.currentPosition.coerceAtLeast(0L)
+        resumePlayWhenReady = exoPlayer.playWhenReady
+        playbackSpeed = exoPlayer.playbackParameters.speed
+        backgroundOwnershipTransferred = false
+
+        exoPlayer.addListener(playerListener)
+        applyPlaybackMode(exoPlayer)
+        binding.playerView.player = exoPlayer
+        SubtitleStyleApplier.apply(binding.playerView.subtitleView, subtitleStyle)
+        systemIntegration.attach(exoPlayer)
+        trackController.onTracksChanged(exoPlayer.currentTracks)
+        loudnessEnhancer.setLevel(volumeBoostLevel)
+        loudnessEnhancer.onAudioSessionIdChanged(exoPlayer.audioSessionId)
+        val videoSize = exoPlayer.videoSize
+        videoWidth = videoSize.width
+        videoHeight = videoSize.height
+        videoPixelWidthHeightRatio = videoSize.pixelWidthHeightRatio
+        resumedMediaItemIndexes += activeMediaItemIndex
+        updateActiveItemUi()
+        binding.retryButton.isVisible = true
+        binding.playbackErrorPanel.isVisible = false
+        updatePlayPauseButton()
+        updatePrecisionControls()
+        updateControlAccessibility()
+        updateToolbarMenu()
+        updatePictureInPictureParameters()
+        binding.playerView.post { applyVideoTransform() }
+        scheduleSleepTimer()
+        showControls()
+    }
+
     private fun releasePlayer() {
         val exoPlayer = player ?: return
         cancelAutoAdvancePrompt(showFeedback = false)
@@ -1022,6 +1348,15 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private val playerListener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             setKeepScreenOn(isPlaying)
+            if (isPlaying && canUseBackgroundAudio() && !inPictureInPicture) {
+                // Completion and foreground playback errors tear down the prepared service. If
+                // playback is restarted in the same Activity, prepare it again while the process
+                // is still TOP so a later Home transition never needs a background FGS start.
+                BackgroundPlaybackCoordinator.prepare(
+                    this@VideoPlayerActivity,
+                    request.displayName,
+                )
+            }
             if (isPlaying) postponeControlsAutoHide() else showControls()
             updateToolbarMenu()
             updatePictureInPictureParameters()
@@ -1043,6 +1378,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 if (sleepTimerMode == SleepTimerMode.END_OF_VIDEO) {
                     finishSleepTimer()
                 }
+                BackgroundPlaybackCoordinator.stopPrepared()
                 showControls()
             }
             updatePlayPauseButton()
@@ -1147,6 +1483,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         override fun onPlayerError(error: PlaybackException) {
             cancelAutoAdvancePrompt(showFeedback = false)
             setKeepScreenOn(false)
+            BackgroundPlaybackCoordinator.stopPrepared()
             capturePlaybackState()
             hideScrubPreview()
             if (isXvidVideoDecoderFailure(error)) {
@@ -1306,6 +1643,10 @@ class VideoPlayerActivity : VideoThemedActivity() {
     }
 
     private fun hideControls() {
+        if (isTouchExplorationEnabled()) {
+            controlsVisible = true
+            return
+        }
         controlsVisible = false
         binding.topBar.isVisible = false
         binding.bottomBar.isVisible = false
@@ -1314,7 +1655,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
     private fun postponeControlsAutoHide() {
         mainHandler.removeCallbacks(hideControlsRunnable)
-        if (player?.isPlaying == true && !scrubbing) {
+        if (player?.isPlaying == true && !scrubbing && !isTouchExplorationEnabled()) {
             mainHandler.postDelayed(hideControlsRunnable, PlayerGesturePolicy.CONTROLS_AUTO_HIDE_MS)
         }
     }
@@ -1344,8 +1685,13 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private fun revealUnlockButton() {
         binding.unlockButton.isVisible = true
         mainHandler.removeCallbacks(hideUnlockRunnable)
-        mainHandler.postDelayed(hideUnlockRunnable, UNLOCK_BUTTON_HIDE_MS)
+        if (!isTouchExplorationEnabled()) {
+            mainHandler.postDelayed(hideUnlockRunnable, UNLOCK_BUTTON_HIDE_MS)
+        }
     }
+
+    private fun isTouchExplorationEnabled(): Boolean =
+        ::accessibilityManager.isInitialized && accessibilityManager.isTouchExplorationEnabled
 
     // endregion
 
@@ -1380,7 +1726,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
         if (!canEnterPictureInPicture()) return false
         return runCatching {
             enterPictureInPictureMode(buildPictureInPictureParams())
-        }.getOrDefault(false)
+        }.getOrDefault(false).also { entered ->
+            if (entered) inPictureInPicture = true
+        }
     }
 
     private fun updatePictureInPictureParameters() {
@@ -1405,7 +1753,10 @@ class VideoPlayerActivity : VideoThemedActivity() {
             builder.setAspectRatio(Rational(ratio.numerator, ratio.denominator))
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            builder.setAutoEnterEnabled(canEnterPictureInPicture())
+            // onUserLeaveHint enters PiP synchronously and marks ownership before onPause. Letting
+            // Android auto-enter as well creates a callback race where background audio can claim
+            // the player before onPictureInPictureModeChanged arrives.
+            builder.setAutoEnterEnabled(false)
         }
         return builder.build()
     }
@@ -1696,11 +2047,20 @@ class VideoPlayerActivity : VideoThemedActivity() {
         binding.abLoopButton.setTextColor(
             if (abLoopState == AbLoopState()) overlay.playerControl else overlay.secondary,
         )
+        binding.abLoopButton.contentDescription = getString(
+            R.string.control_state_description,
+            getString(R.string.action_ab_loop),
+            binding.abLoopButton.text,
+        )
     }
 
     private fun updatePlayPauseButton() {
+        val showPause = shouldShowPauseAction()
         binding.playPauseButton.setImageResource(
-            if (shouldShowPauseAction()) R.drawable.ic_pause else R.drawable.ic_play_arrow,
+            if (showPause) R.drawable.ic_pause else R.drawable.ic_play_arrow,
+        )
+        binding.playPauseButton.setContentDescription(
+            getString(if (showPause) R.string.action_pause else R.string.action_play),
         )
     }
 
@@ -1753,6 +2113,11 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
     private fun updateSpeedButton() {
         binding.speedButton.text = PlayerGesturePolicy.formatSpeed(playbackSpeed)
+        binding.speedButton.contentDescription = getString(
+            R.string.control_state_description,
+            getString(R.string.action_playback_speed),
+            binding.speedButton.text,
+        )
         val overlay = VideoThemePaletteGenerator.generate(videoPalette.source, dark = true)
         binding.speedButton.setTextColor(
             if (playbackSpeed == 1f) overlay.playerControl else overlay.secondary,
@@ -2188,6 +2553,30 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 },
             )
         }
+        menu.findItem(R.id.action_brightness)?.apply {
+            isEnabled = player != null
+            title = getString(
+                R.string.control_state_description,
+                getString(R.string.action_brightness),
+                PlayerGesturePolicy.percentLabel(currentBrightnessFraction()),
+            )
+        }
+        menu.findItem(R.id.action_volume)?.apply {
+            isEnabled = player != null
+            title = getString(
+                R.string.control_state_description,
+                getString(R.string.action_volume),
+                PlayerGesturePolicy.percentLabel(currentVolumeFraction()),
+            )
+        }
+        menu.findItem(R.id.action_zoom)?.apply {
+            isEnabled = player != null
+            title = getString(
+                R.string.control_state_description,
+                getString(R.string.action_zoom),
+                PlayerGesturePolicy.formatSpeed(manualZoomScale),
+            )
+        }
         menu.findItem(R.id.action_gesture_settings)?.isEnabled = player != null
         menu.findItem(R.id.action_video_info)?.isEnabled = player != null
         renderQueuePanel()
@@ -2452,6 +2841,105 @@ class VideoPlayerActivity : VideoThemedActivity() {
         getString(R.string.volume_boost_db, level.decibels)
     }
 
+    private fun showBrightnessDialog() {
+        showAdjustmentDialog(
+            titleRes = R.string.action_brightness,
+            descriptionRes = R.string.brightness_slider_description,
+            iconRes = R.drawable.ic_brightness,
+            valueFrom = PlayerGesturePolicy.MIN_BRIGHTNESS,
+            valueTo = 1f,
+            stepSize = 0.01f,
+            initialValue = currentBrightnessFraction(),
+            valueLabel = PlayerGesturePolicy::percentLabel,
+        ) { value -> applyBrightnessFraction(value) }
+    }
+
+    private fun showVolumeDialog() {
+        showAdjustmentDialog(
+            titleRes = R.string.action_volume,
+            descriptionRes = R.string.volume_slider_description,
+            iconRes = R.drawable.ic_volume_up,
+            valueFrom = 0f,
+            valueTo = 1f,
+            stepSize = 0.01f,
+            initialValue = currentVolumeFraction(),
+            valueLabel = PlayerGesturePolicy::percentLabel,
+        ) { value -> applyVolumeFraction(value) }
+    }
+
+    private fun showZoomDialog() {
+        showAdjustmentDialog(
+            titleRes = R.string.action_zoom,
+            descriptionRes = R.string.zoom_slider_description,
+            iconRes = R.drawable.ic_aspect_ratio,
+            valueFrom = PlayerGesturePolicy.MIN_ZOOM_SCALE,
+            valueTo = PlayerGesturePolicy.MAX_ZOOM_SCALE,
+            stepSize = 0.05f,
+            initialValue = manualZoomScale,
+            valueLabel = PlayerGesturePolicy::formatSpeed,
+        ) { value ->
+            resizeMode = PlayerResizeMode.FIT
+            manualZoomScale = value
+            zoomPivotXFraction = 0.5f
+            zoomPivotYFraction = 0.5f
+            applyResizeMode(showOsd = false)
+            applyVideoTransform()
+            updateControlAccessibility()
+        }
+    }
+
+    private fun showAdjustmentDialog(
+        titleRes: Int,
+        descriptionRes: Int,
+        @DrawableRes iconRes: Int,
+        valueFrom: Float,
+        valueTo: Float,
+        stepSize: Float,
+        initialValue: Float,
+        valueLabel: (Float) -> String,
+        applyValue: (Float) -> Unit,
+    ) {
+        val padding = (24f * resources.displayMetrics.density).roundToInt()
+        val slider = Slider(this).apply {
+            this.valueFrom = valueFrom
+            this.valueTo = valueTo
+            this.stepSize = stepSize
+            value = PlayerGesturePolicy.snapToSliderStep(
+                value = initialValue,
+                valueFrom = valueFrom,
+                valueTo = valueTo,
+                stepSize = stepSize,
+            )
+            contentDescription = getString(descriptionRes)
+            setLabelFormatter(valueLabel)
+            addOnChangeListener { _, changedValue, _ ->
+                applyValue(changedValue)
+                showOsd(iconRes, valueLabel(changedValue), sticky = true)
+            }
+        }
+        val container = FrameLayout(this).apply {
+            setPadding(padding, padding / 2, padding, padding / 2)
+            addView(
+                slider,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                ),
+            )
+        }
+        mainHandler.removeCallbacks(hideControlsRunnable)
+        AlertDialog.Builder(this)
+            .setTitle(titleRes)
+            .setView(container)
+            .setPositiveButton(android.R.string.ok, null)
+            .setOnDismissListener {
+                hideOsdSoon()
+                updateToolbarMenu()
+                postponeControlsAutoHide()
+            }
+            .showWithPalette()
+    }
+
     private fun showGestureSettingsDialog() {
         val items = arrayOf(
             getString(
@@ -2517,6 +3005,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 val milliseconds = options[which]
                 gestureSettings = gestureSettings.copy(doubleTapSeekMs = milliseconds)
                 settingsStore.writeDoubleTapSeekMs(milliseconds)
+                updateControlAccessibility()
                 dialog.dismiss()
             }
             .setOnDismissListener { postponeControlsAutoHide() }
@@ -2679,14 +3168,30 @@ class VideoPlayerActivity : VideoThemedActivity() {
             PlayerResizeMode.FILL -> AspectRatioFrameLayout.RESIZE_MODE_FILL
             PlayerResizeMode.ZOOM -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
         }
-        if (showOsd) {
-            val label = when (resizeMode) {
-                PlayerResizeMode.FIT -> R.string.resize_mode_fit
-                PlayerResizeMode.FILL -> R.string.resize_mode_fill
-                PlayerResizeMode.ZOOM -> R.string.resize_mode_zoom
-            }
-            showOsd(R.drawable.ic_aspect_ratio, getString(label))
-        }
+        val label = resizeModeLabel()
+        binding.resizeButton.contentDescription = getString(
+            R.string.control_state_description,
+            getString(R.string.action_resize_mode),
+            resizeAccessibilityValue(),
+        )
+        if (showOsd) showOsd(R.drawable.ic_aspect_ratio, getString(label))
+    }
+
+    private fun resizeModeLabel(): Int = when (resizeMode) {
+        PlayerResizeMode.FIT -> R.string.resize_mode_fit
+        PlayerResizeMode.FILL -> R.string.resize_mode_fill
+        PlayerResizeMode.ZOOM -> R.string.resize_mode_zoom
+    }
+
+    private fun resizeAccessibilityValue(): String = if (
+        abs(manualZoomScale - PlayerGesturePolicy.DEFAULT_ZOOM_SCALE) >= ZOOM_EPSILON
+    ) {
+        getString(
+            R.string.zoom_scale_value,
+            PlayerGesturePolicy.formatSpeed(manualZoomScale),
+        )
+    } else {
+        getString(resizeModeLabel())
     }
 
     private fun currentVideoRenderTransform(): VideoRenderTransform = VideoTransformPolicy.resolve(
@@ -2812,14 +3317,19 @@ class VideoPlayerActivity : VideoThemedActivity() {
             PlayerOrientationMode.LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             PlayerOrientationMode.PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
         }
-        if (showOsd) {
-            val label = when (orientationMode) {
-                PlayerOrientationMode.AUTO -> R.string.orientation_auto
-                PlayerOrientationMode.LANDSCAPE -> R.string.orientation_landscape
-                PlayerOrientationMode.PORTRAIT -> R.string.orientation_portrait
-            }
-            showOsd(R.drawable.ic_screen_rotation, getString(label))
-        }
+        val label = orientationModeLabel()
+        binding.rotateButton.contentDescription = getString(
+            R.string.control_state_description,
+            getString(R.string.action_rotate_screen),
+            getString(label),
+        )
+        if (showOsd) showOsd(R.drawable.ic_screen_rotation, getString(label))
+    }
+
+    private fun orientationModeLabel(): Int = when (orientationMode) {
+        PlayerOrientationMode.AUTO -> R.string.orientation_auto
+        PlayerOrientationMode.LANDSCAPE -> R.string.orientation_landscape
+        PlayerOrientationMode.PORTRAIT -> R.string.orientation_portrait
     }
 
     private fun applySuggestedOrientationIfNeeded(videoSize: VideoSize) {

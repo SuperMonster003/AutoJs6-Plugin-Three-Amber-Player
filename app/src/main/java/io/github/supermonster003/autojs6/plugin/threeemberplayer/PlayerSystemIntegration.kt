@@ -15,6 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger
 @androidx.annotation.OptIn(UnstableApi::class)
 internal class PlayerSystemIntegration(
     private val activity: AppCompatActivity,
+    private val notificationId: Int? = null,
+    private val notificationChannelId: String = NOTIFICATION_CHANNEL_ID,
 ) {
 
     private val instanceId = nextInstanceId.getAndIncrement()
@@ -47,8 +49,8 @@ internal class PlayerSystemIntegration(
         sessionActivity: PendingIntent,
     ): PlayerNotificationManager = PlayerNotificationManager.Builder(
         activity.applicationContext,
-        instanceId,
-        NOTIFICATION_CHANNEL_ID,
+        notificationId ?: instanceId,
+        notificationChannelId,
     )
         .setChannelNameResourceId(R.string.media_notification_channel_name)
         .setChannelDescriptionResourceId(R.string.media_notification_channel_description)
@@ -95,7 +97,7 @@ internal class PlayerSystemIntegration(
         )
     }
 
-    private companion object {
+    internal companion object {
         const val SESSION_ID_PREFIX = "video-player-"
         const val NOTIFICATION_CHANNEL_ID = "video_playback"
         val nextInstanceId = AtomicInteger(6_003)

@@ -238,4 +238,18 @@
     <string name="color_range_limited">제한</string>
     <string name="color_range_full">전체</string>
     <string name="hdr_tone_mapping_warning">이 디스플레이는 %1$s 지원을 보고하지 않습니다. 톤 매핑으로 밝은 부분과 색상이 달라질 수 있습니다.</string>
+    <string name="action_brightness">밝기</string>
+    <string name="action_volume">음량</string>
+    <string name="action_zoom">동영상 확대</string>
+    <string name="brightness_slider_description" formatted="false">밝기를 1%에서 100%까지 조절</string>
+    <string name="volume_slider_description" formatted="false">미디어 음량을 0%에서 100%까지 조절</string>
+    <string name="zoom_slider_description">동영상 확대를 0.25배에서 4배까지 조절</string>
+    <string name="control_state_description">%1$s: %2$s</string>
+    <string name="action_seek_back_seconds">%1$d초 되감기</string>
+    <string name="action_seek_forward_seconds">%1$d초 빨리 감기</string>
+    <string name="setting_continue_audio_in_background">백그라운드에서 오디오 계속 재생</string>
+    <string name="setting_continue_audio_in_background_summary">사용하면 PIP 모드를 사용할 수 없을 때 알림 컨트롤로 현재 재생을 계속합니다. 기본값은 꺼짐입니다</string>
+    <string name="accessibility_on">켜짐</string>
+    <string name="accessibility_off">꺼짐</string>
+    <string name="background_audio_notification_permission_required">백그라운드 오디오 컨트롤에는 알림 권한이 필요합니다. 이 옵션은 꺼진 상태로 유지됩니다.</string>
 </resources>

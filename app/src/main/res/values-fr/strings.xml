@@ -238,4 +238,18 @@
     <string name="color_range_limited">Limitée</string>
     <string name="color_range_full">Complète</string>
     <string name="hdr_tone_mapping_warning">Cet écran ne signale pas la prise en charge de %1$s. Le mappage tonal peut modifier les hautes lumières et les couleurs.</string>
+    <string name="action_brightness">Luminosité</string>
+    <string name="action_volume">Volume</string>
+    <string name="action_zoom">Zoom vidéo</string>
+    <string name="brightness_slider_description">Réglage de la luminosité de 1 à 100 pour cent</string>
+    <string name="volume_slider_description">Réglage du volume multimédia de 0 à 100 pour cent</string>
+    <string name="zoom_slider_description">Réglage du zoom vidéo de 0,25 à 4 fois</string>
+    <string name="control_state_description">%1$s : %2$s</string>
+    <string name="action_seek_back_seconds">Reculer de %1$d secondes</string>
+    <string name="action_seek_forward_seconds">Avancer de %1$d secondes</string>
+    <string name="setting_continue_audio_in_background">Continuer le son en arrière-plan</string>
+    <string name="setting_continue_audio_in_background_summary">Si activé, la lecture en cours continue avec les commandes de notification lorsque l’image dans l’image est indisponible ; désactivé par défaut</string>
+    <string name="accessibility_on">Activé</string>
+    <string name="accessibility_off">Désactivé</string>
+    <string name="background_audio_notification_permission_required">L’autorisation des notifications est requise pour les commandes audio en arrière-plan. L’option reste désactivée.</string>
 </resources>

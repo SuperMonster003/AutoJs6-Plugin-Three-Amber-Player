@@ -238,4 +238,18 @@
     <string name="color_range_limited">محدود</string>
     <string name="color_range_full">كامل</string>
     <string name="hdr_tone_mapping_warning">لا تبلغ هذه الشاشة عن دعم %1$s. قد يغيّر تعيين الدرجات اللونية الإضاءات والألوان.</string>
+    <string name="action_brightness">السطوع</string>
+    <string name="action_volume">مستوى الصوت</string>
+    <string name="action_zoom">تكبير الفيديو</string>
+    <string name="brightness_slider_description">ضبط السطوع من 1 إلى 100 بالمئة</string>
+    <string name="volume_slider_description">ضبط صوت الوسائط من 0 إلى 100 بالمئة</string>
+    <string name="zoom_slider_description">ضبط تكبير الفيديو من 0.25 إلى 4 أضعاف</string>
+    <string name="control_state_description">%1$s: %2$s</string>
+    <string name="action_seek_back_seconds">إرجاع %1$d ثوانٍ</string>
+    <string name="action_seek_forward_seconds">تقديم %1$d ثوانٍ</string>
+    <string name="setting_continue_audio_in_background">متابعة الصوت في الخلفية</string>
+    <string name="setting_continue_audio_in_background_summary">عند التفعيل يستمر التشغيل الحالي مع عناصر التحكم في الإشعار إذا تعذرت صورة داخل صورة؛ متوقف افتراضيًا</string>
+    <string name="accessibility_on">مفعّل</string>
+    <string name="accessibility_off">متوقف</string>
+    <string name="background_audio_notification_permission_required">يلزم إذن الإشعارات لعناصر التحكم في صوت الخلفية. سيظل الخيار معطّلًا.</string>
 </resources>

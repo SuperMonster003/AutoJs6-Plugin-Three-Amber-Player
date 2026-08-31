@@ -238,4 +238,18 @@
     <string name="color_range_limited">有限</string>
     <string name="color_range_full">完整</string>
     <string name="hdr_tone_mapping_warning">此显示设备未报告支持 %1$s。色调映射可能会改变高光和色彩。</string>
+    <string name="action_brightness">亮度</string>
+    <string name="action_volume">音量</string>
+    <string name="action_zoom">画面缩放</string>
+    <string name="brightness_slider_description" formatted="false">亮度调节，范围 1% 到 100%</string>
+    <string name="volume_slider_description" formatted="false">媒体音量调节，范围 0% 到 100%</string>
+    <string name="zoom_slider_description">画面缩放调节，范围 0.25 倍到 4 倍</string>
+    <string name="control_state_description">%1$s：%2$s</string>
+    <string name="action_seek_back_seconds">快退 %1$d 秒</string>
+    <string name="action_seek_forward_seconds">快进 %1$d 秒</string>
+    <string name="setting_continue_audio_in_background">后台继续播放声音</string>
+    <string name="setting_continue_audio_in_background_summary">开启后，画中画不可用时通过通知控制继续当前播放；默认关闭</string>
+    <string name="accessibility_on">开启</string>
+    <string name="accessibility_off">关闭</string>
+    <string name="background_audio_notification_permission_required">后台音频控件需要通知权限，此选项将保持关闭。</string>
 </resources>

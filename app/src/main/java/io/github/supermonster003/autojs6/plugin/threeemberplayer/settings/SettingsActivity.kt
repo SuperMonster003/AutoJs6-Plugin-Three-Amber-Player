@@ -1,18 +1,32 @@
 package io.github.supermonster003.autojs6.plugin.threeemberplayer.settings
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.media3.common.text.Cue
 import androidx.media3.common.util.UnstableApi
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.BackgroundPlaybackCoordinator
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.BackgroundPlaybackPermissionPolicy
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.PlaybackPositionStore
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.PlayerSettingsStore
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.R
@@ -46,6 +60,20 @@ class SettingsActivity : VideoThemedActivity() {
     private lateinit var playerSettingsStore: PlayerSettingsStore
     private var subtitleStyle = SubtitleStyleSettings()
     private var hostResult = AutoJs6AppearanceResult(AutoJs6HostAvailability.NOT_INSTALLED)
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { granted ->
+        if (granted && BackgroundPlaybackPermissionPolicy.canPostControls(this)) {
+            setBackgroundAudioEnabled(true)
+        } else {
+            setBackgroundAudioEnabled(false)
+            Toast.makeText(
+                this,
+                R.string.background_audio_notification_permission_required,
+                Toast.LENGTH_LONG,
+            ).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,11 +92,27 @@ class SettingsActivity : VideoThemedActivity() {
     override fun onResume() {
         super.onResume()
         if (!::binding.isInitialized) return
+        if (playerSettingsStore.continueAudioInBackground &&
+            !BackgroundPlaybackPermissionPolicy.canPostControls(this)
+        ) {
+            setBackgroundAudioEnabled(false)
+        }
         hostResult = AutoJs6AppearanceClient.query(this)
         renderValues()
     }
 
     private fun bindRows() {
+        bindAccessibleSwitch(binding.rememberPositionSetting, binding.rememberPositionSwitch)
+        bindAccessibleSwitch(binding.rememberPlaybackModeSetting, binding.rememberPlaybackModeSwitch)
+        bindAccessibleSwitch(
+            binding.continueAudioInBackgroundSetting,
+            binding.continueAudioInBackgroundSwitch,
+        )
+        bindAccessibleSwitch(
+            binding.includeSubtitlesInScreenshotSetting,
+            binding.includeSubtitlesInScreenshotSwitch,
+        )
+        bindAccessibleSwitch(binding.autoUpdateSetting, binding.autoUpdateSwitch)
         binding.languageSetting.setOnClickListener { showLanguageDialog() }
         binding.nightModeSetting.setOnClickListener { showNightModeDialog() }
         binding.themeColorSetting.setOnClickListener {
@@ -79,16 +123,23 @@ class SettingsActivity : VideoThemedActivity() {
             preferenceStore.rememberPlaybackPosition = enabled
             binding.rememberPositionSwitch.isChecked = enabled
             if (!enabled) PlaybackPositionStore(this).clearAll()
+            renderSwitchStates()
         }
         binding.rememberPlaybackModeSetting.setOnClickListener {
             val enabled = !binding.rememberPlaybackModeSwitch.isChecked
             playerSettingsStore.setRememberPlaybackMode(enabled)
             binding.rememberPlaybackModeSwitch.isChecked = enabled
+            renderSwitchStates()
+        }
+        binding.continueAudioInBackgroundSetting.setOnClickListener {
+            val enabled = !binding.continueAudioInBackgroundSwitch.isChecked
+            if (enabled) requestBackgroundAudioEnablement() else setBackgroundAudioEnabled(false)
         }
         binding.includeSubtitlesInScreenshotSetting.setOnClickListener {
             val enabled = !binding.includeSubtitlesInScreenshotSwitch.isChecked
             playerSettingsStore.setIncludeSubtitlesInScreenshots(enabled)
             binding.includeSubtitlesInScreenshotSwitch.isChecked = enabled
+            renderSwitchStates()
         }
         binding.subtitleTextSizeSetting.setOnClickListener { showSubtitleTextSizeDialog() }
         binding.subtitleForegroundSetting.setOnClickListener { showSubtitleForegroundDialog() }
@@ -101,6 +152,7 @@ class SettingsActivity : VideoThemedActivity() {
             val enabled = !binding.autoUpdateSwitch.isChecked
             preferenceStore.autoCheckUpdates = enabled
             binding.autoUpdateSwitch.isChecked = enabled
+            renderSwitchStates()
         }
         binding.ignoredUpdatesSetting.setOnClickListener {
             AppUpdateCoordinator.manageIgnoredUpdates(this) { renderValues() }
@@ -189,9 +241,12 @@ class SettingsActivity : VideoThemedActivity() {
         binding.themeColorSummary.text = themeSummary()
         binding.rememberPositionSwitch.isChecked = preferenceStore.rememberPlaybackPosition
         binding.rememberPlaybackModeSwitch.isChecked = playerSettingsStore.rememberPlaybackMode
+        binding.continueAudioInBackgroundSwitch.isChecked =
+            playerSettingsStore.continueAudioInBackground
         binding.includeSubtitlesInScreenshotSwitch.isChecked =
             playerSettingsStore.includeSubtitlesInScreenshots
         binding.autoUpdateSwitch.isChecked = preferenceStore.autoCheckUpdates
+        renderSwitchStates()
         renderSubtitleStyle()
         val ignoredCount = AppUpdateStore(this).ignoredVersions().size
         binding.ignoredUpdatesSummary.text = resources.getQuantityString(
@@ -199,6 +254,73 @@ class SettingsActivity : VideoThemedActivity() {
             ignoredCount,
             ignoredCount,
         )
+    }
+
+    private fun bindAccessibleSwitch(row: View, switch: SwitchMaterial) {
+        ViewCompat.setAccessibilityDelegate(
+            row,
+            object : AccessibilityDelegateCompat() {
+                override fun onInitializeAccessibilityNodeInfo(
+                    host: View,
+                    info: AccessibilityNodeInfoCompat,
+                ) {
+                    super.onInitializeAccessibilityNodeInfo(host, info)
+                    info.className = Switch::class.java.name
+                    info.isCheckable = true
+                    info.isChecked = switch.isChecked
+                }
+            },
+        )
+    }
+
+    private fun requestBackgroundAudioEnablement() {
+        if (BackgroundPlaybackPermissionPolicy.canPostControls(this)) {
+            setBackgroundAudioEnabled(true)
+            return
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS,
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            return
+        }
+        setBackgroundAudioEnabled(false)
+        Toast.makeText(
+            this,
+            R.string.background_audio_notification_permission_required,
+            Toast.LENGTH_LONG,
+        ).show()
+        startActivity(
+            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                data = "package:$packageName".toUri()
+                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            },
+        )
+    }
+
+    private fun setBackgroundAudioEnabled(enabled: Boolean) {
+        playerSettingsStore.setContinueAudioInBackground(enabled)
+        binding.continueAudioInBackgroundSwitch.isChecked = enabled
+        if (!enabled) BackgroundPlaybackCoordinator.stopForDisabledSetting()
+        renderSwitchStates()
+    }
+
+    private fun renderSwitchStates() {
+        listOf(
+            binding.rememberPositionSetting to binding.rememberPositionSwitch,
+            binding.rememberPlaybackModeSetting to binding.rememberPlaybackModeSwitch,
+            binding.continueAudioInBackgroundSetting to binding.continueAudioInBackgroundSwitch,
+            binding.includeSubtitlesInScreenshotSetting to binding.includeSubtitlesInScreenshotSwitch,
+            binding.autoUpdateSetting to binding.autoUpdateSwitch,
+        ).forEach { (row, switch) ->
+            ViewCompat.setStateDescription(
+                row,
+                getString(if (switch.isChecked) R.string.accessibility_on else R.string.accessibility_off),
+            )
+        }
     }
 
     private fun showSubtitleTextSizeDialog() {
@@ -400,6 +522,7 @@ class SettingsActivity : VideoThemedActivity() {
             binding.themeColorTitle,
             binding.rememberPositionTitle,
             binding.rememberPlaybackModeTitle,
+            binding.continueAudioInBackgroundTitle,
             binding.includeSubtitlesInScreenshotTitle,
             binding.subtitleTextSizeTitle,
             binding.subtitleForegroundTitle,
@@ -417,6 +540,7 @@ class SettingsActivity : VideoThemedActivity() {
             binding.themeColorSummary,
             binding.rememberPositionSummary,
             binding.rememberPlaybackModeSummary,
+            binding.continueAudioInBackgroundSummary,
             binding.includeSubtitlesInScreenshotSummary,
             binding.subtitleTextSizeSummary,
             binding.subtitleForegroundSummary,
@@ -430,6 +554,7 @@ class SettingsActivity : VideoThemedActivity() {
         ).forEach { view -> view.setTextColor(palette.onSurfaceVariant) }
         styleSwitch(binding.rememberPositionSwitch)
         styleSwitch(binding.rememberPlaybackModeSwitch)
+        styleSwitch(binding.continueAudioInBackgroundSwitch)
         styleSwitch(binding.includeSubtitlesInScreenshotSwitch)
         styleSwitch(binding.autoUpdateSwitch)
     }

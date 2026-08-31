@@ -100,6 +100,19 @@ internal object PlayerGesturePolicy {
     fun percentLabel(fraction: Float): String =
         "${(fraction.coerceIn(0f, 1f) * 100).roundToInt()}%"
 
+    fun snapToSliderStep(
+        value: Float,
+        valueFrom: Float,
+        valueTo: Float,
+        stepSize: Float,
+    ): Float {
+        if (!valueFrom.isFinite() || !valueTo.isFinite() || valueFrom > valueTo) return value
+        val bounded = value.takeIf(Float::isFinite)?.coerceIn(valueFrom, valueTo) ?: valueFrom
+        if (!stepSize.isFinite() || stepSize <= 0f) return bounded
+        val steps = ((bounded - valueFrom) / stepSize).roundToInt()
+        return (valueFrom + steps * stepSize).coerceIn(valueFrom, valueTo)
+    }
+
     fun formatTime(timeMs: Long): String {
         val totalSeconds = timeMs.coerceAtLeast(0L) / 1_000L
         val hours = totalSeconds / 3_600L

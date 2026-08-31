@@ -238,4 +238,18 @@
     <string name="color_range_limited">リミテッド</string>
     <string name="color_range_full">フル</string>
     <string name="hdr_tone_mapping_warning">このディスプレイは %1$s 対応を報告していません。トーンマッピングによりハイライトや色が変化する場合があります。</string>
+    <string name="action_brightness">明るさ</string>
+    <string name="action_volume">音量</string>
+    <string name="action_zoom">映像ズーム</string>
+    <string name="brightness_slider_description" formatted="false">明るさを 1% から 100% まで調整</string>
+    <string name="volume_slider_description" formatted="false">メディア音量を 0% から 100% まで調整</string>
+    <string name="zoom_slider_description">映像ズームを 0.25 倍から 4 倍まで調整</string>
+    <string name="control_state_description">%1$s：%2$s</string>
+    <string name="action_seek_back_seconds">%1$d 秒戻す</string>
+    <string name="action_seek_forward_seconds">%1$d 秒送る</string>
+    <string name="setting_continue_audio_in_background">バックグラウンドで音声を継続</string>
+    <string name="setting_continue_audio_in_background_summary">有効にすると、ピクチャー イン ピクチャーが利用できない場合に通知コントロールで再生を継続します。既定ではオフです</string>
+    <string name="accessibility_on">オン</string>
+    <string name="accessibility_off">オフ</string>
+    <string name="background_audio_notification_permission_required">バックグラウンド音声の操作には通知権限が必要です。この設定はオフのままです。</string>
 </resources>

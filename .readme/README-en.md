@@ -66,6 +66,9 @@ The plugin sticks to a read-only security model: videos enter the player through
 - Tricky format fallback: a lightweight built-in XVID-in-MKV compatibility layer; when the device cannot decode a video, a clear message is shown and playback can be handed to another player.
 - Themes your way: one seed color generates readable light and dark palettes, following AutoJs6 by default, with 19 presets and a custom RGB color with live preview.
 - Works standalone: comes with a launcher icon and a settings page, opens videos through the system file picker, and can act as a video player in the system "Open with" menu.
+- Display and output tools: inspect HDR10/HLG/SDR and available color details, copy the information panel, optionally include subtitles in a shared screenshot, mirror the session image, or use a warned session-only volume boost up to +15 dB.
+- Accessible without gestures: TalkBack keeps named controls available, every gesture has a button or menu equivalent, layouts tolerate 200% text and display scale, and keyboard/DPAD focus, Space/Enter, seek and MediaSession keys are supported.
+- Optional background audio: off by default and enabled only with notification permission; when PiP is unavailable, the existing player moves to a media-playback foreground service with notification controls and stops on completion or when the setting is disabled. PiP always takes priority.
 - Read-only by design: no storage permission, source videos are never written; the network is used only for update checks.
 
 ******
@@ -216,6 +219,16 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 ******
 
+#### v3.0.0
+
+###### 2026/08/31
+
+* `Feature` Full player accessibility pass: named and state-aware controls, persistent controls during TalkBack touch exploration, button or menu equivalents for every gesture, deterministic focus order, and layouts verified at 200% text and display scale
+* `Feature` Keyboard and remote support: visible focus rings, DPAD navigation, Space/Enter play-pause, left/right seeking by the configured 5/10/30-second step, and media keys through MediaSession
+* `Feature` Optional background audio, off by default: after notification permission is granted, active playback can move without interruption to a media-playback foreground service with notification controls when picture-in-picture is unavailable
+* `Improvement` Picture-in-picture always wins over background audio; disabling the setting, playback completion, an error or leaving playback deliberately stops the service, while a notification tap reclaims the same player and position
+* `Improvement` Headset behavior stays with Media3: one click toggles playback, the platform external-device double tap advances when a next queue item exists, and an explicit Previous media command goes back; no non-standard triple-click timing is imposed
+
 #### v2.3.0
 
 ###### 2026/08/31
@@ -237,18 +250,6 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 * `Feature` New Remember playback mode setting, off by default, to retain sequence, shuffle or repeat-one across playback sessions
 * `Improvement` Every selected target is independently checked against its content URI, ClipData position, MIME type, metadata, size and parent; duplicate IDs or URIs reject the whole group
 * `Improvement` Multi-selection reads only explicitly authorized targets through their bounded Host Session routes and never scans siblings for videos or subtitles
-
-#### v2.1.0
-
-###### 2026/08/31
-
-* `Feature` Subtitle style settings: choose 75%-150% text size, foreground color, opaque/translucent/no background and 0%/4%/8% bottom margin with a live preview; choices persist in playback and picture-in-picture
-* `Feature` External subtitle encoding detection: BOM first, then GBK, Big5, Shift_JIS, EUC-KR, Windows-1251 and Windows-1256, with a clear warning when detection is uncertain
-* `Feature` Load one .srt or .ass subtitle manually from the subtitle menu through the system document picker; files over 4 MiB or with another extension are rejected
-* `Feature` Adjust the selected external subtitle from −600.0 to +600.0 seconds in 0.1-second steps with immediate on-screen feedback
-* `Feature` While paused, step one frame backward or forward (long-press to repeat), and set an A-B interval loop with normalized boundaries
-* `Improvement` Subtitle decoding, UTF-8 conversion and time shifting run entirely in memory without temporary files, storage permission or persistent subtitle grants
-* `Improvement` Subtitle offset resets whenever the video changes; A-B looping takes priority while active, and a later explicit repeat mode or end-of-video timer clears it
 
 ##### Full history
 

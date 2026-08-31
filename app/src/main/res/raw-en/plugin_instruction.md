@@ -26,6 +26,13 @@ Subtitle and precision tools:
 - The subtitle menu can temporarily load one .srt or .ass file up to 4 MiB, detects BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 in memory, and adjusts an external subtitle by ±600.0 seconds in 0.1-second steps. No subtitle grant is persisted.
 - Pause to reveal previous/next-frame buttons (long-press to repeat) and the A–B loop control. An active A–B loop prevents queue advance; choosing a repeat mode or end-of-video timer afterward clears it.
 
+Display, accessibility, and background playback:
+
+- The information panel identifies HDR10, HLG or SDR and available color details. Screenshots can include subtitles and be shared; mirror and warned +3 to +15 dB boost remain session-only.
+- TalkBack keeps named controls visible and every gesture has a button or menu equivalent. The player tolerates 200% text/display scale and supports visible keyboard/DPAD focus, Space/Enter play-pause, configured-step left/right seek, and MediaSession keys.
+- Media3 owns headset multi-click timing: one click toggles playback, a platform external-device double click advances when a next queue item exists, and an explicit Previous command goes back. No non-standard triple-click recognizer is added.
+- Continue audio in background is off by default and requires notification permission. If PiP is unavailable, it hands the existing player to a private media-playback foreground service with notification controls; PiP wins, and disabling the setting, completion, error or explicit exit stops the service. FOREGROUND_SERVICE and FOREGROUND_SERVICE_MEDIA_PLAYBACK are used only for this opted-in lifecycle, and URI access remains temporary.
+
 Explorer extensions:
 
 - MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT.

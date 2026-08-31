@@ -4,6 +4,16 @@
 
 ******
 
+# v3.0.0
+
+###### 2026/08/31
+
+* `Fonctionnalité` Audit complet de l'accessibilité du lecteur: commandes nommées avec état dynamique, commandes persistantes pendant l'exploration tactile TalkBack, équivalent par bouton ou menu pour chaque geste, ordre de focus déterministe et validation à 200 % pour le texte et l'affichage
+* `Fonctionnalité` Prise en charge du clavier et de la télécommande: anneaux de focus visibles, navigation DPAD, lecture/pause avec Espace/Entrée, recherche gauche/droite selon le pas configuré de 5/10/30 secondes et touches multimédias via MediaSession
+* `Fonctionnalité` Audio facultatif en arrière-plan, désactivé par défaut: après autorisation des notifications, la lecture active peut passer sans coupure à un service multimédia de premier plan avec commandes de notification lorsque le PiP est indisponible
+* `Amélioration` Le PiP reste toujours prioritaire; désactiver le réglage, terminer la lecture, rencontrer une erreur ou quitter volontairement arrête le service, tandis qu'un appui sur la notification récupère le même lecteur à la position continue
+* `Amélioration` Le comportement du casque suit Media3: un appui bascule lecture/pause, le double appui du périphérique avance si la file contient un élément suivant et une commande Previous explicite revient en arrière; aucun délai de triple appui non standard n'est imposé
+
 # v2.3.0
 
 ###### 2026/08/31

@@ -238,4 +238,18 @@
     <string name="color_range_limited">Limitado</string>
     <string name="color_range_full">Completo</string>
     <string name="hdr_tone_mapping_warning">Esta pantalla no indica compatibilidad con %1$s. El mapeo de tonos puede alterar las luces y los colores.</string>
+    <string name="action_brightness">Brillo</string>
+    <string name="action_volume">Volumen</string>
+    <string name="action_zoom">Zoom de vídeo</string>
+    <string name="brightness_slider_description">Ajuste de brillo del 1 al 100 por ciento</string>
+    <string name="volume_slider_description">Ajuste del volumen multimedia del 0 al 100 por ciento</string>
+    <string name="zoom_slider_description">Ajuste del zoom de vídeo de 0,25 a 4 veces</string>
+    <string name="control_state_description">%1$s: %2$s</string>
+    <string name="action_seek_back_seconds">Retroceder %1$d segundos</string>
+    <string name="action_seek_forward_seconds">Avanzar %1$d segundos</string>
+    <string name="setting_continue_audio_in_background">Continuar el audio en segundo plano</string>
+    <string name="setting_continue_audio_in_background_summary">Al activarlo, la reproducción continúa con controles de notificación si la imagen en imagen no está disponible; desactivado de forma predeterminada</string>
+    <string name="accessibility_on">Activado</string>
+    <string name="accessibility_off">Desactivado</string>
+    <string name="background_audio_notification_permission_required">Se requiere permiso de notificaciones para los controles de audio en segundo plano. La opción permanecerá desactivada.</string>
 </resources>

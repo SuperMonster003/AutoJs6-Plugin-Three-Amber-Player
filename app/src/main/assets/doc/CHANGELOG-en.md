@@ -4,6 +4,16 @@
 
 ******
 
+# v3.0.0
+
+###### 2026/08/31
+
+* `Feature` Full player accessibility pass: named and state-aware controls, persistent controls during TalkBack touch exploration, button or menu equivalents for every gesture, deterministic focus order, and layouts verified at 200% text and display scale
+* `Feature` Keyboard and remote support: visible focus rings, DPAD navigation, Space/Enter play-pause, left/right seeking by the configured 5/10/30-second step, and media keys through MediaSession
+* `Feature` Optional background audio, off by default: after notification permission is granted, active playback can move without interruption to a media-playback foreground service with notification controls when picture-in-picture is unavailable
+* `Improvement` Picture-in-picture always wins over background audio; disabling the setting, playback completion, an error or leaving playback deliberately stops the service, while a notification tap reclaims the same player and position
+* `Improvement` Headset behavior stays with Media3: one click toggles playback, the platform external-device double tap advances when a next queue item exists, and an explicit Previous media command goes back; no non-standard triple-click timing is imposed
+
 # v2.3.0
 
 ###### 2026/08/31

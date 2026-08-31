@@ -238,4 +238,18 @@
     <string name="color_range_limited">有限</string>
     <string name="color_range_full">完整</string>
     <string name="hdr_tone_mapping_warning">此顯示裝置未回報支援 %1$s。色調映射可能會改變亮部與色彩。</string>
+    <string name="action_brightness">亮度</string>
+    <string name="action_volume">音量</string>
+    <string name="action_zoom">畫面縮放</string>
+    <string name="brightness_slider_description" formatted="false">亮度調整，範圍為 1% 至 100%</string>
+    <string name="volume_slider_description" formatted="false">媒體音量調整，範圍為 0% 至 100%</string>
+    <string name="zoom_slider_description">畫面縮放調整，範圍為 0.25 倍至 4 倍</string>
+    <string name="control_state_description">%1$s：%2$s</string>
+    <string name="action_seek_back_seconds">快退 %1$d 秒</string>
+    <string name="action_seek_forward_seconds">快進 %1$d 秒</string>
+    <string name="setting_continue_audio_in_background">在背景繼續播放聲音</string>
+    <string name="setting_continue_audio_in_background_summary">啟用後，當子母畫面無法使用時，透過通知控制繼續目前播放；預設關閉</string>
+    <string name="accessibility_on">開啟</string>
+    <string name="accessibility_off">關閉</string>
+    <string name="background_audio_notification_permission_required">背景音訊控制項需要通知權限，此選項將維持關閉。</string>
 </resources>

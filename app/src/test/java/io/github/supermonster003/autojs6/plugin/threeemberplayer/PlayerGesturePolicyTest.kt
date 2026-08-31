@@ -141,6 +141,30 @@ class PlayerGesturePolicyTest {
     }
 
     @Test
+    fun sliderValues_snapToValidStepsAndBounds() {
+        assertEquals(
+            0.41f,
+            PlayerGesturePolicy.snapToSliderStep(0.413f, 0.01f, 1f, 0.01f),
+            0.0001f,
+        )
+        assertEquals(
+            0.47f,
+            PlayerGesturePolicy.snapToSliderStep(7f / 15f, 0f, 1f, 0.01f),
+            0.0001f,
+        )
+        assertEquals(
+            4f,
+            PlayerGesturePolicy.snapToSliderStep(5f, 0.25f, 4f, 0.05f),
+            0.0001f,
+        )
+        assertEquals(
+            0.25f,
+            PlayerGesturePolicy.snapToSliderStep(Float.NaN, 0.25f, 4f, 0.05f),
+            0.0001f,
+        )
+    }
+
+    @Test
     fun formatTime_coversMinutesAndHours() {
         assertEquals("00:00", PlayerGesturePolicy.formatTime(-1L))
         assertEquals("00:00", PlayerGesturePolicy.formatTime(0L))

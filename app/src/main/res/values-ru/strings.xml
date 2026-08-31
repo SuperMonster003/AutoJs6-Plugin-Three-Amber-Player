@@ -238,4 +238,18 @@
     <string name="color_range_limited">Ограниченный</string>
     <string name="color_range_full">Полный</string>
     <string name="hdr_tone_mapping_warning">Этот дисплей не сообщает о поддержке %1$s. Тональное отображение может изменить яркие участки и цвета.</string>
+    <string name="action_brightness">Яркость</string>
+    <string name="action_volume">Громкость</string>
+    <string name="action_zoom">Масштаб видео</string>
+    <string name="brightness_slider_description">Настройка яркости от 1 до 100 процентов</string>
+    <string name="volume_slider_description">Настройка громкости мультимедиа от 0 до 100 процентов</string>
+    <string name="zoom_slider_description">Настройка масштаба видео от 0,25 до 4 раз</string>
+    <string name="control_state_description">%1$s: %2$s</string>
+    <string name="action_seek_back_seconds">Назад на %1$d секунд</string>
+    <string name="action_seek_forward_seconds">Вперёд на %1$d секунд</string>
+    <string name="setting_continue_audio_in_background">Продолжать звук в фоне</string>
+    <string name="setting_continue_audio_in_background_summary">Если включено, активное воспроизведение продолжается с управлением из уведомления, когда режим «картинка в картинке» недоступен; по умолчанию выключено</string>
+    <string name="accessibility_on">Включено</string>
+    <string name="accessibility_off">Выключено</string>
+    <string name="background_audio_notification_permission_required">Для управления фоновым звуком требуется разрешение на уведомления. Параметр останется выключенным.</string>
 </resources>

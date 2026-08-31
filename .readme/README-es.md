@@ -66,6 +66,9 @@ El complemento se mantiene fiel a un modelo de seguridad de solo lectura: los vi
 - Respaldo para formatos difíciles: una capa ligera integrada de compatibilidad para XVID en MKV; cuando el dispositivo no puede decodificar un video, se muestra un aviso claro y la reproducción puede pasarse a otro reproductor.
 - Temas a tu gusto: un solo color semilla genera paletas claras y oscuras legibles, siguiendo AutoJs6 de forma predeterminada, con 19 colores predefinidos y un color RGB personalizado con vista previa en vivo.
 - Funciona por su cuenta: incluye un icono en la pantalla de inicio y una página de ajustes, abre videos mediante el selector de archivos del sistema y puede actuar como reproductor de video en el menú "Abrir con" del sistema.
+- Pantalla y salida: consulta HDR10/HLG/SDR y los datos de color disponibles, copia el panel, incluye opcionalmente subtítulos en una captura compartible, refleja la imagen de la sesión o usa un refuerzo advertido de hasta +15 dB.
+- Accesible sin gestos: TalkBack mantiene controles con nombre, cada gesto tiene un botón o menú equivalente, los diseños admiten texto y pantalla al 200 %, y se permiten foco de teclado/DPAD, Espacio/Intro, búsqueda y teclas MediaSession.
+- Audio opcional en segundo plano: desactivado de forma predeterminada y disponible solo con permiso de notificaciones; si PiP no está disponible, el reproductor existente pasa a un servicio multimedia en primer plano con controles de notificación y se detiene al terminar o al desactivar la opción. PiP siempre tiene prioridad.
 - Solo lectura por diseño: sin permiso de almacenamiento, los videos de origen nunca se escriben; la red se usa únicamente para comprobar actualizaciones.
 
 ******
@@ -216,6 +219,16 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 
 ******
 
+#### v3.0.0
+
+###### 2026/08/31
+
+* `Función` Revisión completa de accesibilidad del reproductor: controles con nombre y estado dinámico, controles persistentes durante la exploración táctil de TalkBack, equivalente de botón o menú para cada gesto, orden de foco determinista y diseños verificados con texto y pantalla al 200 %
+* `Función` Compatibilidad con teclado y mando: anillos de foco visibles, navegación DPAD, reproducción/pausa con Espacio/Intro, búsqueda izquierda/derecha según el paso configurado de 5/10/30 segundos y teclas multimedia mediante MediaSession
+* `Función` Audio opcional en segundo plano, desactivado de forma predeterminada: tras conceder permiso de notificaciones, la reproducción activa puede pasar sin cortes a un servicio multimedia en primer plano con controles de notificación cuando PiP no está disponible
+* `Mejora` PiP siempre tiene prioridad; desactivar el ajuste, finalizar la reproducción, un error o salir deliberadamente detiene el servicio, mientras que tocar la notificación recupera el mismo reproductor y la posición continua
+* `Mejora` El comportamiento de los auriculares sigue Media3: una pulsación alterna reproducción/pausa, la doble pulsación del dispositivo avanza si existe un siguiente elemento y un comando Previous explícito retrocede; no se impone un temporizador de triple pulsación no estándar
+
 #### v2.3.0
 
 ###### 2026/08/31
@@ -237,18 +250,6 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 * `Función` Nueva opción Recordar modo de reproducción, desactivada de forma predeterminada, para conservar secuencia, aleatorio o repetición de uno entre sesiones
 * `Mejora` Cada objetivo se comprueba por separado con su URI content, posición en ClipData, MIME, metadatos, tamaño y directorio; los ID o URI duplicados rechazan todo el grupo
 * `Mejora` La selección múltiple solo lee objetivos autorizados explícitamente mediante rutas limitadas de Host Session y nunca examina archivos hermanos para buscar vídeos o subtítulos
-
-#### v2.1.0
-
-###### 2026/08/31
-
-* `Función` Ajustes de estilo de subtítulos: tamaño del 75% al 150%, color, fondo opaco/semitransparente/sin fondo y margen inferior del 0%/4%/8% con vista previa en directo; las opciones se conservan en reproducción e imagen en imagen
-* `Función` Detección de codificación para subtítulos externos: primero BOM y después GBK, Big5, Shift_JIS, EUC-KR, Windows-1251 y Windows-1256, con un aviso claro cuando el resultado no es seguro
-* `Función` Carga manual de un subtítulo .srt o .ass desde el menú mediante el selector de documentos del sistema; se rechazan archivos mayores de 4 MiB o con otra extensión
-* `Función` Desfase del subtítulo externo seleccionado entre −600,0 y +600,0 segundos en pasos de 0,1 segundos con información inmediata en pantalla
-* `Función` En pausa, avance o retroceso fotograma a fotograma (mantener pulsado para repetir) y bucle A-B con límites normalizados
-* `Mejora` La decodificación, conversión a UTF-8 y traslación temporal se realizan por completo en memoria, sin archivos temporales, permiso de almacenamiento ni autorización persistente
-* `Mejora` El desfase vuelve a cero al cambiar de vídeo; el bucle A-B tiene prioridad mientras está activo y una selección posterior de repetición o temporizador hasta el final lo borra
 
 ##### Historial completo
 
