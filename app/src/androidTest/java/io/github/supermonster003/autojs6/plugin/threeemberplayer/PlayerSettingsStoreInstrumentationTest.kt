@@ -14,7 +14,7 @@ import org.junit.runner.RunWith
 class PlayerSettingsStoreInstrumentationTest {
 
     @Test
-    fun playbackModeMemoryDefaultsOffAndClearsItsStoredChoiceWhenDisabled() {
+    fun playbackPreferencesDefaultSafeAndPersistOnlyExplicitChoices() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         val backup = preferences.all.toMap()
@@ -37,6 +37,12 @@ class PlayerSettingsStoreInstrumentationTest {
             assertFalse(store.rememberPlaybackMode)
             store.setRememberPlaybackMode(true)
             assertEquals(VideoPlaybackMode.SEQUENCE, store.readPlaybackMode())
+
+            assertFalse(store.includeSubtitlesInScreenshots)
+            store.setIncludeSubtitlesInScreenshots(true)
+            assertTrue(PlayerSettingsStore(context).includeSubtitlesInScreenshots)
+            store.setIncludeSubtitlesInScreenshots(false)
+            assertFalse(PlayerSettingsStore(context).includeSubtitlesInScreenshots)
         } finally {
             restore(preferences, backup)
         }

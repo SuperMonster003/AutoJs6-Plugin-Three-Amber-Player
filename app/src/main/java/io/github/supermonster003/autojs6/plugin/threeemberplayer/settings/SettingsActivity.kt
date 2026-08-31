@@ -85,6 +85,11 @@ class SettingsActivity : VideoThemedActivity() {
             playerSettingsStore.setRememberPlaybackMode(enabled)
             binding.rememberPlaybackModeSwitch.isChecked = enabled
         }
+        binding.includeSubtitlesInScreenshotSetting.setOnClickListener {
+            val enabled = !binding.includeSubtitlesInScreenshotSwitch.isChecked
+            playerSettingsStore.setIncludeSubtitlesInScreenshots(enabled)
+            binding.includeSubtitlesInScreenshotSwitch.isChecked = enabled
+        }
         binding.subtitleTextSizeSetting.setOnClickListener { showSubtitleTextSizeDialog() }
         binding.subtitleForegroundSetting.setOnClickListener { showSubtitleForegroundDialog() }
         binding.subtitleBackgroundSetting.setOnClickListener { showSubtitleBackgroundDialog() }
@@ -184,6 +189,8 @@ class SettingsActivity : VideoThemedActivity() {
         binding.themeColorSummary.text = themeSummary()
         binding.rememberPositionSwitch.isChecked = preferenceStore.rememberPlaybackPosition
         binding.rememberPlaybackModeSwitch.isChecked = playerSettingsStore.rememberPlaybackMode
+        binding.includeSubtitlesInScreenshotSwitch.isChecked =
+            playerSettingsStore.includeSubtitlesInScreenshots
         binding.autoUpdateSwitch.isChecked = preferenceStore.autoCheckUpdates
         renderSubtitleStyle()
         val ignoredCount = AppUpdateStore(this).ignoredVersions().size
@@ -393,6 +400,7 @@ class SettingsActivity : VideoThemedActivity() {
             binding.themeColorTitle,
             binding.rememberPositionTitle,
             binding.rememberPlaybackModeTitle,
+            binding.includeSubtitlesInScreenshotTitle,
             binding.subtitleTextSizeTitle,
             binding.subtitleForegroundTitle,
             binding.subtitleBackgroundTitle,
@@ -409,6 +417,7 @@ class SettingsActivity : VideoThemedActivity() {
             binding.themeColorSummary,
             binding.rememberPositionSummary,
             binding.rememberPlaybackModeSummary,
+            binding.includeSubtitlesInScreenshotSummary,
             binding.subtitleTextSizeSummary,
             binding.subtitleForegroundSummary,
             binding.subtitleBackgroundSummary,
@@ -421,6 +430,7 @@ class SettingsActivity : VideoThemedActivity() {
         ).forEach { view -> view.setTextColor(palette.onSurfaceVariant) }
         styleSwitch(binding.rememberPositionSwitch)
         styleSwitch(binding.rememberPlaybackModeSwitch)
+        styleSwitch(binding.includeSubtitlesInScreenshotSwitch)
         styleSwitch(binding.autoUpdateSwitch)
     }
 

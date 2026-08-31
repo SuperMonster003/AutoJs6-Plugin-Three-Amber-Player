@@ -216,6 +216,17 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 ******
 
+#### v2.3.0
+
+###### 2026/08/31
+
+* `Fonctionnalité` Les informations vidéo identifient désormais HDR10, HLG ou SDR et affichent, si disponibles, l'espace colorimétrique, la plage et la profondeur; tous les champs se copient en une fois et un avertissement unique apparaît si l'écran ne signale pas la prise en charge du format HDR source
+* `Fonctionnalité` Les captures peuvent inclure les sous-titres visibles via un réglage désactivé par défaut, puis l'action Partager envoie directement le nouveau PNG vers une autre application
+* `Fonctionnalité` Un nouveau miroir vidéo limité à la session inverse gauche/droite, haut/bas ou les deux axes et se combine de façon cohérente avec le zoom par pincement et la rotation de l'écran
+* `Fonctionnalité` Une amplification limitée à la session propose de +3 dB à +15 dB, reste désactivée par défaut, avertit des risques de distorsion et d'audition avant la première utilisation et revient à l'arrêt si elle n'est pas prise en charge
+* `Amélioration` Les captures restent des PNG MediaStore indépendants sans permission de stockage; le partage n'accorde qu'un accès en lecture à l'image choisie
+* `Amélioration` LoudnessEnhancer a été retenu après évaluation car il applique un gain borné à la lecture sans modifier les médias; tout échec de l'effet libère immédiatement les ressources et revient à un état sûr
+
 #### v2.2.0
 
 ###### 2026/08/31
@@ -238,18 +249,6 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 * `Fonctionnalité` En pause, avance ou recul image par image (appui long pour répéter) et boucle d'intervalle A-B avec normalisation des limites
 * `Amélioration` Le décodage, la conversion UTF-8 et le décalage temporel des sous-titres restent entièrement en mémoire, sans fichier temporaire, autorisation de stockage ni droit persistant
 * `Amélioration` Le décalage revient à zéro à chaque changement de vidéo; la boucle A-B est prioritaire tant qu'elle est active, puis un mode de répétition ou un minuteur de fin explicitement choisi l'efface
-
-#### v2.0.0
-
-###### 2026/08/29
-
-* `Fonctionnalité` Tout nouveau système de thèmes: une seule couleur de base génère une palette claire et une palette sombre lisibles, en suivant le thème AutoJs6 par défaut, avec 19 couleurs prédéfinies et une couleur RGB personnalisée avec aperçu en direct
-* `Fonctionnalité` Le plugin devient une application autonome: une entrée sur l'écran d'accueil est ajoutée, et les vidéos peuvent être ouvertes directement via le sélecteur de fichiers du système
-* `Fonctionnalité` Nouvelle page de paramètres: langue, mode nuit, couleur du thème, reprise, mises à jour et historique des versions réunis au même endroit; la langue, le mode nuit et la couleur du thème suivent AutoJs6 par défaut, et ces options sont désactivées avec les valeurs par défaut de l'application quand l'hôte est indisponible
-* `Fonctionnalité` Nouvelle vérification des mises à jour: vérification manuelle et vérification automatique quotidienne des versions officielles GitHub, avec possibilité d'ignorer des versions et une page d'historique des versions localisée intégrée
-* `Correctif` Correction du suivi des paramètres AutoJs6 qui ne prenait pas effet dans certains scénarios (le service d'informations du plugin requis par l'hôte n'était pas exposé auparavant)
-* `Amélioration` L'historique de reprise est réduit à la seule dernière vidéo non terminée; ouvrir une autre vidéo efface immédiatement l'ancien enregistrement, et les vidéos terminées ne conservent aucune position
-* `Amélioration` L'application est renommée 3-Ember Player; l'ID d'application et l'ID de plugin restent inchangés, les installations existantes se mettent donc à niveau directement
 
 ##### Historique complet
 

@@ -63,6 +63,18 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_mirror"
+        android:icon="@drawable/ic_flip"
+        android:title="@string/action_mirror"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_volume_boost"
+        android:icon="@drawable/ic_volume_up"
+        android:title="@string/action_volume_boost"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_gesture_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/action_gesture_settings"

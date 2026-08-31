@@ -216,6 +216,17 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 ******
 
+#### v2.3.0
+
+###### 2026/08/31
+
+* `Feature` Video information now identifies HDR10, HLG or SDR and shows available color space, range and bit depth; copy every field at once and get a one-time warning when the display does not report support for the source HDR format
+* `Feature` Screenshots can optionally include visible subtitles through a default-off setting, and a Share action sends the newly saved PNG directly to another app
+* `Feature` New session-only video mirroring flips left/right, top/bottom or both axes and composes consistently with pinch zoom and screen rotation
+* `Feature` New session-only volume boost offers +3 dB through +15 dB levels, stays off by default, warns about distortion and hearing risk before first use, and falls back to Off when unsupported
+* `Improvement` Screenshots remain independent MediaStore PNG files without storage permission; sharing grants read-only access only to the selected image
+* `Improvement` LoudnessEnhancer was adopted after evaluation because it can apply bounded playback-only gain without modifying media files; device failures are contained with immediate release and safe fallback
+
 #### v2.2.0
 
 ###### 2026/08/31
@@ -238,18 +249,6 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 * `Feature` While paused, step one frame backward or forward (long-press to repeat), and set an A-B interval loop with normalized boundaries
 * `Improvement` Subtitle decoding, UTF-8 conversion and time shifting run entirely in memory without temporary files, storage permission or persistent subtitle grants
 * `Improvement` Subtitle offset resets whenever the video changes; A-B looping takes priority while active, and a later explicit repeat mode or end-of-video timer clears it
-
-#### v2.0.0
-
-###### 2026/08/29
-
-* `Feature` Brand-new theme system: one seed color generates readable light and dark palettes, following the AutoJs6 theme by default, with 19 presets and a custom RGB color with live preview
-* `Feature` The plugin becomes a standalone app: a launcher entry is added, and videos can be opened directly through the system file picker
-* `Feature` New settings page: language, night mode, theme color, resume, updates and release history in one place; language, night mode and theme color follow AutoJs6 by default, and the options are disabled with app defaults when the host is unavailable
-* `Feature` New update checks: manual and once-daily automatic checks against official GitHub releases, with ignorable versions and a built-in localized release history page
-* `Fix` Fixed following AutoJs6 settings not taking effect in some scenarios (the plugin info service required by the host was not exposed before)
-* `Improvement` Resume history is trimmed to the single most recent unfinished video; opening another video clears the old record immediately, and finished videos keep no position
-* `Improvement` The app is renamed to 3-Ember Player; the application ID and plugin ID stay unchanged, so existing installations upgrade in place
 
 ##### Full history
 

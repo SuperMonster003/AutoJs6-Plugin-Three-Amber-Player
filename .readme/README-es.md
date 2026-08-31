@@ -216,6 +216,17 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 
 ******
 
+#### v2.3.0
+
+###### 2026/08/31
+
+* `Función` La información del video ahora identifica HDR10, HLG o SDR y muestra el espacio, rango y profundidad de color disponibles; permite copiar todos los campos y avisa una sola vez si la pantalla no declara compatibilidad con el formato HDR de origen
+* `Función` Las capturas pueden incluir los subtítulos visibles mediante un ajuste desactivado de forma predeterminada, y la acción Compartir envía el PNG recién guardado directamente a otra aplicación
+* `Función` El nuevo reflejo de video, limitado a la sesión, voltea izquierda/derecha, arriba/abajo o ambos ejes y se combina de forma coherente con el zoom de pellizco y la rotación de pantalla
+* `Función` La nueva amplificación limitada a la sesión ofrece de +3 dB a +15 dB, permanece desactivada de forma predeterminada, avisa de distorsión y riesgo auditivo antes del primer uso y vuelve a Desactivado si no es compatible
+* `Mejora` Las capturas siguen siendo PNG independientes de MediaStore sin permiso de almacenamiento; al compartir solo se concede acceso de lectura a la imagen elegida
+* `Mejora` Tras evaluarlo se adoptó LoudnessEnhancer porque aplica una ganancia limitada solo durante la reproducción sin modificar archivos; cualquier fallo libera el efecto inmediatamente y vuelve a un estado seguro
+
 #### v2.2.0
 
 ###### 2026/08/31
@@ -238,18 +249,6 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 * `Función` En pausa, avance o retroceso fotograma a fotograma (mantener pulsado para repetir) y bucle A-B con límites normalizados
 * `Mejora` La decodificación, conversión a UTF-8 y traslación temporal se realizan por completo en memoria, sin archivos temporales, permiso de almacenamiento ni autorización persistente
 * `Mejora` El desfase vuelve a cero al cambiar de vídeo; el bucle A-B tiene prioridad mientras está activo y una selección posterior de repetición o temporizador hasta el final lo borra
-
-#### v2.0.0
-
-###### 2026/08/29
-
-* `Función` Sistema de temas totalmente nuevo: un solo color semilla genera paletas claras y oscuras legibles, siguiendo el tema de AutoJs6 de forma predeterminada, con 19 colores predefinidos y un color RGB personalizado con vista previa en vivo
-* `Función` El complemento se convierte en una aplicación independiente: se añade una entrada en la pantalla de inicio y los videos pueden abrirse directamente con el selector de archivos del sistema
-* `Función` Nueva página de ajustes: idioma, modo nocturno, color del tema, reanudación, actualizaciones e historial de versiones en un solo lugar; el idioma, el modo nocturno y el color del tema siguen AutoJs6 de forma predeterminada, y cuando el host no está disponible las opciones se deshabilitan y se usan los valores predeterminados de la aplicación
-* `Función` Nueva comprobación de actualizaciones: comprobaciones manuales y automáticas una vez al día contra las versiones oficiales de GitHub, con versiones ignorables y una página integrada de historial de versiones localizada
-* `Corrección` Se corrigió que seguir los ajustes de AutoJs6 no tuviera efecto en algunos escenarios (el servicio de información del complemento que el host requiere no se exponía antes)
-* `Mejora` El historial de reanudación se reduce al único video más reciente sin terminar; abrir otro video borra de inmediato el registro anterior, y los videos terminados no conservan posición
-* `Mejora` La aplicación pasa a llamarse 3-Ember Player; el ID de aplicación y el ID de complemento no cambian, por lo que las instalaciones existentes se actualizan sin reinstalar
 
 ##### Historial completo
 

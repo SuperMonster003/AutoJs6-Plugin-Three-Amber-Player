@@ -215,4 +215,37 @@
     <string name="track_unsupported">%1$s (unsupported)</string>
     <string name="video_playlist_count">Video playlist (%1$d)</string>
     <string name="zoom_scale_value">Zoom %1$s</string>
+    <string name="action_copy_all">Copy all</string>
+    <string name="action_mirror">Mirror video</string>
+    <string name="action_share">Share</string>
+    <string name="action_volume_boost">Volume boost</string>
+    <string name="setting_include_subtitles_in_screenshot">Include subtitles in screenshots</string>
+    <string name="setting_include_subtitles_in_screenshot_summary">Draw visible subtitles into saved frames; player controls are never included</string>
+    <string name="screenshot_share_failed">No app is available to share this screenshot</string>
+    <string name="mirror_mode_none">Off</string>
+    <string name="mirror_mode_horizontal">Flip left and right</string>
+    <string name="mirror_mode_vertical">Flip top and bottom</string>
+    <string name="mirror_mode_both">Flip both axes</string>
+    <string name="volume_boost_off">Off</string>
+    <string name="volume_boost_db">+%1$d dB</string>
+    <string name="volume_boost_warning_title">High volume can harm hearing</string>
+    <string name="volume_boost_warning_message">Boosting audio above its original level may cause distortion and can damage your hearing. Start low; results vary by device and audio hardware.</string>
+    <string name="volume_boost_continue">Enable boost</string>
+    <string name="volume_boost_unavailable">Volume boost is not supported for this audio session and was reset to Off</string>
+    <string name="media_info_hdr_type">HDR type</string>
+    <string name="media_info_color_space">Color space</string>
+    <string name="media_info_color_range">Color range</string>
+    <string name="media_info_bit_depth">Bit depth</string>
+    <string name="media_info_bit_depth_value">%1$d-bit</string>
+    <string name="media_info_bit_depth_pair_value">%1$d-bit luma / %2$d-bit chroma</string>
+    <string name="media_info_copied">All video information copied</string>
+    <string name="hdr_type_none">None (SDR)</string>
+    <string name="hdr_type_hdr10" translatable="false">HDR10</string>
+    <string name="hdr_type_hlg" translatable="false">HLG</string>
+    <string name="color_space_bt601" translatable="false">BT.601</string>
+    <string name="color_space_bt709" translatable="false">BT.709</string>
+    <string name="color_space_bt2020" translatable="false">BT.2020</string>
+    <string name="color_range_limited">Limited</string>
+    <string name="color_range_full">Full</string>
+    <string name="hdr_tone_mapping_warning">This display does not report support for %1$s. Tone mapping may alter highlights and colors.</string>
 </resources>

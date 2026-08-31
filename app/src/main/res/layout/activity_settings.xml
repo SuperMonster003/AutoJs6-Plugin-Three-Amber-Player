@@ -152,6 +152,40 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/include_subtitles_in_screenshot_setting"
+                style="@style/SettingsSwitchRow">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/include_subtitles_in_screenshot_title"
+                        style="@style/SettingsRowTitle"
+                        android:text="@string/setting_include_subtitles_in_screenshot" />
+
+                    <TextView
+                        android:id="@+id/include_subtitles_in_screenshot_summary"
+                        style="@style/SettingsRowSummary"
+                        android:text="@string/setting_include_subtitles_in_screenshot_summary" />
+
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/include_subtitles_in_screenshot_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:textOff=""
+                    android:textOn=""
+                    app:showText="false" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/subtitle_style_section"
                 style="@style/SettingsSectionTitle"

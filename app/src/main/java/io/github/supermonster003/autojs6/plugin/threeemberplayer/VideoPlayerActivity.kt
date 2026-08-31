@@ -5,6 +5,8 @@ import android.app.PictureInPictureParams
 import android.app.RemoteAction
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -26,7 +28,12 @@ import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.format.Formatter
 import android.util.Rational
+import android.view.Display
 import android.view.MotionEvent
+import android.view.SurfaceView
+import android.view.TextureView
+import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.Toast
@@ -65,6 +72,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.ActivityVideoPlayerBinding
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.BottomSheetVideoQueueBinding
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.DialogSubtitleOffsetBinding
@@ -121,6 +129,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
     private var player: ExoPlayer? = null
     private var frameCapture: PlayerFrameCapture? = null
+    private var transformedTextureView: TextureView? = null
+    private var transformedTextureAttachedToPlayer = false
+    private val loudnessEnhancer = PlayerLoudnessEnhancer()
     private var scrubThumbnailProvider: ScrubThumbnailProvider? = null
     private var requestAccepted = false
 
@@ -144,6 +155,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private var manualZoomScale = PlayerGesturePolicy.DEFAULT_ZOOM_SCALE
     private var zoomPivotXFraction = 0.5f
     private var zoomPivotYFraction = 0.5f
+    private var mirrorMode = VideoMirrorMode.NONE
+    private var volumeBoostLevel = VolumeBoostLevel.OFF
+    private var volumeBoostWarningAcknowledged = false
     private var orientationSuggestionApplied = false
     private var orientationManuallyChanged = false
     private var pendingResumeToastPosition = -1L
@@ -168,6 +182,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private var scrubPreviewBitmap: Bitmap? = null
     private val subtitleSourceRegistry = SubtitleSourceRegistry()
     private val subtitleEncodingWarnings = Collections.synchronizedSet(HashSet<String>())
+    private val unsupportedHdrWarnings = HashSet<String>()
     private var subtitleOffsetMs = 0L
     private var subtitleRouteRevision = 0L
     private var manualSubtitle: ManualSubtitleDocument? = null
@@ -279,7 +294,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         setUpControls()
         registerPictureInPictureActions()
         applyResizeMode(showOsd = false)
-        binding.playerView.post { applyManualZoom() }
+        binding.playerView.post { applyVideoTransform() }
         applyOrientationMode(showOsd = false)
         applyLockState()
         scheduleSleepTimer()
@@ -320,6 +335,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         scrubThumbnailProvider?.close()
         scrubThumbnailProvider = null
         subtitleSourceRegistry.clear()
+        loudnessEnhancer.close()
         frameRepeatDirection = 0
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             frameCapture?.close()
@@ -330,6 +346,11 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
         mainHandler.removeCallbacksAndMessages(null)
         super.onDestroy()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        binding.playerView.post { applyVideoTransform() }
     }
 
     override fun onUserLeaveHint() {
@@ -387,6 +408,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
         outState.putFloat(STATE_ZOOM_SCALE, manualZoomScale)
         outState.putFloat(STATE_ZOOM_PIVOT_X, zoomPivotXFraction)
         outState.putFloat(STATE_ZOOM_PIVOT_Y, zoomPivotYFraction)
+        outState.putInt(STATE_MIRROR_MODE, mirrorMode.ordinal)
+        outState.putInt(STATE_VOLUME_BOOST_LEVEL, volumeBoostLevel.ordinal)
+        outState.putBoolean(STATE_VOLUME_BOOST_WARNING, volumeBoostWarningAcknowledged)
         outState.putBoolean(STATE_ORIENTATION_MANUAL, orientationManuallyChanged)
         outState.putInt(STATE_AUDIO_GROUP, trackController.selectedAudioKey?.groupIndex ?: -1)
         outState.putInt(STATE_AUDIO_TRACK, trackController.selectedAudioKey?.trackIndex ?: -1)
@@ -439,6 +463,19 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 .coerceIn(0f, 1f)
             zoomPivotYFraction = savedInstanceState.getFloat(STATE_ZOOM_PIVOT_Y, 0.5f)
                 .coerceIn(0f, 1f)
+            mirrorMode = enumFromOrdinal<VideoMirrorMode>(
+                savedInstanceState.getInt(STATE_MIRROR_MODE, VideoMirrorMode.NONE.ordinal),
+            )
+            volumeBoostLevel = VolumeBoostPolicy.fromStoredOrdinal(
+                savedInstanceState.getInt(
+                    STATE_VOLUME_BOOST_LEVEL,
+                    VolumeBoostLevel.OFF.ordinal,
+                ),
+            )
+            volumeBoostWarningAcknowledged = savedInstanceState.getBoolean(
+                STATE_VOLUME_BOOST_WARNING,
+                false,
+            )
             orientationManuallyChanged = savedInstanceState.getBoolean(STATE_ORIENTATION_MANUAL, false)
             trackController.restoreSelections(
                 audioGroupIndex = savedInstanceState.getInt(STATE_AUDIO_GROUP, -1),
@@ -601,6 +638,14 @@ class VideoPlayerActivity : VideoThemedActivity() {
                     captureCurrentFrame()
                     true
                 }
+                R.id.action_mirror -> {
+                    showMirrorDialog()
+                    true
+                }
+                R.id.action_volume_boost -> {
+                    showVolumeBoostDialog()
+                    true
+                }
                 R.id.action_gesture_settings -> {
                     showGestureSettingsDialog()
                     true
@@ -708,6 +753,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 exoPlayer.setPlaybackSpeed(playbackSpeed)
                 applyPlaybackMode(exoPlayer)
                 exoPlayer.addListener(playerListener)
+                loudnessEnhancer.setLevel(volumeBoostLevel)
                 binding.playerView.player = exoPlayer
                 SubtitleStyleApplier.apply(binding.playerView.subtitleView, subtitleStyle)
                 systemIntegration.attach(exoPlayer)
@@ -895,11 +941,17 @@ class VideoPlayerActivity : VideoThemedActivity() {
         speedBoostActive = false
         stopFrameRepeat()
         systemIntegration.detach()
+        loudnessEnhancer.close()
         trackController.clearAvailability()
+        transformedTextureView?.takeIf { transformedTextureAttachedToPlayer }?.let {
+            exoPlayer.clearVideoTextureView(it)
+        }
+        transformedTextureAttachedToPlayer = false
         binding.playerView.player = null
         exoPlayer.removeListener(playerListener)
         exoPlayer.release()
         player = null
+        disposeTransformedTextureView()
         setKeepScreenOn(false)
         updateToolbarMenu()
         updatePictureInPictureParameters()
@@ -1013,6 +1065,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
         override fun onTracksChanged(tracks: Tracks) {
             trackController.onTracksChanged(tracks)
+            maybeWarnAboutUnsupportedHdr()
             if (xvidFourCcCompatibilityApplied && hasUnsupportedXvidVideoTrack(tracks)) {
                 player?.pause()
                 setKeepScreenOn(false)
@@ -1067,8 +1120,20 @@ class VideoPlayerActivity : VideoThemedActivity() {
             // Media3 applies container rotation before reporting VideoSize on API 21+.
             videoRotationDegrees = 0
             videoPixelWidthHeightRatio = videoSize.pixelWidthHeightRatio
+            // The selected video format may settle after the initial tracks callback.
+            // Recheck here so HDR media still gets its one-time display warning.
+            maybeWarnAboutUnsupportedHdr()
             applySuggestedOrientationIfNeeded(videoSize)
+            binding.playerView.post { applyVideoTransform() }
             updatePictureInPictureParameters()
+        }
+
+        override fun onAudioSessionIdChanged(audioSessionId: Int) {
+            if (!loudnessEnhancer.onAudioSessionIdChanged(audioSessionId) &&
+                volumeBoostLevel != VolumeBoostLevel.OFF
+            ) {
+                disableUnavailableVolumeBoost()
+            }
         }
 
         override fun onRepeatModeChanged(repeatMode: Int) {
@@ -2097,6 +2162,32 @@ class VideoPlayerActivity : VideoThemedActivity() {
             isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
             isEnabled = player != null && !screenshotInProgress
         }
+        menu.findItem(R.id.action_mirror)?.apply {
+            isEnabled = player != null
+            title = getString(
+                R.string.gesture_setting_value,
+                getString(R.string.action_mirror),
+                mirrorModeLabel(mirrorMode),
+            )
+            icon?.mutate()?.setTint(
+                if (mirrorMode == VideoMirrorMode.NONE) overlay.playerControl else overlay.secondary,
+            )
+        }
+        menu.findItem(R.id.action_volume_boost)?.apply {
+            isEnabled = player != null
+            title = getString(
+                R.string.gesture_setting_value,
+                getString(R.string.action_volume_boost),
+                volumeBoostLabel(volumeBoostLevel),
+            )
+            icon?.mutate()?.setTint(
+                if (volumeBoostLevel == VolumeBoostLevel.OFF) {
+                    overlay.playerControl
+                } else {
+                    overlay.secondary
+                },
+            )
+        }
         menu.findItem(R.id.action_gesture_settings)?.isEnabled = player != null
         menu.findItem(R.id.action_video_info)?.isEnabled = player != null
         renderQueuePanel()
@@ -2228,19 +2319,137 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
         screenshotInProgress = true
         updateToolbarMenu()
-        capture.capture(binding.playerView) { result ->
+        capture.capture(
+            playerView = binding.playerView,
+            videoSurface = activeVideoOutputView(),
+            options = FrameCaptureOptions(
+                includeSubtitles = settingsStore.includeSubtitlesInScreenshots,
+                renderTransform = currentVideoRenderTransform(),
+            ),
+        ) { result ->
             screenshotInProgress = false
             updateToolbarMenu()
-            val message = when (result) {
-                is FrameCaptureResult.Success -> R.string.screenshot_saved
-                FrameCaptureResult.VideoNotReady -> R.string.screenshot_not_ready
+            when (result) {
+                is FrameCaptureResult.Success -> Snackbar.make(
+                    binding.root,
+                    R.string.screenshot_saved,
+                    Snackbar.LENGTH_LONG,
+                ).setAction(R.string.action_share) {
+                    shareCapturedFrame(result.uri)
+                }.show()
+                FrameCaptureResult.VideoNotReady -> Toast.makeText(
+                    this,
+                    R.string.screenshot_not_ready,
+                    Toast.LENGTH_SHORT,
+                ).show()
                 FrameCaptureResult.CopyFailed,
                 FrameCaptureResult.SaveFailed,
-                -> R.string.screenshot_save_failed
+                -> Toast.makeText(
+                    this,
+                    R.string.screenshot_save_failed,
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             postponeControlsAutoHide()
         }
+    }
+
+    private fun shareCapturedFrame(uri: Uri) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "image/png"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            clipData = ClipData.newUri(contentResolver, getString(R.string.action_share), uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        runCatching {
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.action_share)))
+        }.onFailure {
+            Toast.makeText(this, R.string.screenshot_share_failed, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showMirrorDialog() {
+        val modes = VideoMirrorMode.entries
+        val labels = modes.map(::mirrorModeLabel).toTypedArray()
+        mainHandler.removeCallbacks(hideControlsRunnable)
+        AlertDialog.Builder(this)
+            .setTitle(R.string.action_mirror)
+            .setSingleChoiceItems(labels, modes.indexOf(mirrorMode)) { dialog, which ->
+                mirrorMode = modes[which]
+                applyVideoTransform()
+                updateToolbarMenu()
+                showOsd(R.drawable.ic_flip, mirrorModeLabel(mirrorMode))
+                dialog.dismiss()
+            }
+            .setOnDismissListener { postponeControlsAutoHide() }
+            .showWithPalette()
+    }
+
+    private fun mirrorModeLabel(mode: VideoMirrorMode): String = getString(
+        when (mode) {
+            VideoMirrorMode.NONE -> R.string.mirror_mode_none
+            VideoMirrorMode.HORIZONTAL -> R.string.mirror_mode_horizontal
+            VideoMirrorMode.VERTICAL -> R.string.mirror_mode_vertical
+            VideoMirrorMode.BOTH -> R.string.mirror_mode_both
+        },
+    )
+
+    private fun showVolumeBoostDialog() {
+        val levels = VolumeBoostLevel.entries
+        val labels = levels.map(::volumeBoostLabel).toTypedArray()
+        mainHandler.removeCallbacks(hideControlsRunnable)
+        AlertDialog.Builder(this)
+            .setTitle(R.string.action_volume_boost)
+            .setSingleChoiceItems(labels, levels.indexOf(volumeBoostLevel)) { dialog, which ->
+                val selected = levels[which]
+                dialog.dismiss()
+                if (selected != VolumeBoostLevel.OFF && !volumeBoostWarningAcknowledged) {
+                    showVolumeBoostWarning(selected)
+                } else {
+                    applyVolumeBoost(selected)
+                }
+            }
+            .setOnDismissListener { postponeControlsAutoHide() }
+            .showWithPalette()
+    }
+
+    private fun showVolumeBoostWarning(level: VolumeBoostLevel) {
+        mainHandler.removeCallbacks(hideControlsRunnable)
+        AlertDialog.Builder(this)
+            .setTitle(R.string.volume_boost_warning_title)
+            .setMessage(R.string.volume_boost_warning_message)
+            .setNegativeButton(android.R.string.cancel, null)
+            .setPositiveButton(R.string.volume_boost_continue) { _, _ ->
+                volumeBoostWarningAcknowledged = true
+                applyVolumeBoost(level)
+            }
+            .setOnDismissListener { postponeControlsAutoHide() }
+            .showWithPalette()
+    }
+
+    private fun applyVolumeBoost(level: VolumeBoostLevel) {
+        volumeBoostLevel = level
+        if (!loudnessEnhancer.setLevel(level) && level != VolumeBoostLevel.OFF) {
+            disableUnavailableVolumeBoost()
+            return
+        }
+        updateToolbarMenu()
+        showOsd(R.drawable.ic_volume_up, volumeBoostLabel(level))
+    }
+
+    private fun disableUnavailableVolumeBoost() {
+        volumeBoostLevel = VolumeBoostLevel.OFF
+        loudnessEnhancer.setLevel(VolumeBoostLevel.OFF)
+        updateToolbarMenu()
+        Toast.makeText(this, R.string.volume_boost_unavailable, Toast.LENGTH_LONG).show()
+    }
+
+    private fun volumeBoostLabel(level: VolumeBoostLevel): String = if (
+        level == VolumeBoostLevel.OFF
+    ) {
+        getString(R.string.volume_boost_off)
+    } else {
+        getString(R.string.volume_boost_db, level.decibels)
     }
 
     private fun showGestureSettingsDialog() {
@@ -2343,6 +2552,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         val declaredSize = item.declaredSize.takeIf { it >= 0L }
             ?.let { Formatter.formatFileSize(this, it) }
             ?: unknown
+        val colorSummary = currentMediaColorSummary()
         val rows = listOf(
             R.string.media_info_file_name to item.displayName,
             R.string.media_info_declared_size to declaredSize,
@@ -2350,18 +2560,118 @@ class VideoPlayerActivity : VideoThemedActivity() {
             R.string.media_info_resolution to resolution,
             R.string.media_info_frame_rate to frameRate,
             R.string.media_info_video_codec to videoCodec,
+            R.string.media_info_hdr_type to hdrTypeLabel(colorSummary.hdrType),
+            R.string.media_info_color_space to colorSpaceLabel(colorSummary.colorSpace),
+            R.string.media_info_color_range to colorRangeLabel(colorSummary.colorRange),
+            R.string.media_info_bit_depth to bitDepthLabel(colorSummary),
             R.string.media_info_audio_codec to audioCodec,
-        ).joinToString("\n") { (label, value) ->
+        )
+        val text = rows.joinToString("\n") { (label, value) ->
             getString(R.string.media_info_row, getString(label), value)
         }
         mainHandler.removeCallbacks(hideControlsRunnable)
         AlertDialog.Builder(this)
             .setTitle(R.string.action_video_info)
-            .setMessage(rows)
+            .setMessage(text)
+            .setNeutralButton(R.string.action_copy_all) { _, _ -> copyVideoInfo(text) }
             .setPositiveButton(android.R.string.ok, null)
             .setOnDismissListener { postponeControlsAutoHide() }
             .showWithPalette()
     }
+
+    private fun copyVideoInfo(text: String) {
+        val clipboard = getSystemService(ClipboardManager::class.java)
+        clipboard.setPrimaryClip(
+            ClipData.newPlainText(getString(R.string.action_video_info), text),
+        )
+        Toast.makeText(this, R.string.media_info_copied, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun currentMediaColorSummary(): MediaColorSummary {
+        val colorInfo = player?.videoFormat?.colorInfo
+        val metadata = colorInfo?.let { info ->
+            MediaColorMetadata(
+                colorSpace = when (info.colorSpace) {
+                    C.COLOR_SPACE_BT601 -> MediaColorSpace.BT601
+                    C.COLOR_SPACE_BT709 -> MediaColorSpace.BT709
+                    C.COLOR_SPACE_BT2020 -> MediaColorSpace.BT2020
+                    else -> MediaColorSpace.UNKNOWN
+                },
+                colorRange = when (info.colorRange) {
+                    C.COLOR_RANGE_LIMITED -> MediaColorRange.LIMITED
+                    C.COLOR_RANGE_FULL -> MediaColorRange.FULL
+                    else -> MediaColorRange.UNKNOWN
+                },
+                colorTransfer = when (info.colorTransfer) {
+                    C.COLOR_TRANSFER_SDR -> MediaColorTransfer.SDR
+                    C.COLOR_TRANSFER_ST2084 -> MediaColorTransfer.ST2084
+                    C.COLOR_TRANSFER_HLG -> MediaColorTransfer.HLG
+                    else -> MediaColorTransfer.OTHER
+                },
+                lumaBitDepth = info.lumaBitdepth,
+                chromaBitDepth = info.chromaBitdepth,
+            )
+        }
+        return HdrMediaInfoPolicy.summarize(metadata)
+    }
+
+    private fun hdrTypeLabel(type: MediaHdrType): String = getString(
+        when (type) {
+            MediaHdrType.NONE -> R.string.hdr_type_none
+            MediaHdrType.HDR10 -> R.string.hdr_type_hdr10
+            MediaHdrType.HLG -> R.string.hdr_type_hlg
+            MediaHdrType.UNKNOWN -> R.string.media_info_unknown
+        },
+    )
+
+    private fun colorSpaceLabel(colorSpace: MediaColorSpace): String = getString(
+        when (colorSpace) {
+            MediaColorSpace.BT601 -> R.string.color_space_bt601
+            MediaColorSpace.BT709 -> R.string.color_space_bt709
+            MediaColorSpace.BT2020 -> R.string.color_space_bt2020
+            MediaColorSpace.UNKNOWN -> R.string.media_info_unknown
+        },
+    )
+
+    private fun colorRangeLabel(colorRange: MediaColorRange): String = getString(
+        when (colorRange) {
+            MediaColorRange.LIMITED -> R.string.color_range_limited
+            MediaColorRange.FULL -> R.string.color_range_full
+            MediaColorRange.UNKNOWN -> R.string.media_info_unknown
+        },
+    )
+
+    private fun bitDepthLabel(summary: MediaColorSummary): String {
+        return HdrMediaInfoPolicy.formatBitDepth(
+            summary = summary,
+            unknownValue = getString(R.string.media_info_unknown),
+            singleValue = { bits -> getString(R.string.media_info_bit_depth_value, bits) },
+            pairValue = { luma, chroma ->
+                getString(R.string.media_info_bit_depth_pair_value, luma, chroma)
+            },
+        )
+    }
+
+    private fun maybeWarnAboutUnsupportedHdr() {
+        val hdrType = currentMediaColorSummary().hdrType
+        val supportedTypes = supportedHdrTypes()
+        val shouldWarn = HdrMediaInfoPolicy.requiresToneMappingWarning(
+            hdrType = hdrType,
+            supportsHdr10 = Display.HdrCapabilities.HDR_TYPE_HDR10 in supportedTypes,
+            supportsHlg = Display.HdrCapabilities.HDR_TYPE_HLG in supportedTypes,
+        )
+        val warningKey = "$activeMediaItemIndex:${hdrType.name}"
+        if (!shouldWarn || !unsupportedHdrWarnings.add(warningKey)) return
+        Snackbar.make(
+            binding.root,
+            getString(R.string.hdr_tone_mapping_warning, hdrTypeLabel(hdrType)),
+            Snackbar.LENGTH_LONG,
+        ).show()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun supportedHdrTypes(): IntArray =
+        (binding.root.display ?: windowManager.defaultDisplay).hdrCapabilities.supportedHdrTypes
 
     private fun applyResizeMode(showOsd: Boolean) {
         binding.playerView.resizeMode = when (resizeMode) {
@@ -2379,16 +2689,102 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
     }
 
-    private fun applyManualZoom() {
-        binding.playerView.apply {
+    private fun currentVideoRenderTransform(): VideoRenderTransform = VideoTransformPolicy.resolve(
+        zoomScale = manualZoomScale,
+        pivotXFraction = zoomPivotXFraction,
+        pivotYFraction = zoomPivotYFraction,
+        mirrorMode = mirrorMode,
+    )
+
+    private fun applyVideoTransform() {
+        val videoSurface = binding.playerView.videoSurfaceView ?: return
+        val transform = currentVideoRenderTransform()
+        val transformTarget = if (requiresTextureOutput(transform)) {
+            useTransformedTextureOutput(videoSurface)
+        } else {
+            useDefaultVideoOutput(videoSurface)
+        }
+        transformTarget.apply {
             if (width > 0 && height > 0) {
-                pivotX = width * zoomPivotXFraction
-                pivotY = height * zoomPivotYFraction
+                pivotX = width * transform.pivotXFraction
+                pivotY = height * transform.pivotYFraction
             }
-            scaleX = manualZoomScale
-            scaleY = manualZoomScale
+            scaleX = transform.scaleX
+            scaleY = transform.scaleY
         }
     }
+
+    /**
+     * SurfaceView is retained for the default path because it provides the best HDR output. Some
+     * vendor compositors ignore mirror matrices on SurfaceView, so an opt-in TextureView is used
+     * only while a manual zoom or mirror transform is active. The TextureView stays inside the
+     * video content frame and therefore never transforms subtitles or player controls.
+     */
+    private fun useTransformedTextureOutput(videoSurface: View): View {
+        if (videoSurface is TextureView) return videoSurface
+        val parent = videoSurface.parent as? ViewGroup ?: return videoSurface
+        val textureView = transformedTextureView?.takeIf { it.parent === parent }
+            ?: TextureView(this).also { texture ->
+                transformedTextureView?.let { stale ->
+                    (stale.parent as? ViewGroup)?.removeView(stale)
+                }
+                val surfaceIndex = parent.indexOfChild(videoSurface).coerceAtLeast(0)
+                parent.addView(
+                    texture,
+                    (surfaceIndex + 1).coerceAtMost(parent.childCount),
+                    ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                    ),
+                )
+                transformedTextureView = texture
+            }
+        textureView.isVisible = true
+        player?.let { exoPlayer ->
+            if (!transformedTextureAttachedToPlayer) {
+                exoPlayer.setVideoTextureView(textureView)
+                transformedTextureAttachedToPlayer = true
+            }
+        }
+        videoSurface.visibility = View.INVISIBLE
+        return textureView
+    }
+
+    private fun useDefaultVideoOutput(videoSurface: View): View {
+        transformedTextureView?.let { textureView ->
+            player?.let { exoPlayer ->
+                if (transformedTextureAttachedToPlayer) {
+                    exoPlayer.clearVideoTextureView(textureView)
+                }
+            }
+            transformedTextureAttachedToPlayer = false
+            textureView.isVisible = false
+        }
+        videoSurface.isVisible = true
+        if (videoSurface is SurfaceView) {
+            player?.setVideoSurfaceView(videoSurface)
+        }
+        videoSurface.scaleX = 1f
+        videoSurface.scaleY = 1f
+        return videoSurface
+    }
+
+    private fun activeVideoOutputView(): View? = transformedTextureView
+        ?.takeIf { transformedTextureAttachedToPlayer && it.isVisible }
+        ?: binding.playerView.videoSurfaceView
+
+    private fun disposeTransformedTextureView() {
+        transformedTextureView?.let { textureView ->
+            (textureView.parent as? ViewGroup)?.removeView(textureView)
+        }
+        transformedTextureView = null
+        transformedTextureAttachedToPlayer = false
+        binding.playerView.videoSurfaceView?.isVisible = true
+    }
+
+    private fun requiresTextureOutput(transform: VideoRenderTransform): Boolean =
+        abs(transform.scaleX - 1f) >= ZOOM_EPSILON ||
+            abs(transform.scaleY - 1f) >= ZOOM_EPSILON
 
     private fun resetManualZoom(showOsd: Boolean): Boolean {
         if (abs(manualZoomScale - PlayerGesturePolicy.DEFAULT_ZOOM_SCALE) < ZOOM_EPSILON) {
@@ -2397,7 +2793,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         manualZoomScale = PlayerGesturePolicy.DEFAULT_ZOOM_SCALE
         zoomPivotXFraction = 0.5f
         zoomPivotYFraction = 0.5f
-        applyManualZoom()
+        applyVideoTransform()
         if (showOsd) {
             showOsd(
                 R.drawable.ic_aspect_ratio,
@@ -2567,7 +2963,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
             val height = binding.gestureArea.height.takeIf { it > 0 } ?: 1
             zoomPivotXFraction = (focusX / width).coerceIn(0f, 1f)
             zoomPivotYFraction = (focusY / height).coerceIn(0f, 1f)
-            applyManualZoom()
+            applyVideoTransform()
             showOsd(
                 R.drawable.ic_aspect_ratio,
                 getString(
@@ -2692,6 +3088,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
         const val STATE_ZOOM_SCALE = "zoom_scale"
         const val STATE_ZOOM_PIVOT_X = "zoom_pivot_x"
         const val STATE_ZOOM_PIVOT_Y = "zoom_pivot_y"
+        const val STATE_MIRROR_MODE = "mirror_mode"
+        const val STATE_VOLUME_BOOST_LEVEL = "volume_boost_level"
+        const val STATE_VOLUME_BOOST_WARNING = "volume_boost_warning"
         const val STATE_ORIENTATION_MANUAL = "orientation_manual"
         const val STATE_AUDIO_GROUP = "audio_group"
         const val STATE_AUDIO_TRACK = "audio_track"

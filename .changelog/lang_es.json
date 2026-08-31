@@ -5,6 +5,19 @@
   "changelog_label_improvement": "Mejora",
   "changelog_label_dependency": "Dependencia",
   "$data": {
+    "v2.3.0": {
+      "released_date": "2026/08/31",
+      "feature": [
+        "La información del video ahora identifica HDR10, HLG o SDR y muestra el espacio, rango y profundidad de color disponibles; permite copiar todos los campos y avisa una sola vez si la pantalla no declara compatibilidad con el formato HDR de origen",
+        "Las capturas pueden incluir los subtítulos visibles mediante un ajuste desactivado de forma predeterminada, y la acción Compartir envía el PNG recién guardado directamente a otra aplicación",
+        "El nuevo reflejo de video, limitado a la sesión, voltea izquierda/derecha, arriba/abajo o ambos ejes y se combina de forma coherente con el zoom de pellizco y la rotación de pantalla",
+        "La nueva amplificación limitada a la sesión ofrece de +3 dB a +15 dB, permanece desactivada de forma predeterminada, avisa de distorsión y riesgo auditivo antes del primer uso y vuelve a Desactivado si no es compatible"
+      ],
+      "improvement": [
+        "Las capturas siguen siendo PNG independientes de MediaStore sin permiso de almacenamiento; al compartir solo se concede acceso de lectura a la imagen elegida",
+        "Tras evaluarlo se adoptó LoudnessEnhancer porque aplica una ganancia limitada solo durante la reproducción sin modificar archivos; cualquier fallo libera el efecto inmediatamente y vuelve a un estado seguro"
+      ]
+    },
     "v2.2.0": {
       "released_date": "2026/08/31",
       "feature": [

@@ -44,6 +44,8 @@ class StandaloneLayoutsInstrumentationTest {
             assertNotNull(settings.rememberPositionSwitch.trackDrawable)
             assertNotNull(settings.rememberPlaybackModeSwitch.thumbDrawable)
             assertNotNull(settings.rememberPlaybackModeSwitch.trackDrawable)
+            assertNotNull(settings.includeSubtitlesInScreenshotSwitch.thumbDrawable)
+            assertNotNull(settings.includeSubtitlesInScreenshotSwitch.trackDrawable)
             assertNotNull(settings.autoUpdateSwitch.thumbDrawable)
             assertNotNull(settings.autoUpdateSwitch.trackDrawable)
         }

@@ -3,6 +3,8 @@ package io.github.supermonster003.autojs6.plugin.threeemberplayer
 import android.app.Activity
 import android.content.ContentValues
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.net.Uri
 import android.os.Environment
 import android.os.Handler
@@ -14,12 +16,19 @@ import android.view.TextureView
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.annotation.OptIn
+import androidx.core.graphics.createBitmap
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.Executors
+import kotlin.math.abs
+
+internal data class FrameCaptureOptions(
+    val includeSubtitles: Boolean,
+    val renderTransform: VideoRenderTransform,
+)
 
 internal sealed interface FrameCaptureResult {
     data class Success(val uri: Uri) : FrameCaptureResult
@@ -38,15 +47,19 @@ internal class PlayerFrameCapture(private val activity: Activity) : AutoCloseabl
     @Volatile
     private var closed = false
 
-    fun capture(playerView: PlayerView, callback: (FrameCaptureResult) -> Unit) {
+    fun capture(
+        playerView: PlayerView,
+        videoSurface: View? = playerView.videoSurfaceView,
+        options: FrameCaptureOptions,
+        callback: (FrameCaptureResult) -> Unit,
+    ) {
         if (closed) return
-        val videoSurface = playerView.videoSurfaceView
         if (videoSurface == null || videoSurface.width <= 0 || videoSurface.height <= 0) {
             callback(FrameCaptureResult.VideoNotReady)
             return
         }
         when (videoSurface) {
-            is SurfaceView -> captureSurfaceView(videoSurface, callback)
+            is SurfaceView -> captureSurfaceView(playerView, videoSurface, options, callback)
             is TextureView -> {
                 val bitmap = runCatching {
                     videoSurface.getBitmap(videoSurface.width, videoSurface.height)
@@ -54,7 +67,7 @@ internal class PlayerFrameCapture(private val activity: Activity) : AutoCloseabl
                 if (bitmap == null) {
                     callback(FrameCaptureResult.CopyFailed)
                 } else {
-                    save(bitmap, callback)
+                    finishCopy(playerView, videoSurface, bitmap, options, callback)
                 }
             }
             else -> callback(FrameCaptureResult.CopyFailed)
@@ -62,7 +75,9 @@ internal class PlayerFrameCapture(private val activity: Activity) : AutoCloseabl
     }
 
     private fun captureSurfaceView(
+        playerView: PlayerView,
         surfaceView: SurfaceView,
+        options: FrameCaptureOptions,
         callback: (FrameCaptureResult) -> Unit,
     ) {
         if (!surfaceView.isAttachedToWindow || !surfaceView.holder.surface.isValid) {
@@ -70,7 +85,7 @@ internal class PlayerFrameCapture(private val activity: Activity) : AutoCloseabl
             return
         }
         val bitmap = runCatching {
-            Bitmap.createBitmap(surfaceView.width, surfaceView.height, Bitmap.Config.ARGB_8888)
+            createBitmap(surfaceView.width, surfaceView.height, Bitmap.Config.ARGB_8888)
         }.getOrElse {
             callback(FrameCaptureResult.CopyFailed)
             return
@@ -78,7 +93,7 @@ internal class PlayerFrameCapture(private val activity: Activity) : AutoCloseabl
         runCatching {
             PixelCopy.request(surfaceView, bitmap, { result ->
                 if (result == PixelCopy.SUCCESS) {
-                    save(bitmap, callback)
+                    finishCopy(playerView, surfaceView, bitmap, options, callback)
                 } else {
                     bitmap.recycle()
                     dispatch(callback, FrameCaptureResult.CopyFailed)
@@ -87,6 +102,91 @@ internal class PlayerFrameCapture(private val activity: Activity) : AutoCloseabl
         }.onFailure {
             bitmap.recycle()
             callback(FrameCaptureResult.CopyFailed)
+        }
+    }
+
+    private fun finishCopy(
+        playerView: PlayerView,
+        videoSurface: View,
+        copiedBitmap: Bitmap,
+        options: FrameCaptureOptions,
+        callback: (FrameCaptureResult) -> Unit,
+    ) {
+        var transformedBitmap: Bitmap? = null
+        val output = runCatching {
+            val transformed = applyRenderTransform(copiedBitmap, options.renderTransform)
+                .also { transformedBitmap = it }
+            if (options.includeSubtitles) {
+                // A mirrored TextureView reports its transformed origin. Use PlayerView's
+                // untransformed surface slot as the coordinate anchor so subtitles remain in
+                // their normal screen position in the composed output.
+                drawSubtitles(
+                    playerView,
+                    playerView.videoSurfaceView ?: videoSurface,
+                    transformed,
+                )
+            }
+            transformed
+        }.getOrElse {
+            transformedBitmap
+                ?.takeIf { bitmap -> bitmap !== copiedBitmap && !bitmap.isRecycled }
+                ?.recycle()
+            if (!copiedBitmap.isRecycled) copiedBitmap.recycle()
+            callback(FrameCaptureResult.CopyFailed)
+            return
+        }
+        save(output, callback)
+    }
+
+    private fun applyRenderTransform(
+        source: Bitmap,
+        transform: VideoRenderTransform,
+    ): Bitmap {
+        if (abs(transform.scaleX - 1f) < TRANSFORM_EPSILON &&
+            abs(transform.scaleY - 1f) < TRANSFORM_EPSILON
+        ) {
+            return source
+        }
+        val output = createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
+        try {
+            Canvas(output).apply {
+                drawColor(Color.BLACK)
+                val pivotX = output.width * transform.pivotXFraction
+                val pivotY = output.height * transform.pivotYFraction
+                translate(pivotX, pivotY)
+                scale(transform.scaleX, transform.scaleY)
+                translate(-pivotX, -pivotY)
+                drawBitmap(source, 0f, 0f, null)
+            }
+        } catch (error: Throwable) {
+            output.recycle()
+            throw error
+        }
+        source.recycle()
+        return output
+    }
+
+    private fun drawSubtitles(playerView: PlayerView, videoSurface: View, bitmap: Bitmap) {
+        val subtitleView = playerView.subtitleView ?: return
+        if (!subtitleView.isShown || subtitleView.width <= 0 || subtitleView.height <= 0) return
+        val surfaceLocation = IntArray(2)
+        val subtitleLocation = IntArray(2)
+        videoSurface.getLocationOnScreen(surfaceLocation)
+        subtitleView.getLocationOnScreen(subtitleLocation)
+        val scaleX = bitmap.width.toFloat() / videoSurface.width.coerceAtLeast(1)
+        val scaleY = bitmap.height.toFloat() / videoSurface.height.coerceAtLeast(1)
+        Canvas(bitmap).apply {
+            val saveCount = save()
+            try {
+                scale(scaleX, scaleY)
+                translate(
+                    (subtitleLocation[0] - surfaceLocation[0]).toFloat(),
+                    (subtitleLocation[1] - surfaceLocation[1]).toFloat(),
+                )
+                subtitleView.draw(this)
+            } finally {
+                restoreToCount(saveCount)
+            }
         }
     }
 
@@ -148,5 +248,6 @@ internal class PlayerFrameCapture(private val activity: Activity) : AutoCloseabl
         const val ALBUM_NAME = "3-Ember Player"
         const val FILE_TIMESTAMP_PATTERN = "yyyyMMdd_HHmmss_SSS"
         const val PNG_QUALITY = 100
+        const val TRANSFORM_EPSILON = 0.0001f
     }
 }
