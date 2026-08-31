@@ -14,11 +14,14 @@ import org.autojs.plugin.explorer.api.ExplorerActionValues
 internal object ThreeEmberPlayerPlugin {
     const val ID = "video-player"
     const val ACTION_ID = "play-video"
+    const val ACTION_SELECTION_ID = "play-video-selection"
     const val VARIANT = "default"
     const val PROTOCOL_VERSION = 12
     const val REQUIRED_HOST_VERSION = 5276L
     const val LABEL_RESOURCE_NAME = "action_play_video"
     const val LABEL_FALLBACK = "Play video"
+    const val SELECTION_LABEL_RESOURCE_NAME = "action_play_selected"
+    const val SELECTION_LABEL_FALLBACK = "Play selected"
     const val ACTIVITY_CLASS_NAME =
         "io.github.supermonster003.autojs6.plugin.threeemberplayer.ExplorerActionActivity"
     const val ACTION_PRIORITY = 20
@@ -80,18 +83,26 @@ internal fun Context.threeEmberPlayerPluginInfo(): PluginInfo {
 }
 
 internal fun threeEmberPlayerActionCatalog(): Bundle {
-    val action = Bundle().apply {
-        putString(ExplorerActionCatalogKeys.ID, ThreeEmberPlayerPlugin.ACTION_ID)
-        putString(ExplorerActionCatalogKeys.LABEL_RESOURCE_NAME, ThreeEmberPlayerPlugin.LABEL_RESOURCE_NAME)
-        putString(ExplorerActionCatalogKeys.LABEL_FALLBACK, ThreeEmberPlayerPlugin.LABEL_FALLBACK)
+    fun action(
+        id: String,
+        labelResourceName: String,
+        labelFallback: String,
+        cardinality: Int,
+        placement: Int,
+        readSiblings: Boolean,
+        playbackProgress: Boolean,
+    ) = Bundle().apply {
+        putString(ExplorerActionCatalogKeys.ID, id)
+        putString(ExplorerActionCatalogKeys.LABEL_RESOURCE_NAME, labelResourceName)
+        putString(ExplorerActionCatalogKeys.LABEL_FALLBACK, labelFallback)
         putString(ExplorerActionCatalogKeys.ACTIVITY_CLASS_NAME, ThreeEmberPlayerPlugin.ACTIVITY_CLASS_NAME)
         putInt(ExplorerActionCatalogKeys.PRIORITY, ThreeEmberPlayerPlugin.ACTION_PRIORITY)
         putInt(ExplorerActionCatalogKeys.TARGET_KIND, ExplorerActionValues.TARGET_FILE)
-        putInt(ExplorerActionCatalogKeys.CARDINALITY, ExplorerActionValues.CARDINALITY_SINGLE)
+        putInt(ExplorerActionCatalogKeys.CARDINALITY, cardinality)
         putInt(ExplorerActionCatalogKeys.ACCESS_MODE, ExplorerActionValues.ACCESS_READ_ONLY)
-        putInt(ExplorerActionCatalogKeys.PLACEMENT, ExplorerActionValues.PLACEMENT_PRIMARY)
-        putBoolean(ExplorerActionCatalogKeys.READ_SIBLINGS, true)
-        putBoolean(ExplorerActionCatalogKeys.PLAYBACK_PROGRESS, true)
+        putInt(ExplorerActionCatalogKeys.PLACEMENT, placement)
+        putBoolean(ExplorerActionCatalogKeys.READ_SIBLINGS, readSiblings)
+        putBoolean(ExplorerActionCatalogKeys.PLAYBACK_PROGRESS, playbackProgress)
         putStringArrayList(
             ExplorerActionCatalogKeys.MIME_TYPES,
             ArrayList(ThreeEmberPlayerPlugin.MIME_TYPES.asList()),
@@ -103,6 +114,28 @@ internal fun threeEmberPlayerActionCatalog(): Bundle {
     }
     return Bundle().apply {
         putInt(ExplorerActionCatalogKeys.PROTOCOL_VERSION, ThreeEmberPlayerPlugin.PROTOCOL_VERSION)
-        putParcelableArrayList(ExplorerActionCatalogKeys.ACTIONS, arrayListOf(action))
+        putParcelableArrayList(
+            ExplorerActionCatalogKeys.ACTIONS,
+            arrayListOf(
+                action(
+                    id = ThreeEmberPlayerPlugin.ACTION_ID,
+                    labelResourceName = ThreeEmberPlayerPlugin.LABEL_RESOURCE_NAME,
+                    labelFallback = ThreeEmberPlayerPlugin.LABEL_FALLBACK,
+                    cardinality = ExplorerActionValues.CARDINALITY_SINGLE,
+                    placement = ExplorerActionValues.PLACEMENT_PRIMARY,
+                    readSiblings = true,
+                    playbackProgress = true,
+                ),
+                action(
+                    id = ThreeEmberPlayerPlugin.ACTION_SELECTION_ID,
+                    labelResourceName = ThreeEmberPlayerPlugin.SELECTION_LABEL_RESOURCE_NAME,
+                    labelFallback = ThreeEmberPlayerPlugin.SELECTION_LABEL_FALLBACK,
+                    cardinality = ExplorerActionValues.CARDINALITY_MULTIPLE,
+                    placement = ExplorerActionValues.PLACEMENT_SELECTION_TOOLBAR,
+                    readSiblings = false,
+                    playbackProgress = false,
+                ),
+            ),
+        )
     }
 }

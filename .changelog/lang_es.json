@@ -5,6 +5,19 @@
   "changelog_label_improvement": "Mejora",
   "changelog_label_dependency": "Dependencia",
   "$data": {
+    "v2.2.0": {
+      "released_date": "2026/08/31",
+      "feature": [
+        "Nuevo panel de cola de Host Session: nombres, duraciones conocidas o marcadores, elemento actual resaltado, salto con un toque y control sincronizado de secuencia, aleatorio y repetición de uno",
+        "Nueva acción de solo lectura Reproducir seleccionados: reproduce de 1 a 128 vídeos compatibles del mismo directorio en el orden elegido por el host, sin descubrir archivos hermanos",
+        "Antes de la reproducción automática de la cola, conserva el último fotograma y muestra durante tres segundos un aviso cancelable para el siguiente elemento sin desbloquear los controles",
+        "Nueva opción Recordar modo de reproducción, desactivada de forma predeterminada, para conservar secuencia, aleatorio o repetición de uno entre sesiones"
+      ],
+      "improvement": [
+        "Cada objetivo se comprueba por separado con su URI content, posición en ClipData, MIME, metadatos, tamaño y directorio; los ID o URI duplicados rechazan todo el grupo",
+        "La selección múltiple solo lee objetivos autorizados explícitamente mediante rutas limitadas de Host Session y nunca examina archivos hermanos para buscar vídeos o subtítulos"
+      ]
+    },
     "v2.1.0": {
       "released_date": "2026/08/31",
       "feature": [

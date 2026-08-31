@@ -80,6 +80,11 @@ class SettingsActivity : VideoThemedActivity() {
             binding.rememberPositionSwitch.isChecked = enabled
             if (!enabled) PlaybackPositionStore(this).clearAll()
         }
+        binding.rememberPlaybackModeSetting.setOnClickListener {
+            val enabled = !binding.rememberPlaybackModeSwitch.isChecked
+            playerSettingsStore.setRememberPlaybackMode(enabled)
+            binding.rememberPlaybackModeSwitch.isChecked = enabled
+        }
         binding.subtitleTextSizeSetting.setOnClickListener { showSubtitleTextSizeDialog() }
         binding.subtitleForegroundSetting.setOnClickListener { showSubtitleForegroundDialog() }
         binding.subtitleBackgroundSetting.setOnClickListener { showSubtitleBackgroundDialog() }
@@ -178,6 +183,7 @@ class SettingsActivity : VideoThemedActivity() {
         binding.nightModeSummary.text = nightModeSummary()
         binding.themeColorSummary.text = themeSummary()
         binding.rememberPositionSwitch.isChecked = preferenceStore.rememberPlaybackPosition
+        binding.rememberPlaybackModeSwitch.isChecked = playerSettingsStore.rememberPlaybackMode
         binding.autoUpdateSwitch.isChecked = preferenceStore.autoCheckUpdates
         renderSubtitleStyle()
         val ignoredCount = AppUpdateStore(this).ignoredVersions().size
@@ -386,6 +392,7 @@ class SettingsActivity : VideoThemedActivity() {
             binding.nightModeTitle,
             binding.themeColorTitle,
             binding.rememberPositionTitle,
+            binding.rememberPlaybackModeTitle,
             binding.subtitleTextSizeTitle,
             binding.subtitleForegroundTitle,
             binding.subtitleBackgroundTitle,
@@ -401,6 +408,7 @@ class SettingsActivity : VideoThemedActivity() {
             binding.nightModeSummary,
             binding.themeColorSummary,
             binding.rememberPositionSummary,
+            binding.rememberPlaybackModeSummary,
             binding.subtitleTextSizeSummary,
             binding.subtitleForegroundSummary,
             binding.subtitleBackgroundSummary,
@@ -412,6 +420,7 @@ class SettingsActivity : VideoThemedActivity() {
             binding.aboutSummary,
         ).forEach { view -> view.setTextColor(palette.onSurfaceVariant) }
         styleSwitch(binding.rememberPositionSwitch)
+        styleSwitch(binding.rememberPlaybackModeSwitch)
         styleSwitch(binding.autoUpdateSwitch)
     }
 

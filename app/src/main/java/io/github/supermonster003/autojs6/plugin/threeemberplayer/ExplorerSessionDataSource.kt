@@ -16,8 +16,7 @@ import java.io.IOException
 /** Read-only Media3 bridge for opaque direct-sibling routes backed by one Host Session. */
 internal class ExplorerSessionDataSource private constructor(
     private val session: IExplorerActionHostSession,
-    private val targetId: String,
-    private val relativePathsByUri: Map<String, String>,
+    private val routesByUri: Map<String, HostFileRoute>,
 ) : BaseDataSource(false) {
 
     private var openedUri: Uri? = null
@@ -29,10 +28,10 @@ internal class ExplorerSessionDataSource private constructor(
     override fun open(dataSpec: DataSpec): Long {
         check(input == null) { "Explorer session data source is already open" }
         transferInitializing(dataSpec)
-        val relativePath = relativePathsByUri[dataSpec.uri.toString()]
+        val route = routesByUri[dataSpec.uri.toString()]
             ?: throw IOException("Explorer session media route is unknown")
         val descriptor = try {
-            session.openFile(targetId, relativePath)
+            session.openFile(route.targetId, route.relativePath)
         } catch (error: Exception) {
             throw IOException("Explorer session could not open media", error)
         }
@@ -90,16 +89,14 @@ internal class ExplorerSessionDataSource private constructor(
 
     class Factory(
         private val session: IExplorerActionHostSession,
-        private val targetId: String,
-        private val relativePathsByUri: Map<String, String>,
+        private val routesByUri: Map<String, HostFileRoute>,
     ) : DataSource.Factory {
 
         private var transferListener: TransferListener? = null
 
         override fun createDataSource(): DataSource = ExplorerSessionDataSource(
             session,
-            targetId,
-            relativePathsByUri,
+            routesByUri,
         ).also { dataSource -> transferListener?.let(dataSource::addTransferListener) }
 
         fun setTransferListener(listener: TransferListener?): Factory = apply {
@@ -108,13 +105,22 @@ internal class ExplorerSessionDataSource private constructor(
     }
 }
 
-internal fun AndroidPlaybackRequest.hostRelativePathsByUri(): Map<String, String> = buildMap {
+internal data class HostFileRoute(
+    val targetId: String,
+    val relativePath: String,
+)
+
+internal fun AndroidPlaybackRequest.hostFileRoutesByUri(): Map<String, HostFileRoute> = buildMap {
     items.forEach { item ->
+        val targetId = item.hostTargetId ?: return@forEach
         if (item.sourceUri.scheme == VideoIntentFactory.HOST_SOURCE_SCHEME) {
-            put(item.sourceUri.toString(), requireNotNull(item.relativePath))
+            put(
+                item.sourceUri.toString(),
+                HostFileRoute(targetId, requireNotNull(item.relativePath)),
+            )
         }
         item.subtitles.forEach { subtitle ->
-            put(subtitle.sourceUri.toString(), subtitle.relativePath)
+            put(subtitle.sourceUri.toString(), HostFileRoute(targetId, subtitle.relativePath))
         }
     }
 }

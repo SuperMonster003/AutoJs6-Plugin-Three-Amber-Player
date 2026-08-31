@@ -199,4 +199,15 @@
     <string name="ab_loop_active_label">A–B</string>
     <string name="ab_loop_clear_label">A/B</string>
     <string name="ab_loop_cancelled_for_mode">已为所选播放模式清除 A–B 循环</string>
+    <string name="action_play_selected">播放所选</string>
+    <string name="action_change_playback_mode">切换播放模式</string>
+    <string name="playback_queue">播放队列</string>
+    <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="queue_duration_unknown">--:--</string>
+    <string name="queue_current_item_description">正在播放：%1$s</string>
+    <string name="auto_advance_prompt">即将播放下一项 · %1$d 秒</string>
+    <string name="action_cancel_auto_advance">取消</string>
+    <string name="auto_advance_cancelled">已取消本次连播</string>
+    <string name="setting_remember_playback_mode">记住播放模式</string>
+    <string name="setting_remember_playback_mode_summary">在播放会话间保留顺序、随机或单项循环选择</string>
 </resources>

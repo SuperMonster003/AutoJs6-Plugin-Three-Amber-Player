@@ -5,6 +5,19 @@
   "changelog_label_improvement": "Improvement",
   "changelog_label_dependency": "Dependency",
   "$data": {
+    "v2.2.0": {
+      "released_date": "2026/08/31",
+      "feature": [
+        "New Host Session playback queue sheet: file names, known durations or placeholders, current-item highlight, tap-to-jump and a live sequence/shuffle/repeat-one control",
+        "New read-only Play selected file-manager action: play 1 to 128 supported videos from one parent in the host selection order without sibling discovery",
+        "Before queue autoplay, keep the current end frame and show a cancelable three-second next-item prompt without unlocking locked controls",
+        "New Remember playback mode setting, off by default, to retain sequence, shuffle or repeat-one across playback sessions"
+      ],
+      "improvement": [
+        "Every selected target is independently checked against its content URI, ClipData position, MIME type, metadata, size and parent; duplicate IDs or URIs reject the whole group",
+        "Multi-selection reads only explicitly authorized targets through their bounded Host Session routes and never scans siblings for videos or subtitles"
+      ]
+    },
     "v2.1.0": {
       "released_date": "2026/08/31",
       "feature": [

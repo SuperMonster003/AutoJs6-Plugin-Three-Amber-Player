@@ -15,13 +15,24 @@ import org.autojs.plugin.explorer.api.ExplorerActionTargetKeys
 import org.autojs.plugin.explorer.api.IExplorerActionHostSession
 
 internal data class AndroidExplorerRequest(
+    val actionId: String,
+    val parentUri: Uri,
+    val targets: List<AndroidExplorerTarget>,
+    val hostSession: IExplorerActionHostSession?,
+) {
+    val isSelection: Boolean
+        get() = actionId == ThreeEmberPlayerPlugin.ACTION_SELECTION_ID
+
+    val primaryTarget: AndroidExplorerTarget
+        get() = targets.first()
+}
+
+internal data class AndroidExplorerTarget(
     val targetId: String,
     val targetUri: Uri,
-    val parentUri: Uri,
     val displayName: String,
     val declaredSize: Long,
     val mimeType: String,
-    val hostSession: IExplorerActionHostSession?,
 )
 
 internal data class AndroidExternalRequest(
@@ -33,15 +44,16 @@ internal data class AndroidPlaybackRequest(
     val items: List<AndroidPlaybackItem>,
     val startIndex: Int,
     val hostSession: IExplorerActionHostSession? = null,
-    val hostTargetId: String? = null,
 ) {
     init {
         require(items.size in 1..HostMediaDiscoveryPolicy.MAX_QUEUE_ENTRIES && startIndex in items.indices)
-        require((hostSession == null) == (hostTargetId == null))
         if (hostSession == null) {
-            require(items.size == 1 && items.single().relativePath == null && items.single().subtitles.isEmpty())
+            require(
+                items.size == 1 && items.single().hostTargetId == null &&
+                    items.single().relativePath == null && items.single().subtitles.isEmpty(),
+            )
         } else {
-            require(items.all { it.relativePath != null })
+            require(items.all { it.hostTargetId != null && it.relativePath != null })
         }
     }
 
@@ -64,6 +76,7 @@ internal data class AndroidPlaybackRequest(
 internal data class AndroidPlaybackItem(
     val sourceUri: Uri,
     val externalUri: Uri?,
+    val hostTargetId: String?,
     val relativePath: String?,
     val displayName: String,
     val declaredSize: Long,
@@ -89,20 +102,11 @@ internal object AndroidVideoIntentPolicy {
     fun resolveExplorer(intent: Intent?): AndroidExplorerRequest? = runCatching {
         intent ?: return null
         if (intent.selector != null) return null
-        val targetUri = intent.data ?: return null
+        val dataUri = intent.data ?: return null
         val parentUri = intent.parcelableUriExtra(ExplorerActionIntentExtras.PARENT_URI) ?: return null
         val targetBundles = intent.parcelableBundleArrayListExtra(ExplorerActionIntentExtras.TARGETS)
-            ?.takeIf { it.size == 1 }
+            ?.takeIf { it.size in 1..ExplorerSelectionPolicy.MAX_TARGETS }
             ?: return null
-        val target = targetBundles.single()
-        val bundledUri = target.parcelableUri(ExplorerActionTargetKeys.URI) ?: return null
-        if (bundledUri != targetUri) return null
-        val displayName = target.getString(ExplorerActionTargetKeys.DISPLAY_NAME) ?: return null
-        val declaredSize = target.getLong(ExplorerActionTargetKeys.SIZE, Long.MIN_VALUE)
-        val mimeType = target.getString(ExplorerActionTargetKeys.MIME_TYPE) ?: return null
-        if (intent.stringExtra(ExplorerActionIntentExtras.DISPLAY_NAME) != displayName) return null
-        if (intent.longExtraOrNull(ExplorerActionIntentExtras.SIZE) != declaredSize) return null
-        if (intent.type != mimeType) return null
         val hostSessionBundle = intent.parcelableBundleExtra(ExplorerActionIntentExtras.HOST_SESSION)
         val hostSession = if (hostSessionBundle == null) {
             null
@@ -113,6 +117,17 @@ internal object AndroidVideoIntentPolicy {
             }
             IExplorerActionHostSession.Stub.asInterface(binder)
         }
+        val targetEnvelopes = targetBundles.map { target ->
+            ExplorerTargetEnvelope(
+                targetId = target.getString(ExplorerActionTargetKeys.ID),
+                targetUri = target.parcelableUri(ExplorerActionTargetKeys.URI)?.toString(),
+                targetKind = target.getInt(ExplorerActionTargetKeys.KIND, Int.MIN_VALUE),
+                displayName = target.getString(ExplorerActionTargetKeys.DISPLAY_NAME),
+                declaredSize = target.getLong(ExplorerActionTargetKeys.SIZE, Long.MIN_VALUE),
+                lastModified = target.getLong(ExplorerActionTargetKeys.LAST_MODIFIED, Long.MIN_VALUE),
+                mimeType = target.getString(ExplorerActionTargetKeys.MIME_TYPE),
+            )
+        }
         val validated = VideoRequestPolicy.validateExplorer(
             ExplorerRequestEnvelope(
                 action = intent.action,
@@ -121,27 +136,30 @@ internal object AndroidVideoIntentPolicy {
                 sourceSurface = intent.stringExtra(ExplorerActionIntentExtras.SOURCE_SURFACE),
                 hostVersionCode = intent.longExtraOrNull(ExplorerActionIntentExtras.HOST_VERSION_CODE),
                 requestId = intent.stringExtra(ExplorerActionIntentExtras.REQUEST_ID),
-                targetUri = targetUri.toString(),
+                dataUri = dataUri.toString(),
                 parentUri = parentUri.toString(),
                 parentDisplayPath = intent.stringExtra(ExplorerActionIntentExtras.PARENT_DISPLAY_PATH),
                 clipItems = intent.clipItems(),
                 grants = intent.grantEnvelope(),
-                targetCount = targetBundles.size,
-                targetId = target.getString(ExplorerActionTargetKeys.ID),
-                targetKind = target.getInt(ExplorerActionTargetKeys.KIND, Int.MIN_VALUE),
-                displayName = displayName,
-                declaredSize = declaredSize,
-                lastModified = target.getLong(ExplorerActionTargetKeys.LAST_MODIFIED, Long.MIN_VALUE),
-                mimeType = mimeType,
+                targets = targetEnvelopes,
+                envelopeDisplayName = intent.stringExtra(ExplorerActionIntentExtras.DISPLAY_NAME),
+                envelopeDeclaredSize = intent.longExtraOrNull(ExplorerActionIntentExtras.SIZE),
+                envelopeMimeType = intent.type,
+                hostSessionPresent = hostSession != null,
             ),
         ) ?: return null
         AndroidExplorerRequest(
-            targetId = validated.targetId,
-            targetUri = targetUri,
+            actionId = validated.actionId,
             parentUri = parentUri,
-            displayName = validated.displayName,
-            declaredSize = validated.declaredSize,
-            mimeType = validated.mimeType,
+            targets = validated.targets.map { target ->
+                AndroidExplorerTarget(
+                    targetId = target.targetId,
+                    targetUri = Uri.parse(target.targetUri),
+                    displayName = target.displayName,
+                    declaredSize = target.declaredSize,
+                    mimeType = target.mimeType,
+                )
+            },
             hostSession = hostSession,
         )
     }.getOrNull()
@@ -194,6 +212,7 @@ internal object AndroidVideoIntentPolicy {
                     AndroidPlaybackItem(
                         sourceUri = targetUri,
                         externalUri = targetUri,
+                        hostTargetId = null,
                         relativePath = null,
                         displayName = validated.displayName,
                         declaredSize = validated.declaredSize,
@@ -273,9 +292,12 @@ internal object VideoIntentFactory {
     const val HOST_REQUEST_EXTRA =
         "io.github.supermonster003.autojs6.plugin.threeemberplayer.extra.HOST_REQUEST"
 
-    private const val HOST_TARGET_ID = "targetId"
+    private const val HOST_QUEUE_KIND = "queueKind"
+    private const val HOST_QUEUE_KIND_SIBLINGS = 1
+    private const val HOST_QUEUE_KIND_SELECTION = 2
     private const val HOST_START_INDEX = "startIndex"
     private const val HOST_ITEMS = "items"
+    private const val HOST_TARGET_ID = "targetId"
     private const val HOST_RELATIVE_PATH = "relativePath"
     private const val HOST_DISPLAY_NAME = "displayName"
     private const val HOST_MIME_TYPE = "mimeType"
@@ -313,26 +335,55 @@ internal object VideoIntentFactory {
         request: AndroidExplorerRequest,
         queue: DiscoveredVideoQueue,
     ): Intent {
+        require(!request.isSelection && request.targets.size == 1)
         val session = requireNotNull(request.hostSession)
+        val selected = request.primaryTarget
         require(queue.items.isNotEmpty() && queue.startIndex in queue.items.indices)
-        require(queue.items[queue.startIndex].displayName == request.displayName)
-        val targetUri = request.targetUri
+        require(queue.items[queue.startIndex].displayName == selected.displayName)
+        val targetUri = selected.targetUri
         return Intent(context, VideoPlayerActivity::class.java).apply {
             action = VideoRequestPolicy.INTERNAL_PLAY_ACTION
-            setDataAndType(targetUri, request.mimeType)
-            clipData = ClipData.newRawUri(request.displayName, targetUri)
+            setDataAndType(targetUri, selected.mimeType)
+            clipData = ClipData.newRawUri(selected.displayName, targetUri)
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            putExtra(VideoRequestPolicy.DISPLAY_NAME_EXTRA, request.displayName)
-            putExtra(VideoRequestPolicy.DECLARED_SIZE_EXTRA, request.declaredSize)
+            putExtra(VideoRequestPolicy.DISPLAY_NAME_EXTRA, selected.displayName)
+            putExtra(VideoRequestPolicy.DECLARED_SIZE_EXTRA, selected.declaredSize)
             putExtra(
                 HOST_REQUEST_EXTRA,
                 Bundle().apply {
                     putBinder(ExplorerActionHostSessionKeys.BINDER, session.asBinder())
-                    putString(HOST_TARGET_ID, request.targetId)
+                    putInt(HOST_QUEUE_KIND, HOST_QUEUE_KIND_SIBLINGS)
                     putInt(HOST_START_INDEX, queue.startIndex)
                     putParcelableArrayList(
                         HOST_ITEMS,
-                        ArrayList(queue.items.map { item -> item.toHostBundle() }),
+                        ArrayList(queue.items.map { item -> item.toHostBundle(selected.targetId) }),
+                    )
+                },
+            )
+        }
+    }
+
+    fun createInternalSelection(context: Context, request: AndroidExplorerRequest): Intent {
+        require(request.isSelection)
+        val session = requireNotNull(request.hostSession)
+        require(request.targets.size in 1..ExplorerSelectionPolicy.MAX_TARGETS)
+        val selected = request.primaryTarget
+        return Intent(context, VideoPlayerActivity::class.java).apply {
+            action = VideoRequestPolicy.INTERNAL_PLAY_ACTION
+            setDataAndType(selected.targetUri, selected.mimeType)
+            clipData = ClipData.newRawUri(selected.displayName, selected.targetUri)
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            putExtra(VideoRequestPolicy.DISPLAY_NAME_EXTRA, selected.displayName)
+            putExtra(VideoRequestPolicy.DECLARED_SIZE_EXTRA, selected.declaredSize)
+            putExtra(
+                HOST_REQUEST_EXTRA,
+                Bundle().apply {
+                    putBinder(ExplorerActionHostSessionKeys.BINDER, session.asBinder())
+                    putInt(HOST_QUEUE_KIND, HOST_QUEUE_KIND_SELECTION)
+                    putInt(HOST_START_INDEX, 0)
+                    putParcelableArrayList(
+                        HOST_ITEMS,
+                        ArrayList(request.targets.map { target -> target.toHostBundle() }),
                     )
                 },
             )
@@ -350,13 +401,8 @@ internal object VideoIntentFactory {
             return null
         }
         val session = IExplorerActionHostSession.Stub.asInterface(binder)
-        val targetId = bundle.getString(HOST_TARGET_ID)
-            ?.takeIf { value ->
-                value.length in 1..128 && value.none { character ->
-                    character.isWhitespace() || character.isISOControl() ||
-                        Character.getType(character) == Character.FORMAT.toInt()
-                }
-            }
+        val queueKind = bundle.getInt(HOST_QUEUE_KIND, Int.MIN_VALUE)
+            .takeIf { it == HOST_QUEUE_KIND_SIBLINGS || it == HOST_QUEUE_KIND_SELECTION }
             ?: return null
         val itemBundles = bundle.bundleArrayList(HOST_ITEMS)
             ?.takeIf { it.size in 1..HostMediaDiscoveryPolicy.MAX_QUEUE_ENTRIES }
@@ -366,15 +412,21 @@ internal object VideoIntentFactory {
         var totalSubtitleAttachments = 0
         val items = itemBundles.mapIndexed { index, itemBundle ->
             if (itemBundle.keySet().toSet() != HOST_ITEM_KEYS) return null
+            val targetId = itemBundle.getString(HOST_TARGET_ID)
+                ?.takeIf(::isSafeTargetId)
+                ?: return null
             val relativePath = itemBundle.getString(HOST_RELATIVE_PATH) ?: return null
             if (relativePath.isNotEmpty() && !isSafeHostName(relativePath)) return null
             val displayName = itemBundle.getString(HOST_DISPLAY_NAME)
                 ?.takeIf(::isSafeHostName)
                 ?: return null
-            if (index == startIndex) {
-                if (relativePath.isNotEmpty()) return null
-            } else if (relativePath != displayName) {
-                return null
+            when (queueKind) {
+                HOST_QUEUE_KIND_SIBLINGS -> if (index == startIndex) {
+                    if (relativePath.isNotEmpty()) return null
+                } else if (relativePath != displayName) {
+                    return null
+                }
+                HOST_QUEUE_KIND_SELECTION -> if (relativePath.isNotEmpty()) return null
             }
             val mimeType = VideoRequestPolicy.normalizeVideoMimeType(
                 itemBundle.getString(HOST_MIME_TYPE),
@@ -385,6 +437,7 @@ internal object VideoIntentFactory {
             val subtitleBundles = itemBundle.bundleArrayList(HOST_SUBTITLES)
                 ?.takeIf { it.size <= HostMediaDiscoveryPolicy.MAX_SUBTITLES_PER_VIDEO }
                 ?: return null
+            if (queueKind == HOST_QUEUE_KIND_SELECTION && subtitleBundles.isNotEmpty()) return null
             totalSubtitleAttachments += subtitleBundles.size
             if (totalSubtitleAttachments > HostMediaDiscoveryPolicy.MAX_TOTAL_SUBTITLE_ATTACHMENTS) return null
             val subtitles = subtitleBundles.mapIndexed {
@@ -428,6 +481,7 @@ internal object VideoIntentFactory {
                     hostSourceUri(HOST_VIDEO_AUTHORITY, index)
                 },
                 externalUri = selectedContentUri.takeIf { index == startIndex },
+                hostTargetId = targetId,
                 relativePath = relativePath,
                 displayName = displayName,
                 declaredSize = size,
@@ -443,16 +497,28 @@ internal object VideoIntentFactory {
             return null
         }
         if (items.map { it.displayName }.toSet().size != items.size) return null
-        if (items.zipWithNext().any { (first, second) ->
-                HostMediaDiscoveryPolicy.compareNaturally(first.displayName, second.displayName) > 0
+        when (queueKind) {
+            HOST_QUEUE_KIND_SIBLINGS -> {
+                if (items.map { it.hostTargetId }.toSet().size != 1) return null
+                if (items.zipWithNext().any { (first, second) ->
+                        HostMediaDiscoveryPolicy.compareNaturally(first.displayName, second.displayName) > 0
+                    }
+                ) {
+                    return null
+                }
             }
-        ) {
-            return null
+            HOST_QUEUE_KIND_SELECTION -> {
+                if (startIndex != 0) return null
+                if (!ExplorerSelectionPolicy.hasUniqueNonBlankValues(items.map { requireNotNull(it.hostTargetId) })) {
+                    return null
+                }
+            }
         }
-        return AndroidPlaybackRequest(items, startIndex, session, targetId)
+        return AndroidPlaybackRequest(items, startIndex, session)
     }
 
-    private fun DiscoveredVideo.toHostBundle(): Bundle = Bundle().apply {
+    private fun DiscoveredVideo.toHostBundle(targetId: String): Bundle = Bundle().apply {
+        putString(HOST_TARGET_ID, targetId)
         putString(HOST_RELATIVE_PATH, relativePath)
         putString(HOST_DISPLAY_NAME, displayName)
         putString(HOST_MIME_TYPE, mimeType)
@@ -472,6 +538,15 @@ internal object VideoIntentFactory {
         )
     }
 
+    private fun AndroidExplorerTarget.toHostBundle(): Bundle = Bundle().apply {
+        putString(HOST_TARGET_ID, targetId)
+        putString(HOST_RELATIVE_PATH, "")
+        putString(HOST_DISPLAY_NAME, displayName)
+        putString(HOST_MIME_TYPE, mimeType)
+        putLong(HOST_SIZE, declaredSize)
+        putParcelableArrayList(HOST_SUBTITLES, arrayListOf<Bundle>())
+    }
+
     private fun hostSourceUri(authority: String, vararg indices: Int): Uri = Uri.Builder()
         .scheme(HOST_SOURCE_SCHEME)
         .authority(authority)
@@ -483,13 +558,20 @@ internal object VideoIntentFactory {
             value != "." && value != ".." && '/' !in value && '\\' !in value &&
             value.none { it.isISOControl() || Character.getType(it) == Character.FORMAT.toInt() }
 
+    private fun isSafeTargetId(value: String): Boolean =
+        value.length in 1..128 && value.none { character ->
+            character.isWhitespace() || character.isISOControl() ||
+                Character.getType(character) == Character.FORMAT.toInt()
+        }
+
     private val HOST_REQUEST_KEYS = setOf(
         ExplorerActionHostSessionKeys.BINDER,
-        HOST_TARGET_ID,
+        HOST_QUEUE_KIND,
         HOST_START_INDEX,
         HOST_ITEMS,
     )
     private val HOST_ITEM_KEYS = setOf(
+        HOST_TARGET_ID,
         HOST_RELATIVE_PATH,
         HOST_DISPLAY_NAME,
         HOST_MIME_TYPE,

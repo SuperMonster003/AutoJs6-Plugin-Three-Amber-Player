@@ -199,4 +199,15 @@
     <string name="ab_loop_active_label">A–B</string>
     <string name="ab_loop_clear_label">A/B</string>
     <string name="ab_loop_cancelled_for_mode">Boucle A–B effacée pour le mode de lecture sélectionné</string>
+    <string name="action_play_selected">Lire la sélection</string>
+    <string name="action_change_playback_mode">Changer le mode de lecture</string>
+    <string name="playback_queue">File d’attente de lecture</string>
+    <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="queue_duration_unknown">--:--</string>
+    <string name="queue_current_item_description">Lecture en cours : %1$s</string>
+    <string name="auto_advance_prompt">Lecture de l’élément suivant dans %1$d s</string>
+    <string name="action_cancel_auto_advance">Annuler</string>
+    <string name="auto_advance_cancelled">Lecture automatique de la file annulée</string>
+    <string name="setting_remember_playback_mode">Mémoriser le mode de lecture</string>
+    <string name="setting_remember_playback_mode_summary">Conserver séquence, aléatoire ou répétition d’un élément entre les sessions</string>
 </resources>

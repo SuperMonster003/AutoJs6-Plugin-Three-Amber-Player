@@ -199,4 +199,15 @@
     <string name="ab_loop_active_label">A–B</string>
     <string name="ab_loop_clear_label">A/B</string>
     <string name="ab_loop_cancelled_for_mode">Bucle A–B borrado para el modo de reproducción elegido</string>
+    <string name="action_play_selected">Reproducir seleccionados</string>
+    <string name="action_change_playback_mode">Cambiar modo de reproducción</string>
+    <string name="playback_queue">Cola de reproducción</string>
+    <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="queue_duration_unknown">--:--</string>
+    <string name="queue_current_item_description">Reproduciendo ahora: %1$s</string>
+    <string name="auto_advance_prompt">El siguiente elemento se reproducirá en %1$d s</string>
+    <string name="action_cancel_auto_advance">Cancelar</string>
+    <string name="auto_advance_cancelled">Se canceló la reproducción automática de la cola</string>
+    <string name="setting_remember_playback_mode">Recordar modo de reproducción</string>
+    <string name="setting_remember_playback_mode_summary">Conservar secuencia, aleatorio o repetir uno entre sesiones de reproducción</string>
 </resources>

@@ -199,4 +199,15 @@
     <string name="ab_loop_active_label">A–B</string>
     <string name="ab_loop_clear_label">A/B</string>
     <string name="ab_loop_cancelled_for_mode">Цикл A–B сброшен для выбранного режима воспроизведения</string>
+    <string name="action_play_selected">Воспроизвести выбранное</string>
+    <string name="action_change_playback_mode">Изменить режим воспроизведения</string>
+    <string name="playback_queue">Очередь воспроизведения</string>
+    <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="queue_duration_unknown">--:--</string>
+    <string name="queue_current_item_description">Сейчас воспроизводится: %1$s</string>
+    <string name="auto_advance_prompt">Следующий элемент запустится через %1$d с</string>
+    <string name="action_cancel_auto_advance">Отмена</string>
+    <string name="auto_advance_cancelled">Автовоспроизведение очереди отменено</string>
+    <string name="setting_remember_playback_mode">Запоминать режим воспроизведения</string>
+    <string name="setting_remember_playback_mode_summary">Сохранять выбор последовательного, случайного или повтора одного элемента между сеансами</string>
 </resources>

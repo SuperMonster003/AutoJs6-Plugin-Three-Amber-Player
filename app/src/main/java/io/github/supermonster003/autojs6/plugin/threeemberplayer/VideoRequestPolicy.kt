@@ -27,13 +27,21 @@ internal data class ExplorerRequestEnvelope(
     val sourceSurface: String?,
     val hostVersionCode: Long?,
     val requestId: String?,
-    val targetUri: String?,
+    val dataUri: String?,
     val parentUri: String?,
     val parentDisplayPath: String?,
     val clipItems: List<ClipItemEnvelope>,
     val grants: GrantEnvelope,
-    val targetCount: Int,
+    val targets: List<ExplorerTargetEnvelope>,
+    val envelopeDisplayName: String?,
+    val envelopeDeclaredSize: Long?,
+    val envelopeMimeType: String?,
+    val hostSessionPresent: Boolean,
+)
+
+internal data class ExplorerTargetEnvelope(
     val targetId: String?,
+    val targetUri: String?,
     val targetKind: Int?,
     val displayName: String?,
     val declaredSize: Long?,
@@ -68,6 +76,18 @@ internal data class ValidatedExplorerRequest(
     val mimeType: String,
 )
 
+internal data class ValidatedExplorerRequestGroup(
+    val actionId: String,
+    val parentUri: String,
+    val targets: List<ValidatedExplorerRequest>,
+) {
+    val isSelection: Boolean
+        get() = actionId == ThreeEmberPlayerPlugin.ACTION_SELECTION_ID
+
+    val primaryTarget: ValidatedExplorerRequest
+        get() = targets.first()
+}
+
 internal data class ValidatedPlaybackRequest(
     val targetUri: String,
     val displayName: String,
@@ -98,38 +118,71 @@ internal object VideoRequestPolicy {
     private const val MAX_REQUEST_ID_LENGTH = 36
     private const val TARGET_KIND_FILE = 1
 
+    private const val MAX_DECLARED_SIZE = 8L * 1024L * 1024L * 1024L * 1024L
     private val mimeTokenPattern = Regex("[a-z0-9][a-z0-9!#$&^_.+-]*")
-    fun validateExplorer(envelope: ExplorerRequestEnvelope): ValidatedExplorerRequest? {
+
+    fun validateExplorer(envelope: ExplorerRequestEnvelope): ValidatedExplorerRequestGroup? {
         if (envelope.action != EXPLORER_EXECUTE_ACTION) return null
-        if (envelope.actionId != ThreeEmberPlayerPlugin.ACTION_ID) return null
+        val actionId = envelope.actionId ?: return null
+        val multipleAction = when (actionId) {
+            ThreeEmberPlayerPlugin.ACTION_ID -> false
+            ThreeEmberPlayerPlugin.ACTION_SELECTION_ID -> true
+            else -> return null
+        }
         if (envelope.protocolVersion != PROTOCOL_VERSION) return null
         if (envelope.sourceSurface != SOURCE_SURFACE_MAIN) return null
         if ((envelope.hostVersionCode ?: return null) < ThreeEmberPlayerPlugin.REQUIRED_HOST_VERSION) return null
         if (!envelope.grants.isExplorerReadOnly()) return null
         if (canonicalRequestId(envelope.requestId) == null) return null
         if (validateParentDisplayPath(envelope.parentDisplayPath) == null) return null
-        if (envelope.targetCount != 1 || envelope.targetKind != TARGET_KIND_FILE) return null
-        val targetId = validateOpaqueId(envelope.targetId) ?: return null
-
-        val target = parsePlainContentUri(envelope.targetUri) ?: return null
         val parent = parsePlainContentUri(envelope.parentUri) ?: return null
-        if (!target.isDirectChildOf(parent)) return null
+        if (!ExplorerSelectionPolicy.isValidTargetCount(envelope.targets.size, multipleAction)) return null
+        if (envelope.clipItems.size != envelope.targets.size) return null
+        // The Host creates a multi-target session only when more than one item is selected.
+        // A one-item invocation still belongs to the multiple-cardinality action, but can
+        // safely use the exact URI grant without a session.
+        if (multipleAction && envelope.targets.size > 1 && !envelope.hostSessionPresent) return null
 
-        if (envelope.clipItems.size != 1) return null
-        if (!envelope.clipItems[0].isExactUri(target.original)) return null
+        val validatedTargets = envelope.targets.mapIndexed { index, targetEnvelope ->
+            if (targetEnvelope.targetKind != TARGET_KIND_FILE) return null
+            val targetId = validateOpaqueId(targetEnvelope.targetId) ?: return null
+            val target = parsePlainContentUri(targetEnvelope.targetUri) ?: return null
+            if (!target.isDirectChildOf(parent)) return null
+            if (!envelope.clipItems[index].isExactUri(target.original)) return null
+            val displayName = validateExactDisplayName(targetEnvelope.displayName, target) ?: return null
+            val declaredSize = targetEnvelope.declaredSize
+                ?.takeIf { it in 0L..MAX_DECLARED_SIZE }
+                ?: return null
+            if ((targetEnvelope.lastModified ?: return null) < UNKNOWN_DECLARED_SIZE) return null
+            val mimeType = normalizeVideoMimeType(targetEnvelope.mimeType) ?: return null
+            ValidatedExplorerRequest(
+                targetId = targetId,
+                targetUri = target.original,
+                parentUri = parent.original,
+                displayName = displayName,
+                declaredSize = declaredSize,
+                mimeType = mimeType,
+            )
+        }
+        if (!ExplorerSelectionPolicy.hasUniqueNonBlankValues(validatedTargets.map { it.targetId })) return null
+        if (!ExplorerSelectionPolicy.hasUniqueNonBlankValues(validatedTargets.map { it.targetUri })) return null
+        if (!ExplorerSelectionPolicy.hasUniqueNonBlankValues(validatedTargets.map { it.displayName })) return null
 
-        val displayName = validateExactDisplayName(envelope.displayName, target) ?: return null
-        val declaredSize = envelope.declaredSize?.takeIf { it >= 0L } ?: return null
-        if ((envelope.lastModified ?: return null) < UNKNOWN_DECLARED_SIZE) return null
-        val mimeType = normalizeVideoMimeType(envelope.mimeType) ?: return null
+        val primary = validatedTargets.first()
+        if (envelope.dataUri != primary.targetUri) return null
+        if (envelope.envelopeDisplayName != primary.displayName) return null
+        if (envelope.envelopeDeclaredSize != primary.declaredSize) return null
+        val validEnvelopeMime = if (multipleAction) {
+            envelope.envelopeMimeType == MULTIPLE_TARGET_MIME_TYPE
+        } else {
+            normalizeVideoMimeType(envelope.envelopeMimeType) == primary.mimeType
+        }
+        if (!validEnvelopeMime) return null
 
-        return ValidatedExplorerRequest(
-            targetId = targetId,
-            targetUri = target.original,
+        return ValidatedExplorerRequestGroup(
+            actionId = actionId,
             parentUri = parent.original,
-            displayName = displayName,
-            declaredSize = declaredSize,
-            mimeType = mimeType,
+            targets = validatedTargets,
         )
     }
 
@@ -272,6 +325,8 @@ internal object VideoRequestPolicy {
         val authority: String,
         val segments: List<String>,
     )
+
+    private const val MULTIPLE_TARGET_MIME_TYPE = "*/*"
 }
 
 internal data class ForwardedPlaybackSpec(

@@ -14,13 +14,12 @@ internal enum class HostPlaybackHistoryState {
 /** Optional v12 playback-progress client; unsupported calls safely fall back to plugin memory. */
 internal class HostPlaybackProgressClient(
     private val session: IExplorerActionHostSession,
-    private val targetId: String,
 ) {
 
     var state: HostPlaybackHistoryState = HostPlaybackHistoryState.UNKNOWN
         private set
 
-    fun resumePosition(relativePath: String): Long? {
+    fun resumePosition(targetId: String, relativePath: String): Long? {
         val result = runCatching { session.getPlaybackProgress(targetId, relativePath) }
             .getOrElse {
                 state = HostPlaybackHistoryState.UNSUPPORTED
@@ -40,6 +39,7 @@ internal class HostPlaybackProgressClient(
     }
 
     fun report(
+        targetId: String,
         relativePath: String,
         positionMillis: Long,
         durationMillis: Long,

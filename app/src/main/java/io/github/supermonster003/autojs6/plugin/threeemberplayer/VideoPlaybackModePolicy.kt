@@ -8,6 +8,21 @@ internal enum class VideoPlaybackMode {
 
 internal object VideoPlaybackModePolicy {
 
+    fun restoreRemembered(enabled: Boolean, storedValue: String?): VideoPlaybackMode {
+        if (!enabled) return VideoPlaybackMode.SEQUENCE
+        return runCatching { VideoPlaybackMode.valueOf(storedValue.orEmpty()) }
+            .getOrDefault(VideoPlaybackMode.SEQUENCE)
+    }
+
+    fun normalizeForItemCount(mode: VideoPlaybackMode, itemCount: Int): VideoPlaybackMode {
+        require(itemCount > 0)
+        return if (itemCount == 1 && mode == VideoPlaybackMode.SHUFFLE) {
+            VideoPlaybackMode.SEQUENCE
+        } else {
+            mode
+        }
+    }
+
     fun next(current: VideoPlaybackMode, itemCount: Int): VideoPlaybackMode {
         require(itemCount > 0)
         return if (itemCount == 1) {

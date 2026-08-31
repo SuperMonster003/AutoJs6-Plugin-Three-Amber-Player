@@ -54,7 +54,8 @@ Le plugin applique un modèle de sécurité en lecture seule: les vidéos arrive
 - Lecture en un appui: appuyez sur un fichier vidéo dans le gestionnaire de fichiers AutoJs6 et il s'ouvre directement en plein écran immersif, sans aucune configuration.
 - Des gestes bien pensés: balayez la moitié gauche pour la luminosité et la moitié droite pour le volume, balayez horizontalement pour naviguer dans la vidéo, faites un double appui sur les côtés pour sauter, un double appui au centre pour lecture/pause, un appui long pour une vitesse temporaire de 2×, et verrouillez toutes les commandes d'un seul appui pour éviter les appuis accidentels.
 - Vitesse et image sous contrôle: 9 vitesses de lecture de 0,25× à 3×, zoom par pincement (0,25× à 4×), modes d'affichage adapter/remplir/rogner, et bascule de l'orientation en un appui avec suggestion automatique selon le format de l'image.
-- Lecture enchaînée du dossier: ouvrir une vidéo construit une file de lecture avec les vidéos du même dossier (tri naturel des noms de fichiers), avec précédent/suivant, les modes séquentiel, aléatoire et répétition d'un seul élément, plus l'enchaînement automatique sur la vidéo suivante.
+- Lecture enchaînée du dossier: ouvrir une vidéo construit une file au tri naturel; son panneau surligne l'élément actuel, affiche les durées connues, permet de sauter et de choisir séquence/aléatoire/répétition d'un élément, avec une invite annulable de trois secondes avant l'enchaînement.
+- Sélections ordonnées de l'hôte: l'action en lecture seule Lire la sélection transforme 1 à 128 vidéos d'un dossier en file dans l'ordre exact choisi par l'hôte, sans découverte voisine; un réglage peut mémoriser le mode entre les sessions.
 - Sous-titres externes et intégrés: détectez automatiquement les .srt / .ass correspondants ou chargez-en un manuellement, reconnaissez les anciens encodages courants, réglez le style et le décalage externe sur ±600 secondes, puis changez les pistes intégrées; les sous-titres restent désactivés jusqu'à votre activation explicite.
 - Lecture de précision: en pause, avancez ou reculez image par image avec répétition par appui long, puis définissez ou effacez une boucle A-B pour examiner les détails.
 - Reprise de lecture: la position de la dernière vidéo non terminée est mémorisée et la lecture reprend à la réouverture; les vidéos terminées sont effacées immédiatement, sans laisser de trace de visionnage.
@@ -195,7 +196,7 @@ external MIME type: video/*
 required host build: 5276
 ```
 
-L'implémentation actuelle repose sur le protocole explorer-action v12: le plugin enregistre l'action principale de gestionnaire de fichiers en lecture seule `play-video`, accepte via `video/*` tous les types vidéo reconnus par l'hôte, et conserve 23 filtres d'extension exacts pour les anciens hôtes. Les hôtes compatibles peuvent y joindre la lecture des fichiers frères limitée à la requête (utilisée pour les files du même dossier et la détection des sous-titres externes) et la capacité de progression de lecture; les hôtes sans ces extensions facultatives reviennent automatiquement à la lecture d'un seul fichier. La lecture audio et l'affichage d'images sont des capacités de plugin distinctes et ne font pas partie de cet APK.
+L'implémentation repose sur explorer-action v12 : le plugin enregistre l'action principale en lecture seule `play-video` et l'action de barre de sélection `play-video-selection`, accepte les types reconnus via `video/*` et conserve 23 extensions exactes pour les anciens hôtes. L'action principale peut lire les voisins de façon bornée pour la file et les sous-titres; l'action de sélection conserve 1 à 128 cibles de l'hôte et n'active jamais cette lecture. Les sessions compatibles peuvent aussi porter la progression, et toute capacité facultative absente se replie sans risque. Audio et images restent des plugins distincts de cet APK.
 
 La coopération complète avec l'hôte nécessite AutoJs6 6.8.0 (build 5276) ou ultérieur avec Explorer Action v12; les futures mises à jour du plugin ne relèveront pas cette exigence.
 
@@ -214,6 +215,17 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 ### Historique des versions
 
 ******
+
+#### v2.2.0
+
+###### 2026/08/31
+
+* `Fonctionnalité` Nouveau panneau de file Host Session : noms, durées connues ou espaces réservés, élément actuel surligné, saut au toucher et commande synchronisée séquence/aléatoire/répétition d'un élément
+* `Fonctionnalité` Nouvelle action en lecture seule Lire la sélection : lit de 1 à 128 vidéos compatibles d'un même dossier dans l'ordre choisi par l'hôte, sans découverte des fichiers voisins
+* `Fonctionnalité` Avant la lecture automatique de la file, conserve la dernière image et affiche pendant trois secondes une invite annulable pour l'élément suivant sans déverrouiller les commandes
+* `Fonctionnalité` Nouveau réglage Mémoriser le mode de lecture, désactivé par défaut, pour conserver séquence, aléatoire ou répétition d'un élément entre les sessions
+* `Amélioration` Chaque cible est contrôlée séparément avec son URI content, sa position ClipData, son MIME, ses métadonnées, sa taille et son dossier ; les ID ou URI en double rejettent tout le groupe
+* `Amélioration` La sélection multiple lit uniquement les cibles explicitement autorisées via leurs routes Host Session bornées et n'analyse jamais les fichiers voisins pour rechercher vidéos ou sous-titres
 
 #### v2.1.0
 
@@ -238,19 +250,6 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 * `Correctif` Correction du suivi des paramètres AutoJs6 qui ne prenait pas effet dans certains scénarios (le service d'informations du plugin requis par l'hôte n'était pas exposé auparavant)
 * `Amélioration` L'historique de reprise est réduit à la seule dernière vidéo non terminée; ouvrir une autre vidéo efface immédiatement l'ancien enregistrement, et les vidéos terminées ne conservent aucune position
 * `Amélioration` L'application est renommée 3-Ember Player; l'ID d'application et l'ID de plugin restent inchangés, les installations existantes se mettent donc à niveau directement
-
-#### v1.4.0
-
-###### 2026/08/28
-
-* `Fonctionnalité` Lecture enchaînée du dossier: ouvrir une vidéo construit automatiquement une file de lecture du même dossier (tri naturel des noms de fichiers), avec précédent/suivant, les modes séquentiel, aléatoire et répétition d'un seul élément, et l'enchaînement automatique sur la vidéo suivante
-* `Fonctionnalité` Sous-titres externes: les fichiers .srt / .ass du même nom et leurs variantes à suffixe de langue sont détectés automatiquement; les sous-titres restent désactivés tant qu'ils ne sont pas choisis dans le menu des sous-titres
-* `Fonctionnalité` Historique de reprise facultatif géré par l'hôte: désactivé par défaut, il peut être activé, désactivé ou effacé dans les paramètres AutoJs6; les listes de fichiers n'affichent aucun marqueur de visionnage
-* `Correctif` Correction du rejet de fichiers reconnus comme vidéo par l'hôte parce que leur extension manquait dans l'ancienne liste blanche; les requêtes video/* de confiance sont désormais acceptées uniformément
-* `Amélioration` L'accès aux fichiers frères est strictement limité au fichier sélectionné et à ses frères directs lisibles, avec interdiction des dossiers récursifs, des écritures et des accès persistants; le plugin ne stocke aucun chemin en clair
-* `Amélioration` La file de lecture est plafonnée à 128 vidéos avec jusqu'à 8 sous-titres externes chacune, et la vidéo choisie par l'utilisateur reste toujours dans la file
-* `Amélioration` La base de compatibilité est fixée à AutoJs6 6.8.0 (build 5276); les hôtes plus anciens reviennent à la lecture d'un seul fichier, sans impact sur les fonctions de base
-* `Dépendance` Mise à niveau de l'API Explorer Action intégrée du protocole v2 vers la v12 rétrocompatible
 
 ##### Historique complet
 

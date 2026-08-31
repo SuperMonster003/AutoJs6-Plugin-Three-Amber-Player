@@ -54,7 +54,8 @@ The plugin sticks to a read-only security model: videos enter the player through
 - Tap to play: tap a video file in the AutoJs6 file manager and it opens directly in immersive full screen, no setup required.
 - Handy gestures: swipe the left half for brightness and the right half for volume, swipe horizontally to seek, double-tap the sides to jump, double-tap the center to play/pause, long-press for temporary 2× speed, and lock all controls with one tap to prevent accidental touches.
 - Speed and picture control: 9 playback speeds from 0.25× to 3×, pinch-to-zoom (0.25× to 4×), fit/fill/crop scaling modes, and one-tap orientation switching with an automatic suggestion based on the aspect ratio.
-- Folder playback: opening one video builds a same-folder queue (natural filename order) with previous/next, sequential, shuffle and single-item repeat modes, plus autoplay of the next item.
+- Folder playback: opening one video builds a same-folder queue (natural filename order); its queue sheet shows the current item and known duration, jumps on tap, controls sequential/shuffle/repeat-one, and offers a cancelable three-second prompt before autoplaying the next item.
+- Ordered host selections: the read-only Play selected action turns 1-128 videos from one folder into a queue in exactly the host selection order, without sibling discovery; an optional setting remembers the playback mode between sessions.
 - External and embedded subtitles: automatically discover same-name .srt / .ass files or load one manually, detect common legacy encodings, adjust style and a ±600-second external-subtitle offset, and switch embedded subtitle or audio tracks; subtitles stay off until explicitly enabled.
 - Precision playback: while paused, step frames backward or forward with long-press repeat, and set or clear an A-B interval loop for close inspection.
 - Resume playback: remembers the position of the most recent unfinished video and resumes it on reopen; finished videos are cleared immediately, leaving no watch trail.
@@ -195,7 +196,7 @@ external MIME type: video/*
 required host build: 5276
 ```
 
-The current implementation is based on explorer-action protocol v12: the plugin registers the read-only primary file manager action `play-video`, accepts every video type the host recognizes via `video/*`, and keeps 23 exact extension matchers for older hosts. Compatible hosts may attach request-scoped sibling reading (used for same-folder queues and external subtitle discovery) and playback progress capabilities; hosts without these optional extensions fall back to single-file playback automatically. Audio playback and image viewing are separate plugin capabilities and are not part of this APK.
+The current implementation is based on explorer-action protocol v12: the plugin registers the read-only primary action `play-video` and selection-toolbar action `play-video-selection`, accepts every video type the host recognizes via `video/*`, and keeps 23 exact extension matchers for older hosts. The primary action may use bounded sibling reading for same-folder queues and subtitle discovery; the selection action preserves 1-128 host targets and never enables sibling reading. Compatible sessions may also carry playback progress, while unavailable optional capabilities fall back safely. Audio playback and image viewing are separate plugin capabilities and are not part of this APK.
 
 Full host cooperation requires AutoJs6 6.8.0 (build 5276) or later with Explorer Action v12; future plugin updates will not raise this requirement.
 
@@ -214,6 +215,17 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 ### Release History
 
 ******
+
+#### v2.2.0
+
+###### 2026/08/31
+
+* `Feature` New Host Session playback queue sheet: file names, known durations or placeholders, current-item highlight, tap-to-jump and a live sequence/shuffle/repeat-one control
+* `Feature` New read-only Play selected file-manager action: play 1 to 128 supported videos from one parent in the host selection order without sibling discovery
+* `Feature` Before queue autoplay, keep the current end frame and show a cancelable three-second next-item prompt without unlocking locked controls
+* `Feature` New Remember playback mode setting, off by default, to retain sequence, shuffle or repeat-one across playback sessions
+* `Improvement` Every selected target is independently checked against its content URI, ClipData position, MIME type, metadata, size and parent; duplicate IDs or URIs reject the whole group
+* `Improvement` Multi-selection reads only explicitly authorized targets through their bounded Host Session routes and never scans siblings for videos or subtitles
 
 #### v2.1.0
 
@@ -238,19 +250,6 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 * `Fix` Fixed following AutoJs6 settings not taking effect in some scenarios (the plugin info service required by the host was not exposed before)
 * `Improvement` Resume history is trimmed to the single most recent unfinished video; opening another video clears the old record immediately, and finished videos keep no position
 * `Improvement` The app is renamed to 3-Ember Player; the application ID and plugin ID stay unchanged, so existing installations upgrade in place
-
-#### v1.4.0
-
-###### 2026/08/28
-
-* `Feature` Folder playback: opening one video builds a same-folder queue automatically (natural filename order) with previous/next, sequential, shuffle, single-item repeat and autoplay of the next item
-* `Feature` External subtitles: same-name .srt / .ass files and their language-suffix variants are discovered automatically; subtitles stay off until picked in the subtitle menu
-* `Feature` Optional host-managed resume history: off by default, can be enabled, disabled or cleared in AutoJs6 settings; file lists show no watched markers
-* `Fix` Fixed files recognized as video by the host being rejected because their extension was missing from the legacy allowlist; trusted video/* requests are now accepted uniformly
-* `Improvement` Sibling access is strictly limited to the selected file and its readable direct siblings, with recursive directories, writes and persistable grants forbidden; the plugin stores no plain-text paths
-* `Improvement` The playback queue is capped at 128 videos with up to 8 external subtitles each, and the user-selected video always stays in the queue
-* `Improvement` The compatibility baseline is fixed at AutoJs6 6.8.0 (build 5276); older hosts fall back to single-file playback with base features unaffected
-* `Dependency` Upgraded the bundled Explorer Action API from protocol v2 to the backward-compatible v12
 
 ##### Full history
 

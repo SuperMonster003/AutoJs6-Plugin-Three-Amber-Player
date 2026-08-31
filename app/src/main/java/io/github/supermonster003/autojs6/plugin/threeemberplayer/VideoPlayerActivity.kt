@@ -61,8 +61,12 @@ import androidx.media3.exoplayer.SeekParameters
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.TimeBar
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.slider.Slider
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.ActivityVideoPlayerBinding
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.BottomSheetVideoQueueBinding
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.DialogSubtitleOffsetBinding
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.settings.AppPreferenceStore
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.VideoThemePaletteGenerator
@@ -111,6 +115,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private lateinit var trackController: PlayerTrackController
     private lateinit var systemIntegration: PlayerSystemIntegration
     private var hostProgressClient: HostPlaybackProgressClient? = null
+    private var queueDialog: BottomSheetDialog? = null
+    private var queueSheetBinding: BottomSheetVideoQueueBinding? = null
+    private var queueAdapter: VideoQueueAdapter? = null
 
     private var player: ExoPlayer? = null
     private var frameCapture: PlayerFrameCapture? = null
@@ -133,6 +140,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private lateinit var subtitleStyle: SubtitleStyleSettings
     private var sleepTimerMode = SleepTimerMode.OFF
     private var sleepTimerDeadlineElapsedRealtimeMs = 0L
+    private var autoAdvancePromptDeadlineElapsedRealtimeMs = 0L
     private var manualZoomScale = PlayerGesturePolicy.DEFAULT_ZOOM_SCALE
     private var zoomPivotXFraction = 0.5f
     private var zoomPivotYFraction = 0.5f
@@ -176,6 +184,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private val hideOsdRunnable = Runnable { binding.osdPanel.isVisible = false }
     private val hideUnlockRunnable = Runnable { binding.unlockButton.isVisible = false }
     private val sleepTimerRunnable = Runnable { updateSleepTimer() }
+    private val autoAdvancePromptRunnable = Runnable { updateAutoAdvancePrompt() }
     private val frameRepeatRunnable = object : Runnable {
         override fun run() {
             val direction = frameRepeatDirection
@@ -224,12 +233,16 @@ class VideoPlayerActivity : VideoThemedActivity() {
         activeMediaItemIndex = request.startIndex
         resumeMediaItemIndex = request.startIndex
         hostProgressClient = request.hostSession?.let { session ->
-            HostPlaybackProgressClient(session, requireNotNull(request.hostTargetId))
+            HostPlaybackProgressClient(session)
         }
         positionStore = PlaybackPositionStore(this)
         appPreferenceStore = AppPreferenceStore(this)
         if (!appPreferenceStore.rememberPlaybackPosition) positionStore.clearAll()
         settingsStore = PlayerSettingsStore(this)
+        playbackMode = VideoPlaybackModePolicy.normalizeForItemCount(
+            settingsStore.readPlaybackMode(),
+            request.items.size,
+        )
         gestureSettings = settingsStore.read()
         subtitleStyle = settingsStore.readSubtitleStyle()
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
@@ -283,6 +296,8 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
     override fun onStop() {
         if (requestAccepted && !inPictureInPicture) {
+            dismissQueuePanel()
+            cancelAutoAdvancePrompt(showFeedback = false)
             mainHandler.removeCallbacks(progressRunnable)
             savePlaybackPosition()
             releasePlayer()
@@ -296,6 +311,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
             savePlaybackPosition()
             releasePlayer()
         }
+        dismissQueuePanel()
         if (pipReceiverRegistered) {
             unregisterReceiver(pictureInPictureActionReceiver)
             pipReceiverRegistered = false
@@ -338,6 +354,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
             binding.bottomBar.isVisible = false
             binding.unlockButton.isVisible = false
             binding.osdPanel.isVisible = false
+            binding.autoAdvancePromptPanel.isVisible = false
             hideScrubPreview()
         } else if (controlsLocked) {
             applyLockState()
@@ -345,6 +362,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
             showControls()
         } else {
             hideControls()
+        }
+        if (!isInPictureInPictureMode && autoAdvancePromptDeadlineElapsedRealtimeMs > 0L) {
+            updateAutoAdvancePrompt()
         }
     }
 
@@ -360,6 +380,10 @@ class VideoPlayerActivity : VideoThemedActivity() {
         outState.putInt(STATE_MEDIA_ITEM_INDEX, player?.currentMediaItemIndex ?: activeMediaItemIndex)
         outState.putInt(STATE_SLEEP_TIMER_MODE, sleepTimerMode.ordinal)
         outState.putLong(STATE_SLEEP_TIMER_DEADLINE, sleepTimerDeadlineElapsedRealtimeMs)
+        outState.putLong(
+            STATE_AUTO_ADVANCE_PROMPT_DEADLINE,
+            autoAdvancePromptDeadlineElapsedRealtimeMs,
+        )
         outState.putFloat(STATE_ZOOM_SCALE, manualZoomScale)
         outState.putFloat(STATE_ZOOM_PIVOT_X, zoomPivotXFraction)
         outState.putFloat(STATE_ZOOM_PIVOT_Y, zoomPivotYFraction)
@@ -401,6 +425,10 @@ class VideoPlayerActivity : VideoThemedActivity() {
             )
             sleepTimerDeadlineElapsedRealtimeMs = savedInstanceState.getLong(
                 STATE_SLEEP_TIMER_DEADLINE,
+                0L,
+            )
+            autoAdvancePromptDeadlineElapsedRealtimeMs = savedInstanceState.getLong(
+                STATE_AUTO_ADVANCE_PROMPT_DEADLINE,
                 0L,
             )
             manualZoomScale = savedInstanceState.getFloat(
@@ -504,9 +532,15 @@ class VideoPlayerActivity : VideoThemedActivity() {
         binding.osdPanel.backgroundTintList = ColorStateList.valueOf(overlaySurface)
         binding.unlockButton.backgroundTintList = ColorStateList.valueOf(overlaySurface)
         binding.scrubPreviewPanel.backgroundTintList = ColorStateList.valueOf(overlaySurface)
+        binding.autoAdvancePromptPanel.setCardBackgroundColor(overlaySurface)
         binding.osdIcon.imageTintList = ColorStateList.valueOf(control)
         binding.osdText.setTextColor(content)
         binding.scrubPreviewText.setTextColor(content)
+        binding.autoAdvancePromptText.setTextColor(content)
+        binding.cancelAutoAdvanceButton.setTextColor(control)
+        binding.cancelAutoAdvanceButton.rippleColor = ColorStateList.valueOf(
+            VideoThemePaletteGenerator.withAlpha(control, 0x24),
+        )
 
         binding.playbackErrorPanel.setBackgroundColor(
             VideoThemePaletteGenerator.withAlpha(overlay.errorContainer, 0xF2),
@@ -538,14 +572,16 @@ class VideoPlayerActivity : VideoThemedActivity() {
                     true
                 }
                 R.id.action_playlist -> {
-                    showPlaylistDialog()
+                    showQueuePanel()
                     true
                 }
                 R.id.action_previous_video -> {
+                    cancelAutoAdvancePrompt(showFeedback = false)
                     player?.seekToPreviousMediaItem()
                     true
                 }
                 R.id.action_next_video -> {
+                    cancelAutoAdvancePrompt(showFeedback = false)
                     player?.seekToNextMediaItem()
                     true
                 }
@@ -612,6 +648,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
         binding.lockButton.setOnClickListener { setControlsLocked(true) }
         binding.unlockButton.setOnClickListener { setControlsLocked(false) }
+        binding.cancelAutoAdvanceButton.setOnClickListener {
+            cancelAutoAdvancePrompt(showFeedback = true)
+        }
         binding.retryButton.setOnClickListener { retryPlayback() }
         binding.openWithOtherAppButton.setOnClickListener {
             if (!ExternalPlaybackLauncher.open(this, currentItem())) {
@@ -638,8 +677,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 this,
                 ExplorerSessionDataSource.Factory(
                     session = session,
-                    targetId = requireNotNull(request.hostTargetId),
-                    relativePathsByUri = request.hostRelativePathsByUri(),
+                    routesByUri = request.hostFileRoutesByUri(),
                 ),
             )
         } ?: DefaultDataSource.Factory(this)
@@ -694,6 +732,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
             ).show()
             pendingResumeToastPosition = -1L
         }
+        restoreAutoAdvancePromptIfNeeded()
     }
 
     private fun buildMediaItems(): List<MediaItem> {
@@ -797,6 +836,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         hideScrubPreview()
         updateToolbarMenu()
         updatePrecisionControls()
+        renderQueuePanel()
     }
 
     private fun resumeItemIfAvailable(index: Int) {
@@ -822,7 +862,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
         // prior record immediately even when an AutoJs6 Host Session supplies the actual resume.
         val localResume = positionStore.resumePosition(positionKey(item))
         val hostResume = item.relativePath?.let { relativePath ->
-            hostProgressClient?.resumePosition(relativePath)
+            item.hostTargetId?.let { targetId ->
+                hostProgressClient?.resumePosition(targetId, relativePath)
+            }
         }
         return hostResume ?: localResume.takeIf {
             hostProgressClient == null ||
@@ -837,7 +879,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     }
 
     private fun positionKey(item: AndroidPlaybackItem): String {
-        val targetId = request.hostTargetId
+        val targetId = item.hostTargetId
         val relativePath = item.relativePath
         return if (targetId != null && relativePath != null) {
             "explorer-session:$targetId:$relativePath"
@@ -848,6 +890,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
     private fun releasePlayer() {
         val exoPlayer = player ?: return
+        cancelAutoAdvancePrompt(showFeedback = false)
         capturePlaybackState()
         speedBoostActive = false
         stopFrameRepeat()
@@ -896,7 +939,15 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
         if (completed) positionStore.clear(positionKey(item))
         val handledByHost = item.relativePath?.let { relativePath ->
-            hostProgressClient?.report(relativePath, boundedPosition, durationMillis, completed)
+            item.hostTargetId?.let { targetId ->
+                hostProgressClient?.report(
+                    targetId,
+                    relativePath,
+                    boundedPosition,
+                    durationMillis,
+                    completed,
+                )
+            }
         }
         if (handledByHost == true || hostProgressClient?.state == HostPlaybackHistoryState.DISABLED) {
             return
@@ -909,6 +960,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     }
 
     private fun retryPlayback() {
+        cancelAutoAdvancePrompt(showFeedback = false)
         binding.playbackErrorPanel.isVisible = false
         releasePlayer()
         resumePlayWhenReady = true
@@ -926,6 +978,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
         override fun onPlaybackStateChanged(playbackState: Int) {
             if (playbackState == Player.STATE_ENDED) {
+                cancelAutoAdvancePrompt(showFeedback = false)
                 val exoPlayer = player
                 if (exoPlayer != null) {
                     persistItemPosition(
@@ -947,6 +1000,11 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
 
         override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+            if (!playWhenReady && reason == Player.PLAY_WHEN_READY_CHANGE_REASON_END_OF_MEDIA_ITEM) {
+                handlePausedAtMediaItemEnd()
+            } else if (playWhenReady && autoAdvancePromptDeadlineElapsedRealtimeMs > 0L) {
+                clearAutoAdvancePrompt()
+            }
             updatePlayPauseButton()
             updateToolbarMenu()
             updatePictureInPictureParameters()
@@ -971,6 +1029,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 ?.takeIf { it in request.items.indices }
                 ?: player?.currentMediaItemIndex
                 ?: return
+            if (nextIndex != activeMediaItemIndex) {
+                cancelAutoAdvancePrompt(showFeedback = false)
+            }
             if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT) {
                 val loopStart = abLoopState.pointAMs
                 if (abLoopState.active && loopStart != null) {
@@ -1019,6 +1080,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
 
         override fun onPlayerError(error: PlaybackException) {
+            cancelAutoAdvancePrompt(showFeedback = false)
             setKeepScreenOn(false)
             capturePlaybackState()
             hideScrubPreview()
@@ -1116,7 +1178,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 ?.let { relativePath ->
                     {
                         requireNotNull(request.hostSession).openFile(
-                            requireNotNull(request.hostTargetId),
+                            requireNotNull(item.hostTargetId),
                             relativePath,
                         )
                     }
@@ -1306,10 +1368,123 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
     // endregion
 
+    // region Queue auto-advance prompt
+
+    private fun handlePausedAtMediaItemEnd() {
+        val exoPlayer = player ?: return
+        val index = exoPlayer.currentMediaItemIndex
+        val duration = exoPlayer.duration
+        if (duration > 0L && duration != C.TIME_UNSET) {
+            persistItemPosition(
+                index = index,
+                positionMillis = duration,
+                durationMillis = duration,
+                completed = true,
+            )
+        }
+        if (sleepTimerMode == SleepTimerMode.END_OF_VIDEO) {
+            cancelAutoAdvancePrompt(showFeedback = false)
+            finishSleepTimer()
+            return
+        }
+        if (
+            AutoAdvancePromptPolicy.shouldShowPrompt(
+                itemCount = request.items.size,
+                hasNextMediaItem = exoPlayer.hasNextMediaItem(),
+                playbackMode = playbackMode,
+                abLoopActive = abLoopState.active,
+                stopAtEndOfVideo = false,
+            )
+        ) {
+            startAutoAdvancePrompt()
+        } else {
+            // pauseAtEndOfMediaItems is queue-wide. At the final sequence item, resume once so
+            // Media3 can enter STATE_ENDED instead of leaving a stale, paused end frame.
+            exoPlayer.play()
+        }
+    }
+
+    private fun startAutoAdvancePrompt() {
+        autoAdvancePromptDeadlineElapsedRealtimeMs =
+            SystemClock.elapsedRealtime() + AutoAdvancePromptPolicy.COUNTDOWN_MILLIS
+        updateAutoAdvancePrompt()
+        mainHandler.post {
+            if (autoAdvancePromptDeadlineElapsedRealtimeMs > 0L && !controlsLocked) {
+                hideControls()
+            }
+        }
+    }
+
+    private fun restoreAutoAdvancePromptIfNeeded() {
+        if (autoAdvancePromptDeadlineElapsedRealtimeMs <= 0L) return
+        val exoPlayer = player ?: return
+        val eligible = AutoAdvancePromptPolicy.shouldShowPrompt(
+            itemCount = request.items.size,
+            hasNextMediaItem = exoPlayer.hasNextMediaItem(),
+            playbackMode = playbackMode,
+            abLoopActive = abLoopState.active,
+            stopAtEndOfVideo = sleepTimerMode == SleepTimerMode.END_OF_VIDEO,
+        )
+        if (!eligible) {
+            clearAutoAdvancePrompt()
+            return
+        }
+        exoPlayer.pause()
+        updateAutoAdvancePrompt()
+    }
+
+    private fun updateAutoAdvancePrompt() {
+        mainHandler.removeCallbacks(autoAdvancePromptRunnable)
+        val deadline = autoAdvancePromptDeadlineElapsedRealtimeMs
+        if (deadline <= 0L) {
+            binding.autoAdvancePromptPanel.isVisible = false
+            return
+        }
+        val now = SystemClock.elapsedRealtime()
+        val seconds = AutoAdvancePromptPolicy.remainingSeconds(deadline, now)
+        if (seconds <= 0) {
+            finishAutoAdvancePrompt()
+            return
+        }
+        binding.autoAdvancePromptText.text = getString(R.string.auto_advance_prompt, seconds)
+        binding.autoAdvancePromptPanel.isVisible = !inPictureInPicture
+        mainHandler.postDelayed(
+            autoAdvancePromptRunnable,
+            (deadline - now).coerceAtMost(AUTO_ADVANCE_PROMPT_TICK_MS).coerceAtLeast(1L),
+        )
+    }
+
+    private fun finishAutoAdvancePrompt() {
+        if (autoAdvancePromptDeadlineElapsedRealtimeMs <= 0L) return
+        clearAutoAdvancePrompt()
+        player?.play()
+    }
+
+    private fun cancelAutoAdvancePrompt(showFeedback: Boolean) {
+        if (autoAdvancePromptDeadlineElapsedRealtimeMs <= 0L) return
+        clearAutoAdvancePrompt()
+        if (showFeedback) {
+            Toast.makeText(this, R.string.auto_advance_cancelled, Toast.LENGTH_SHORT).show()
+            if (!controlsLocked) showControls()
+        }
+    }
+
+    private fun clearAutoAdvancePrompt() {
+        autoAdvancePromptDeadlineElapsedRealtimeMs = 0L
+        mainHandler.removeCallbacks(autoAdvancePromptRunnable)
+        if (::binding.isInitialized) binding.autoAdvancePromptPanel.isVisible = false
+    }
+
+    // endregion
+
     // region Playback controls
 
     private fun togglePlayPause() {
         val exoPlayer = player ?: return
+        if (autoAdvancePromptDeadlineElapsedRealtimeMs > 0L) {
+            finishAutoAdvancePrompt()
+            return
+        }
         when {
             exoPlayer.playbackState == Player.STATE_ENDED -> {
                 exoPlayer.seekTo(0L)
@@ -1381,6 +1556,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     }
 
     private fun toggleAbLoopPoint() {
+        cancelAutoAdvancePrompt(showFeedback = false)
         val exoPlayer = player ?: return
         val duration = exoPlayer.duration.takeIf { it > 0L } ?: return
         val previous = abLoopState
@@ -1479,7 +1655,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
         val index = exoPlayer.currentMediaItemIndex
         if (index in request.items.indices) {
             lastPositionsByIndex[index] = exoPlayer.currentPosition.coerceAtLeast(0L)
-            if (duration > 0L) durationsByIndex[index] = duration
+            if (duration > 0L && durationsByIndex.put(index, duration) != duration) {
+                renderQueuePanel()
+            }
         }
         binding.timeBar.setDuration(duration)
         binding.durationText.text = PlayerGesturePolicy.formatTime(duration)
@@ -1517,6 +1695,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     }
 
     private fun togglePlaybackMode() {
+        cancelAutoAdvancePrompt(showFeedback = false)
         if (abLoopState != AbLoopState()) {
             clearAbLoop(showFeedback = false)
             Toast.makeText(this, R.string.ab_loop_cancelled_for_mode, Toast.LENGTH_SHORT).show()
@@ -1528,8 +1707,10 @@ class VideoPlayerActivity : VideoThemedActivity() {
             mainHandler.removeCallbacks(sleepTimerRunnable)
             Toast.makeText(this, R.string.sleep_timer_cancelled, Toast.LENGTH_SHORT).show()
         }
+        settingsStore.writePlaybackMode(playbackMode)
         player?.let(::applyPlaybackMode)
         updateToolbarMenu()
+        renderQueuePanel()
         showOsd(
             playbackModeIcon(),
             getString(playbackModeTitle()),
@@ -1544,6 +1725,14 @@ class VideoPlayerActivity : VideoThemedActivity() {
         } else {
             Player.REPEAT_MODE_OFF
         }
+        exoPlayer.setPauseAtEndOfMediaItems(
+            AutoAdvancePromptPolicy.shouldPauseAtItemEnd(
+                itemCount = request.items.size,
+                playbackMode = playbackMode,
+                abLoopActive = abLoopState.active,
+                stopAtEndOfVideo = sleepTimerMode == SleepTimerMode.END_OF_VIDEO,
+            ),
+        )
     }
 
     @DrawableRes
@@ -1559,25 +1748,94 @@ class VideoPlayerActivity : VideoThemedActivity() {
         VideoPlaybackMode.REPEAT_ONE -> R.string.repeat_one
     }
 
-    private fun showPlaylistDialog() {
-        if (request.items.size <= 1) return
+    private fun showQueuePanel() {
+        if (request.hostSession == null) return
         mainHandler.removeCallbacks(hideControlsRunnable)
-        val checkedIndex = player?.currentMediaItemIndex
+        dismissQueuePanel(postponeAutoHide = false)
+        val sheetBinding = BottomSheetVideoQueueBinding.inflate(layoutInflater)
+        val adapter = VideoQueueAdapter(videoPalette) { index ->
+            player?.takeIf { index in 0 until it.mediaItemCount }?.let { exoPlayer ->
+                cancelAutoAdvancePrompt(showFeedback = false)
+                exoPlayer.seekToDefaultPosition(index)
+                exoPlayer.play()
+                renderQueuePanel()
+            }
+        }
+        styleQueuePanel(sheetBinding)
+        sheetBinding.queueList.layoutManager = LinearLayoutManager(this)
+        sheetBinding.queueList.adapter = adapter
+        sheetBinding.queueModeButton.setOnClickListener { togglePlaybackMode() }
+        val dialog = BottomSheetDialog(this).apply {
+            setContentView(sheetBinding.root)
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.skipCollapsed = true
+            setOnDismissListener {
+                queueDialog = null
+                queueSheetBinding = null
+                queueAdapter = null
+                postponeControlsAutoHide()
+            }
+        }
+        queueDialog = dialog
+        queueSheetBinding = sheetBinding
+        queueAdapter = adapter
+        renderQueuePanel()
+        dialog.show()
+        val currentIndex = player?.currentMediaItemIndex
             ?.takeIf { it in request.items.indices }
             ?: activeMediaItemIndex
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.video_playlist_count, request.items.size))
-            .setSingleChoiceItems(
-                request.items.map(AndroidPlaybackItem::displayName).toTypedArray(),
-                checkedIndex,
-            ) { dialog, which ->
-                player?.seekToDefaultPosition(which)
-                player?.play()
-                dialog.dismiss()
-            }
-            .setNegativeButton(android.R.string.cancel, null)
-            .setOnDismissListener { postponeControlsAutoHide() }
-            .showWithPalette()
+        sheetBinding.queueList.scrollToPosition(currentIndex)
+    }
+
+    private fun styleQueuePanel(sheetBinding: BottomSheetVideoQueueBinding) {
+        val palette = videoPalette
+        sheetBinding.queueSheetRoot.setBackgroundColor(palette.surfaceContainerLow)
+        sheetBinding.queueHandle.setBackgroundColor(palette.outline)
+        sheetBinding.queueTitle.setTextColor(palette.onSurface)
+        sheetBinding.queueCount.setTextColor(palette.onSurfaceVariant)
+        sheetBinding.queueModeButton.backgroundTintList = ColorStateList.valueOf(
+            palette.surfaceContainerHigh,
+        )
+        sheetBinding.queueModeButton.setTextColor(palette.primary)
+        sheetBinding.queueModeButton.iconTint = ColorStateList.valueOf(palette.primary)
+        sheetBinding.queueModeButton.rippleColor = ColorStateList.valueOf(
+            VideoThemePaletteGenerator.withAlpha(palette.primary, 0x24),
+        )
+    }
+
+    private fun renderQueuePanel() {
+        val sheetBinding = queueSheetBinding ?: return
+        val adapter = queueAdapter ?: return
+        val currentIndex = player?.currentMediaItemIndex
+            ?.takeIf { it in request.items.indices }
+            ?: activeMediaItemIndex
+        sheetBinding.queueCount.text = getString(R.string.video_playlist_count, request.items.size)
+        sheetBinding.queueModeButton.text = getString(playbackModeTitle())
+        sheetBinding.queueModeButton.setIconResource(playbackModeIcon())
+        sheetBinding.queueModeButton.isActivated = playbackMode != VideoPlaybackMode.SEQUENCE
+        adapter.submitList(
+            request.items.mapIndexed { index, item ->
+                VideoQueueRow(
+                    index = index,
+                    title = item.displayName,
+                    durationLabel = durationsByIndex[index]
+                        ?.takeIf { it > 0L }
+                        ?.let(PlayerGesturePolicy::formatTime)
+                        ?: getString(R.string.queue_duration_unknown),
+                    current = index == currentIndex,
+                )
+            },
+        )
+    }
+
+    private fun dismissQueuePanel(postponeAutoHide: Boolean = true) {
+        queueDialog?.setOnDismissListener(null)
+        queueDialog?.dismiss()
+        queueDialog = null
+        queueSheetBinding?.queueList?.adapter = null
+        queueSheetBinding = null
+        queueAdapter = null
+        if (postponeAutoHide && ::binding.isInitialized) postponeControlsAutoHide()
     }
 
     private fun onTrackAvailabilityChanged(hasAudioChoices: Boolean, hasSubtitles: Boolean) {
@@ -1813,7 +2071,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
             )
         }
         menu.findItem(R.id.action_playlist)?.apply {
-            isVisible = request.items.size > 1
+            isVisible = request.hostSession != null
             isEnabled = player != null
         }
         menu.findItem(R.id.action_previous_video)?.apply {
@@ -1841,6 +2099,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
         menu.findItem(R.id.action_gesture_settings)?.isEnabled = player != null
         menu.findItem(R.id.action_video_info)?.isEnabled = player != null
+        renderQueuePanel()
     }
 
     private fun showSleepTimerDialog() {
@@ -1869,6 +2128,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     )
 
     private fun setSleepTimer(mode: SleepTimerMode) {
+        cancelAutoAdvancePrompt(showFeedback = false)
         if (mode == SleepTimerMode.END_OF_VIDEO && abLoopState != AbLoopState()) {
             clearAbLoop(showFeedback = false)
             Toast.makeText(this, R.string.ab_loop_cancelled_for_mode, Toast.LENGTH_SHORT).show()
@@ -1881,8 +2141,8 @@ class VideoPlayerActivity : VideoThemedActivity() {
         ) ?: 0L
         if (mode == SleepTimerMode.END_OF_VIDEO && playbackMode == VideoPlaybackMode.REPEAT_ONE) {
             playbackMode = VideoPlaybackMode.SEQUENCE
-            player?.let(::applyPlaybackMode)
         }
+        player?.let(::applyPlaybackMode)
         scheduleSleepTimer()
         val message = when {
             mode.durationMinutes != null -> getString(
@@ -1924,11 +2184,13 @@ class VideoPlayerActivity : VideoThemedActivity() {
     }
 
     private fun finishSleepTimer() {
+        cancelAutoAdvancePrompt(showFeedback = false)
         player?.pause()
         resumePlayWhenReady = false
         sleepTimerMode = SleepTimerMode.OFF
         sleepTimerDeadlineElapsedRealtimeMs = 0L
         mainHandler.removeCallbacks(sleepTimerRunnable)
+        player?.let(::applyPlaybackMode)
         updateToolbarMenu()
         showControls()
         Toast.makeText(this, R.string.sleep_timer_finished, Toast.LENGTH_SHORT).show()
@@ -2426,6 +2688,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         const val STATE_MEDIA_ITEM_INDEX = "media_item_index"
         const val STATE_SLEEP_TIMER_MODE = "sleep_timer_mode"
         const val STATE_SLEEP_TIMER_DEADLINE = "sleep_timer_deadline"
+        const val STATE_AUTO_ADVANCE_PROMPT_DEADLINE = "auto_advance_prompt_deadline"
         const val STATE_ZOOM_SCALE = "zoom_scale"
         const val STATE_ZOOM_PIVOT_X = "zoom_pivot_x"
         const val STATE_ZOOM_PIVOT_Y = "zoom_pivot_y"
@@ -2456,6 +2719,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         const val OSD_LINGER_MS = 400L
         const val UNLOCK_BUTTON_HIDE_MS = 3_000L
         const val SLEEP_TIMER_TICK_MS = 60_000L
+        const val AUTO_ADVANCE_PROMPT_TICK_MS = 250L
         const val SCRUB_THUMBNAIL_WIDTH_PX = 320
         const val SCRUB_THUMBNAIL_HEIGHT_PX = 180
         const val SCRUB_PREVIEW_MARGIN_DP = 8f

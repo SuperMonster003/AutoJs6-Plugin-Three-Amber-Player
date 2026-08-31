@@ -199,4 +199,15 @@
     <string name="ab_loop_active_label">A–B</string>
     <string name="ab_loop_clear_label">A/B</string>
     <string name="ab_loop_cancelled_for_mode">選択した再生モードのため A–B リピートを解除しました</string>
+    <string name="action_play_selected">選択項目を再生</string>
+    <string name="action_change_playback_mode">再生モードを変更</string>
+    <string name="playback_queue">再生キュー</string>
+    <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="queue_duration_unknown">--:--</string>
+    <string name="queue_current_item_description">再生中: %1$s</string>
+    <string name="auto_advance_prompt">%1$d 秒後に次の項目を再生します</string>
+    <string name="action_cancel_auto_advance">キャンセル</string>
+    <string name="auto_advance_cancelled">キューの自動再生をキャンセルしました</string>
+    <string name="setting_remember_playback_mode">再生モードを記憶</string>
+    <string name="setting_remember_playback_mode_summary">再生セッションをまたいで順次・シャッフル・1項目リピートを保持します</string>
 </resources>

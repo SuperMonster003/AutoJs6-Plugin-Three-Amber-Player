@@ -54,7 +54,8 @@ El complemento se mantiene fiel a un modelo de seguridad de solo lectura: los vi
 - Tocar y reproducir: toca un archivo de video en el gestor de archivos de AutoJs6 y se abre directamente en pantalla completa inmersiva, sin configurar nada.
 - Gestos prácticos: desliza en la mitad izquierda para ajustar el brillo y en la derecha el volumen, desliza en horizontal para avanzar o retroceder, doble toque en los laterales para saltar, doble toque en el centro para reproducir/pausar, pulsación larga para una velocidad temporal de 2×, y bloquea todos los controles con un solo toque para evitar toques accidentales.
 - Velocidad e imagen bajo control: 9 velocidades de reproducción de 0,25× a 3×, zoom por pellizco (de 0,25× a 4×), modos de escalado adaptar/rellenar/recortar, y cambio de orientación con un solo toque, con sugerencia automática según la relación de aspecto.
-- Reproducción continua por carpeta: al abrir un video se crea una cola con los videos de la misma carpeta (en orden natural de nombre de archivo), con anterior/siguiente, modos secuencial, aleatorio y repetición individual, además de reproducción automática del siguiente.
+- Reproducción continua por carpeta: al abrir un video se crea una cola en orden natural; su panel resalta el actual, muestra la duración conocida, permite saltar y cambiar entre secuencial, aleatorio y repetición individual, y ofrece un aviso cancelable de tres segundos antes de continuar.
+- Selecciones ordenadas del host: la acción de solo lectura Reproducir seleccionados convierte entre 1 y 128 videos de una carpeta en una cola con el orden exacto del host, sin descubrir archivos vecinos; una opción puede recordar el modo entre sesiones.
 - Subtítulos externos e integrados: detecta automáticamente los .srt / .ass coincidentes o carga uno manualmente, reconoce codificaciones antiguas comunes, ajusta el estilo y un desfase externo de ±600 segundos, y cambia pistas integradas; los subtítulos siguen apagados hasta que los actives expresamente.
 - Reproducción precisa: en pausa, avanza o retrocede fotograma a fotograma con repetición por pulsación larga, y define o borra un bucle A-B para revisar detalles.
 - Reanudación de la reproducción: recuerda la posición del último video sin terminar y la retoma al volver a abrirlo; los videos terminados se borran de inmediato, sin dejar rastro de visualización.
@@ -195,7 +196,7 @@ external MIME type: video/*
 required host build: 5276
 ```
 
-La implementación actual se basa en el protocolo explorer-action v12: el complemento registra la acción principal de solo lectura del gestor de archivos `play-video`, acepta mediante `video/*` todos los tipos de video que el host reconoce y conserva 23 comparadores de extensiones exactas para hosts antiguos. Los hosts compatibles pueden adjuntar lectura de hermanos limitada a la solicitud (usada para las colas de la misma carpeta y la detección de subtítulos externos) y capacidades de progreso de reproducción; los hosts sin estas extensiones opcionales recurren automáticamente a la reproducción de un solo archivo. La reproducción de audio y la visualización de imágenes son capacidades de complementos independientes y no forman parte de este APK.
+La implementación actual se basa en explorer-action v12: registra la acción principal de solo lectura `play-video` y la acción de barra de selección `play-video-selection`, acepta los tipos reconocidos mediante `video/*` y conserva 23 extensiones exactas para hosts antiguos. La acción principal puede leer hermanos de forma limitada para la cola y subtítulos; la acción de selección conserva entre 1 y 128 objetivos del host y nunca habilita esa lectura. Las sesiones compatibles también pueden llevar progreso y toda capacidad opcional ausente retrocede de forma segura. Audio e imágenes son complementos independientes y no forman parte de este APK.
 
 La cooperación completa con el host requiere AutoJs6 6.8.0 (build 5276) o posterior con Explorer Action v12; las próximas actualizaciones del complemento no elevarán este requisito.
 
@@ -214,6 +215,17 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 ### Historial de versiones
 
 ******
+
+#### v2.2.0
+
+###### 2026/08/31
+
+* `Función` Nuevo panel de cola de Host Session: nombres, duraciones conocidas o marcadores, elemento actual resaltado, salto con un toque y control sincronizado de secuencia, aleatorio y repetición de uno
+* `Función` Nueva acción de solo lectura Reproducir seleccionados: reproduce de 1 a 128 vídeos compatibles del mismo directorio en el orden elegido por el host, sin descubrir archivos hermanos
+* `Función` Antes de la reproducción automática de la cola, conserva el último fotograma y muestra durante tres segundos un aviso cancelable para el siguiente elemento sin desbloquear los controles
+* `Función` Nueva opción Recordar modo de reproducción, desactivada de forma predeterminada, para conservar secuencia, aleatorio o repetición de uno entre sesiones
+* `Mejora` Cada objetivo se comprueba por separado con su URI content, posición en ClipData, MIME, metadatos, tamaño y directorio; los ID o URI duplicados rechazan todo el grupo
+* `Mejora` La selección múltiple solo lee objetivos autorizados explícitamente mediante rutas limitadas de Host Session y nunca examina archivos hermanos para buscar vídeos o subtítulos
 
 #### v2.1.0
 
@@ -238,19 +250,6 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 * `Corrección` Se corrigió que seguir los ajustes de AutoJs6 no tuviera efecto en algunos escenarios (el servicio de información del complemento que el host requiere no se exponía antes)
 * `Mejora` El historial de reanudación se reduce al único video más reciente sin terminar; abrir otro video borra de inmediato el registro anterior, y los videos terminados no conservan posición
 * `Mejora` La aplicación pasa a llamarse 3-Ember Player; el ID de aplicación y el ID de complemento no cambian, por lo que las instalaciones existentes se actualizan sin reinstalar
-
-#### v1.4.0
-
-###### 2026/08/28
-
-* `Función` Reproducción por carpeta: abrir un video crea automáticamente una cola de la misma carpeta (orden natural de nombre de archivo) con anterior/siguiente, modos secuencial, aleatorio, repetición individual y reproducción automática del siguiente
-* `Función` Subtítulos externos: los archivos .srt / .ass con el mismo nombre y sus variantes con sufijo de idioma se detectan automáticamente; los subtítulos permanecen desactivados hasta elegirlos en el menú de subtítulos
-* `Función` Historial de reanudación opcional gestionado por el host: desactivado de forma predeterminada, puede activarse, desactivarse o borrarse en los ajustes de AutoJs6; las listas de archivos no muestran marcas de visto
-* `Corrección` Se corrigió que archivos reconocidos como video por el host se rechazaran porque su extensión no figuraba en la antigua lista de permitidos; ahora las solicitudes video/* de confianza se aceptan de manera uniforme
-* `Mejora` El acceso a hermanos se limita estrictamente al archivo seleccionado y a sus hermanos directos legibles, con los directorios recursivos, la escritura y las concesiones persistentes prohibidos; el complemento no guarda rutas en texto claro
-* `Mejora` La cola de reproducción se limita a 128 videos con hasta 8 subtítulos externos cada uno, y el video elegido por el usuario permanece siempre en la cola
-* `Mejora` La base de compatibilidad queda fijada en AutoJs6 6.8.0 (build 5276); los hosts antiguos recurren a la reproducción de un solo archivo sin afectar las funciones básicas
-* `Dependencia` Se actualizó la API Explorer Action incluida del protocolo v2 a la v12 retrocompatible
 
 ##### Historial completo
 

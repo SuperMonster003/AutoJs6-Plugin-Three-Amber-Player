@@ -9,6 +9,8 @@ import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.Act
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.ActivityLauncherBinding
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.ActivityReleaseHistoryBinding
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.ActivitySettingsBinding
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.BottomSheetVideoQueueBinding
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.ItemVideoQueueBinding
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,6 +30,8 @@ class StandaloneLayoutsInstrumentationTest {
                 settings.root,
                 ActivityReleaseHistoryBinding.inflate(inflater).root,
                 ActivityAboutBinding.inflate(inflater).root,
+                BottomSheetVideoQueueBinding.inflate(inflater).root,
+                ItemVideoQueueBinding.inflate(inflater).root,
             ).forEach { root ->
                 assertNotNull(root)
                 root.measure(
@@ -38,6 +42,8 @@ class StandaloneLayoutsInstrumentationTest {
             }
             assertNotNull(settings.rememberPositionSwitch.thumbDrawable)
             assertNotNull(settings.rememberPositionSwitch.trackDrawable)
+            assertNotNull(settings.rememberPlaybackModeSwitch.thumbDrawable)
+            assertNotNull(settings.rememberPlaybackModeSwitch.trackDrawable)
             assertNotNull(settings.autoUpdateSwitch.thumbDrawable)
             assertNotNull(settings.autoUpdateSwitch.trackDrawable)
         }

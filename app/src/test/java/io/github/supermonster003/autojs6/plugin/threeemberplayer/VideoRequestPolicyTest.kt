@@ -1,39 +1,107 @@
 package io.github.supermonster003.autojs6.plugin.threeemberplayer
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VideoRequestPolicyTest {
 
     @Test
-    fun explorerRequest_acceptsExactProtocolV12Envelope() {
+    fun explorerSingle_acceptsExactProtocolV12Envelope() {
         val result = VideoRequestPolicy.validateExplorer(validExplorerEnvelope())
 
         assertNotNull(result)
-        assertEquals(TARGET_URI, result?.targetUri)
-        assertEquals(PARENT_URI, result?.parentUri)
-        assertEquals("sample.mp4", result?.displayName)
-        assertEquals(42L, result?.declaredSize)
-        assertEquals("video/mp4", result?.mimeType)
+        assertFalse(requireNotNull(result).isSelection)
+        assertEquals(TARGET_URI, result.primaryTarget.targetUri)
+        assertEquals(PARENT_URI, result.parentUri)
+        assertEquals("sample.mp4", result.primaryTarget.displayName)
+        assertEquals(42L, result.primaryTarget.declaredSize)
+        assertEquals("video/mp4", result.primaryTarget.mimeType)
+    }
+
+    @Test
+    fun explorerSelection_acceptsOneThrough128AndPreservesHostOrder() {
+        listOf(1, 2, ExplorerSelectionPolicy.MAX_TARGETS).forEach { count ->
+            val envelope = validSelectionEnvelope(count).let { candidate ->
+                if (count == 1) candidate.copy(hostSessionPresent = false) else candidate
+            }
+            val result = VideoRequestPolicy.validateExplorer(envelope)
+
+            assertNotNull(result)
+            assertTrue(requireNotNull(result).isSelection)
+            assertEquals(
+                envelope.targets.map { it.displayName },
+                result.targets.map { it.displayName },
+            )
+        }
+    }
+
+    @Test
+    fun explorerSelection_rejectsInvalidCountMissingSessionAndSingleActionGroup() {
+        listOf(
+            validSelectionEnvelope(1).copy(targets = emptyList(), clipItems = emptyList()),
+            validSelectionEnvelope(ExplorerSelectionPolicy.MAX_TARGETS).let { envelope ->
+                val extra = targetEnvelope(ExplorerSelectionPolicy.MAX_TARGETS)
+                envelope.copy(
+                    targets = envelope.targets + extra,
+                    clipItems = envelope.clipItems + ClipItemEnvelope(extra.targetUri),
+                )
+            },
+            validSelectionEnvelope(2).copy(hostSessionPresent = false),
+            validSelectionEnvelope(2).copy(actionId = ThreeEmberPlayerPlugin.ACTION_ID),
+        ).forEach { envelope ->
+            assertNull(VideoRequestPolicy.validateExplorer(envelope))
+        }
+    }
+
+    @Test
+    fun explorerSelection_rejectsDuplicateIdentitiesAndOrderMismatch() {
+        val valid = validSelectionEnvelope(3)
+        val first = valid.targets.first()
+        val second = valid.targets[1]
+        listOf(
+            valid.copy(targets = valid.targets.toMutableList().also { it[1] = second.copy(targetId = first.targetId) }),
+            valid.copy(targets = valid.targets.toMutableList().also { it[1] = second.copy(targetUri = first.targetUri) }),
+            valid.copy(
+                clipItems = valid.clipItems.toMutableList().also {
+                    val swapped = it[0]
+                    it[0] = it[1]
+                    it[1] = swapped
+                },
+            ),
+            valid.copy(dataUri = valid.targets[1].targetUri),
+            valid.copy(envelopeDisplayName = valid.targets[1].displayName),
+            valid.copy(envelopeDeclaredSize = valid.targets[1].declaredSize),
+            valid.copy(envelopeMimeType = "video/*"),
+        ).forEach { envelope ->
+            assertNull(VideoRequestPolicy.validateExplorer(envelope))
+        }
     }
 
     @Test
     fun explorerRequest_acceptsAnySafeNameWhenTrustedHostDeclaresVideo() {
-        val target = "content://authority/root/videos/camera.wmv"
+        val target = targetEnvelope(0).copy(
+            targetUri = "$PARENT_URI/camera.wmv",
+            displayName = "camera.wmv",
+            mimeType = "video/*",
+        )
         val result = VideoRequestPolicy.validateExplorer(
             validExplorerEnvelope().copy(
-                targetUri = target,
-                displayName = "camera.wmv",
-                clipItems = listOf(ClipItemEnvelope(target)),
-                mimeType = "video/*",
+                dataUri = target.targetUri,
+                clipItems = listOf(ClipItemEnvelope(target.targetUri)),
+                targets = listOf(target),
+                envelopeDisplayName = target.displayName,
+                envelopeDeclaredSize = target.declaredSize,
+                envelopeMimeType = target.mimeType,
             ),
         )
 
         assertNotNull(result)
-        assertEquals("camera.wmv", result?.displayName)
-        assertEquals("video/*", result?.mimeType)
+        assertEquals("camera.wmv", result?.primaryTarget?.displayName)
+        assertEquals("video/*", result?.primaryTarget?.mimeType)
     }
 
     @Test
@@ -63,23 +131,52 @@ class VideoRequestPolicyTest {
     }
 
     @Test
-    fun explorerRequest_rejectsUnsafeOrUnrelatedUris() {
+    fun explorerRequest_rejectsUnsafeUnrelatedOrInconsistentTargetMetadata() {
+        val valid = validExplorerEnvelope()
+        val target = valid.targets.single()
+        val invalidTargets = listOf(
+            target.copy(targetUri = "file:///root/videos/sample.mp4"),
+            target.copy(targetUri = "$TARGET_URI?mode=read"),
+            target.copy(targetUri = "$TARGET_URI#fragment"),
+            target.copy(targetUri = "content://authority/root/videos/%2E%2E/sample.mp4"),
+            target.copy(targetUri = "content://authority/root/videos/sample%2Fmp4"),
+            target.copy(displayName = "other.mp4"),
+            target.copy(displayName = "sample\u202Emp4"),
+            target.copy(declaredSize = -1L),
+            target.copy(declaredSize = 8L * 1024L * 1024L * 1024L * 1024L + 1L),
+            target.copy(lastModified = -2L),
+            target.copy(targetKind = 2),
+            target.copy(targetId = "bad id"),
+            target.copy(mimeType = "application/octet-stream"),
+            target.copy(mimeType = "Video/mp4"),
+            target.copy(mimeType = "video/mp4; charset=utf-8"),
+        )
+        invalidTargets.forEach { invalid ->
+            assertNull(
+                VideoRequestPolicy.validateExplorer(
+                    valid.copy(
+                        dataUri = invalid.targetUri,
+                        clipItems = listOf(ClipItemEnvelope(invalid.targetUri)),
+                        targets = listOf(invalid),
+                        envelopeDisplayName = invalid.displayName,
+                        envelopeDeclaredSize = invalid.declaredSize,
+                        envelopeMimeType = invalid.mimeType,
+                    ),
+                ),
+            )
+        }
         listOf(
-            validExplorerEnvelope().copy(targetUri = "file:///root/videos/sample.mp4"),
-            validExplorerEnvelope().copy(targetUri = "$TARGET_URI?mode=read"),
-            validExplorerEnvelope().copy(targetUri = "$TARGET_URI#fragment"),
-            validExplorerEnvelope().copy(targetUri = "content://authority/root/videos/%2E%2E/sample.mp4"),
-            validExplorerEnvelope().copy(targetUri = "content://authority/root/videos/sample%2Fmp4"),
-            validExplorerEnvelope().copy(parentUri = "content://authority/root/other"),
-            validExplorerEnvelope().copy(parentUri = TARGET_URI),
-            validExplorerEnvelope().copy(parentUri = "content://other/root/videos"),
-        ).forEach { envelope ->
-            assertNull(VideoRequestPolicy.validateExplorer(envelope))
+            "content://authority/root/other",
+            TARGET_URI,
+            "content://other/root/videos",
+        ).forEach { parent ->
+            assertNull(VideoRequestPolicy.validateExplorer(valid.copy(parentUri = parent)))
         }
     }
 
     @Test
-    fun explorerRequest_requiresOneExactTargetClipItem() {
+    fun explorerRequest_requiresExactTargetClipItems() {
+        val valid = validExplorerEnvelope()
         listOf(
             emptyList(),
             listOf(ClipItemEnvelope(TARGET_URI), ClipItemEnvelope(PARENT_URI)),
@@ -87,32 +184,8 @@ class VideoRequestPolicyTest {
             listOf(ClipItemEnvelope(TARGET_URI, hasText = true)),
             listOf(ClipItemEnvelope(TARGET_URI, hasIntent = true)),
         ).forEach { clipItems ->
-            assertNull(
-                VideoRequestPolicy.validateExplorer(
-                    validExplorerEnvelope().copy(clipItems = clipItems),
-                ),
-            )
+            assertNull(VideoRequestPolicy.validateExplorer(valid.copy(clipItems = clipItems)))
         }
-    }
-
-    @Test
-    fun explorerRequest_rejectsUnsafeMetadataAndNonVideoTargets() {
-        listOf(
-            validExplorerEnvelope().copy(displayName = "other.mp4"),
-            validExplorerEnvelope().copy(displayName = "sample\u202Emp4"),
-            validExplorerEnvelope().copy(displayName = "sample.exe"),
-            validExplorerEnvelope().copy(declaredSize = -1L),
-            validExplorerEnvelope().copy(lastModified = -2L),
-            validExplorerEnvelope().copy(targetKind = 2),
-            validExplorerEnvelope().copy(targetCount = 2),
-            validExplorerEnvelope().copy(targetId = "bad id"),
-            validExplorerEnvelope().copy(mimeType = "application/octet-stream"),
-            validExplorerEnvelope().copy(mimeType = "Video/mp4"),
-            validExplorerEnvelope().copy(mimeType = "video/mp4; charset=utf-8"),
-        ).forEach { envelope ->
-            assertNull(VideoRequestPolicy.validateExplorer(envelope))
-        }
-
     }
 
     @Test
@@ -138,7 +211,7 @@ class VideoRequestPolicyTest {
     }
 
     @Test
-    fun internalRequest_requiresOneExactClipAndOnlyDisplayNameExtra() {
+    fun internalRequest_requiresOneExactClipAndOnlyDeclaredExtras() {
         val valid = InternalRequestEnvelope(
             action = VideoRequestPolicy.INTERNAL_PLAY_ACTION,
             targetUri = TARGET_URI,
@@ -187,26 +260,57 @@ class VideoRequestPolicyTest {
         assertEquals("video", VideoRequestPolicy.sanitizeExternalDisplayName(null, null))
     }
 
-    private fun validExplorerEnvelope() = ExplorerRequestEnvelope(
-        action = VideoRequestPolicy.EXPLORER_EXECUTE_ACTION,
-        actionId = ThreeEmberPlayerPlugin.ACTION_ID,
-        protocolVersion = VideoRequestPolicy.PROTOCOL_VERSION,
-        sourceSurface = VideoRequestPolicy.SOURCE_SURFACE_MAIN,
-        hostVersionCode = ThreeEmberPlayerPlugin.REQUIRED_HOST_VERSION,
-        requestId = "123e4567-e89b-12d3-a456-426614174000",
-        targetUri = TARGET_URI,
-        parentUri = PARENT_URI,
-        parentDisplayPath = "/storage/emulated/0/videos",
-        clipItems = listOf(ClipItemEnvelope(TARGET_URI)),
-        grants = EXPLORER_GRANTS,
-        targetCount = 1,
-        targetId = "target-id",
-        targetKind = 1,
-        displayName = "sample.mp4",
-        declaredSize = 42L,
-        lastModified = 1L,
-        mimeType = "video/mp4",
-    )
+    private fun validExplorerEnvelope(): ExplorerRequestEnvelope {
+        val target = targetEnvelope(0)
+        return ExplorerRequestEnvelope(
+            action = VideoRequestPolicy.EXPLORER_EXECUTE_ACTION,
+            actionId = ThreeEmberPlayerPlugin.ACTION_ID,
+            protocolVersion = VideoRequestPolicy.PROTOCOL_VERSION,
+            sourceSurface = VideoRequestPolicy.SOURCE_SURFACE_MAIN,
+            hostVersionCode = ThreeEmberPlayerPlugin.REQUIRED_HOST_VERSION,
+            requestId = "123e4567-e89b-12d3-a456-426614174000",
+            dataUri = target.targetUri,
+            parentUri = PARENT_URI,
+            parentDisplayPath = "/storage/emulated/0/videos",
+            clipItems = listOf(ClipItemEnvelope(target.targetUri)),
+            grants = EXPLORER_GRANTS,
+            targets = listOf(target),
+            envelopeDisplayName = target.displayName,
+            envelopeDeclaredSize = target.declaredSize,
+            envelopeMimeType = target.mimeType,
+            hostSessionPresent = false,
+        )
+    }
+
+    private fun validSelectionEnvelope(count: Int): ExplorerRequestEnvelope {
+        require(count in 1..ExplorerSelectionPolicy.MAX_TARGETS)
+        // Deliberately non-natural: validation must never sort the host's selection order.
+        val targets = (0 until count).map { index -> targetEnvelope((index * 37) % count) }
+        val first = targets.first()
+        return validExplorerEnvelope().copy(
+            actionId = ThreeEmberPlayerPlugin.ACTION_SELECTION_ID,
+            dataUri = first.targetUri,
+            clipItems = targets.map { ClipItemEnvelope(it.targetUri) },
+            targets = targets,
+            envelopeDisplayName = first.displayName,
+            envelopeDeclaredSize = first.declaredSize,
+            envelopeMimeType = "*/*",
+            hostSessionPresent = true,
+        )
+    }
+
+    private fun targetEnvelope(index: Int): ExplorerTargetEnvelope {
+        val name = if (index == 0) "sample.mp4" else "selected-$index.mp4"
+        return ExplorerTargetEnvelope(
+            targetId = "target-$index",
+            targetUri = "$PARENT_URI/$name",
+            targetKind = 1,
+            displayName = name,
+            declaredSize = 42L + index,
+            lastModified = 1L + index,
+            mimeType = "video/mp4",
+        )
+    }
 
     private companion object {
         const val PARENT_URI = "content://authority/root/videos"

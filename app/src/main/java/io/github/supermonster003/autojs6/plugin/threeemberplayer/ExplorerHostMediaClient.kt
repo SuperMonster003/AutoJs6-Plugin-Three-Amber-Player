@@ -9,12 +9,14 @@ import org.autojs.plugin.explorer.api.IExplorerActionHostSession
 internal object ExplorerHostMediaClient {
 
     fun discover(request: AndroidExplorerRequest): DiscoveredVideoQueue {
+        require(!request.isSelection && request.targets.size == 1)
         val session = requireNotNull(request.hostSession)
+        val selected = request.primaryTarget
         return HostMediaDiscoveryPolicy.discover(
-            selectedDisplayName = request.displayName,
-            selectedMimeType = request.mimeType,
-            selectedSize = request.declaredSize,
-            siblings = listDirectSiblings(session, request.targetId),
+            selectedDisplayName = selected.displayName,
+            selectedMimeType = selected.mimeType,
+            selectedSize = selected.declaredSize,
+            siblings = listDirectSiblings(session, selected.targetId),
         )
     }
 

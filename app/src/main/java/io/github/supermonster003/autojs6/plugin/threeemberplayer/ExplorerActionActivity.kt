@@ -29,6 +29,10 @@ class ExplorerActionActivity : Activity() {
             return
         }
         hostSession = request.hostSession
+        if (request.isSelection && request.hostSession != null) {
+            launchSelection(request)
+            return
+        }
         if (request.hostSession == null) {
             launchSingleFile(request)
             return
@@ -63,20 +67,33 @@ class ExplorerActionActivity : Activity() {
     }
 
     private fun launchSingleFile(request: AndroidExplorerRequest) {
+        val target = request.primaryTarget
         val spec = PlaybackForwardingPolicy.fromExplorer(
             ValidatedExplorerRequest(
-                targetId = request.targetId,
-                targetUri = request.targetUri.toString(),
+                targetId = target.targetId,
+                targetUri = target.targetUri.toString(),
                 parentUri = request.parentUri.toString(),
-                displayName = request.displayName,
-                declaredSize = request.declaredSize,
-                mimeType = request.mimeType,
+                displayName = target.displayName,
+                declaredSize = target.declaredSize,
+                mimeType = target.mimeType,
             ),
         )
         runCatching { startActivity(VideoIntentFactory.createInternal(this, spec)) }
             .onFailure {
                 Toast.makeText(this, R.string.error_invalid_request, Toast.LENGTH_SHORT).show()
             }
+        finish()
+    }
+
+    private fun launchSelection(request: AndroidExplorerRequest) {
+        runCatching {
+            startActivity(VideoIntentFactory.createInternalSelection(this, request))
+        }.onSuccess {
+            // The player owns the bounded per-target Host Session until the queue closes.
+            hostSession = null
+        }.onFailure {
+            Toast.makeText(this, R.string.error_invalid_request, Toast.LENGTH_SHORT).show()
+        }
         finish()
     }
 
@@ -96,9 +113,9 @@ class ExplorerActionActivity : Activity() {
         items = listOf(
             DiscoveredVideo(
                 relativePath = "",
-                displayName = request.displayName,
-                mimeType = request.mimeType,
-                size = request.declaredSize,
+                displayName = request.primaryTarget.displayName,
+                mimeType = request.primaryTarget.mimeType,
+                size = request.primaryTarget.declaredSize,
                 subtitles = emptyList(),
             ),
         ),

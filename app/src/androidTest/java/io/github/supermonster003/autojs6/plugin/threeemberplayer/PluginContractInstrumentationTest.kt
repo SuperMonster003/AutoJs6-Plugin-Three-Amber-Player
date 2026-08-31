@@ -11,6 +11,7 @@ import org.autojs.plugin.explorer.api.ExplorerActionCatalogKeys
 import org.autojs.plugin.explorer.api.ExplorerActionValues
 import org.autojs.plugin.explorer.api.IExplorerActionPlugin
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -30,19 +31,35 @@ class PluginContractInstrumentationTest {
     }
 
     @Test
-    fun catalogRetainsStableIdentityAndAdvertisesVideoPlaybackProgress() {
+    fun catalogRetainsStableIdentityAndHostCompatibleCapabilities() {
         val catalog = threeEmberPlayerActionCatalog()
         val actions = requireNotNull(
             catalog.getParcelableArrayList<android.os.Bundle>(ExplorerActionCatalogKeys.ACTIONS),
         )
         assertEquals(ThreeEmberPlayerPlugin.PROTOCOL_VERSION, catalog.getInt(ExplorerActionCatalogKeys.PROTOCOL_VERSION))
-        assertEquals(1, actions.size)
-        val action = actions.single()
+        assertEquals(2, actions.size)
+        val action = actions.first()
         assertEquals(ThreeEmberPlayerPlugin.ACTION_ID, action.getString(ExplorerActionCatalogKeys.ID))
         assertEquals(ExplorerActionValues.CARDINALITY_SINGLE, action.getInt(ExplorerActionCatalogKeys.CARDINALITY))
         assertEquals(listOf("video/*"), action.getStringArrayList(ExplorerActionCatalogKeys.MIME_TYPES))
         assertTrue(action.getBoolean(ExplorerActionCatalogKeys.READ_SIBLINGS))
         assertTrue(action.getBoolean(ExplorerActionCatalogKeys.PLAYBACK_PROGRESS))
+
+        val selection = actions.last()
+        assertEquals(
+            ThreeEmberPlayerPlugin.ACTION_SELECTION_ID,
+            selection.getString(ExplorerActionCatalogKeys.ID),
+        )
+        assertEquals(
+            ExplorerActionValues.CARDINALITY_MULTIPLE,
+            selection.getInt(ExplorerActionCatalogKeys.CARDINALITY),
+        )
+        assertEquals(
+            ExplorerActionValues.PLACEMENT_SELECTION_TOOLBAR,
+            selection.getInt(ExplorerActionCatalogKeys.PLACEMENT),
+        )
+        assertEquals(false, selection.getBoolean(ExplorerActionCatalogKeys.READ_SIBLINGS))
+        assertFalse(selection.getBoolean(ExplorerActionCatalogKeys.PLAYBACK_PROGRESS))
     }
 
     @Test

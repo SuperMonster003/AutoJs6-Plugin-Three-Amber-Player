@@ -7,6 +7,38 @@ import org.junit.Test
 class VideoPlaybackModePolicyTest {
 
     @Test
+    fun rememberedMode_defaultsOffAndRejectsUnknownStoredValues() {
+        assertEquals(
+            VideoPlaybackMode.SEQUENCE,
+            VideoPlaybackModePolicy.restoreRemembered(false, VideoPlaybackMode.SHUFFLE.name),
+        )
+        assertEquals(
+            VideoPlaybackMode.SHUFFLE,
+            VideoPlaybackModePolicy.restoreRemembered(true, VideoPlaybackMode.SHUFFLE.name),
+        )
+        assertEquals(
+            VideoPlaybackMode.SEQUENCE,
+            VideoPlaybackModePolicy.restoreRemembered(true, "future-mode"),
+        )
+    }
+
+    @Test
+    fun singleItem_normalizesRememberedShuffleButKeepsRepeatOne() {
+        assertEquals(
+            VideoPlaybackMode.SEQUENCE,
+            VideoPlaybackModePolicy.normalizeForItemCount(VideoPlaybackMode.SHUFFLE, 1),
+        )
+        assertEquals(
+            VideoPlaybackMode.REPEAT_ONE,
+            VideoPlaybackModePolicy.normalizeForItemCount(VideoPlaybackMode.REPEAT_ONE, 1),
+        )
+        assertEquals(
+            VideoPlaybackMode.SHUFFLE,
+            VideoPlaybackModePolicy.normalizeForItemCount(VideoPlaybackMode.SHUFFLE, 2),
+        )
+    }
+
+    @Test
     fun queueCyclesSequenceShuffleRepeatOne() {
         assertEquals(
             VideoPlaybackMode.SHUFFLE,

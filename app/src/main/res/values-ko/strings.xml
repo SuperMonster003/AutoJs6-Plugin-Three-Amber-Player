@@ -199,4 +199,15 @@
     <string name="ab_loop_active_label">A–B</string>
     <string name="ab_loop_clear_label">A/B</string>
     <string name="ab_loop_cancelled_for_mode">선택한 재생 모드에 맞춰 A–B 반복을 해제했습니다</string>
+    <string name="action_play_selected">선택 항목 재생</string>
+    <string name="action_change_playback_mode">재생 모드 변경</string>
+    <string name="playback_queue">재생 대기열</string>
+    <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="queue_duration_unknown">--:--</string>
+    <string name="queue_current_item_description">현재 재생 중: %1$s</string>
+    <string name="auto_advance_prompt">%1$d초 후 다음 항목 재생</string>
+    <string name="action_cancel_auto_advance">취소</string>
+    <string name="auto_advance_cancelled">대기열 자동 재생을 취소했습니다</string>
+    <string name="setting_remember_playback_mode">재생 모드 기억</string>
+    <string name="setting_remember_playback_mode_summary">재생 세션 간에 순차, 셔플 또는 한 항목 반복 선택 유지</string>
 </resources>
