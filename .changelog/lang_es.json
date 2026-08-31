@@ -5,73 +5,87 @@
   "changelog_label_improvement": "Mejora",
   "changelog_label_dependency": "Dependencia",
   "$data": {
+    "v2.1.0": {
+      "released_date": "2026/08/31",
+      "feature": [
+        "Ajustes de estilo de subtítulos: tamaño del 75% al 150%, color, fondo opaco/semitransparente/sin fondo y margen inferior del 0%/4%/8% con vista previa en directo; las opciones se conservan en reproducción e imagen en imagen",
+        "Detección de codificación para subtítulos externos: primero BOM y después GBK, Big5, Shift_JIS, EUC-KR, Windows-1251 y Windows-1256, con un aviso claro cuando el resultado no es seguro",
+        "Carga manual de un subtítulo .srt o .ass desde el menú mediante el selector de documentos del sistema; se rechazan archivos mayores de 4 MiB o con otra extensión",
+        "Desfase del subtítulo externo seleccionado entre −600,0 y +600,0 segundos en pasos de 0,1 segundos con información inmediata en pantalla",
+        "En pausa, avance o retroceso fotograma a fotograma (mantener pulsado para repetir) y bucle A-B con límites normalizados"
+      ],
+      "improvement": [
+        "La decodificación, conversión a UTF-8 y traslación temporal se realizan por completo en memoria, sin archivos temporales, permiso de almacenamiento ni autorización persistente",
+        "El desfase vuelve a cero al cambiar de vídeo; el bucle A-B tiene prioridad mientras está activo y una selección posterior de repetición o temporizador hasta el final lo borra"
+      ]
+    },
     "v2.0.0": {
       "released_date": "2026/08/29",
       "feature": [
-        "Se añadió un sistema de color detallado basado en HCT que genera desde un solo color roles semánticos accesibles para modos claro y oscuro, barras, controles, superficies, contornos y errores, con 19 preajustes Material 500 localizados y RGB personalizado con vista previa",
-        "Se añadió una pantalla de inicio y un reproductor independiente para un archivo, además de ajustes propios de idioma, modo nocturno, color, reanudación, actualizaciones, historial e información de la aplicación y el desarrollador",
-        "El idioma, el modo nocturno y el color siguen AutoJs6 de forma predeterminada mediante su contrato oficial de solo lectura; si el host no está disponible, las opciones siguen visibles pero deshabilitadas y usan los valores predeterminados",
-        "Se añadieron comprobaciones manuales y automáticas diarias, gestión de versiones ignoradas e historial localizado integrado"
+        "Sistema de temas totalmente nuevo: un solo color semilla genera paletas claras y oscuras legibles, siguiendo el tema de AutoJs6 de forma predeterminada, con 19 colores predefinidos y un color RGB personalizado con vista previa en vivo",
+        "El complemento se convierte en una aplicación independiente: se añade una entrada en la pantalla de inicio y los videos pueden abrirse directamente con el selector de archivos del sistema",
+        "Nueva página de ajustes: idioma, modo nocturno, color del tema, reanudación, actualizaciones e historial de versiones en un solo lugar; el idioma, el modo nocturno y el color del tema siguen AutoJs6 de forma predeterminada, y cuando el host no está disponible las opciones se deshabilitan y se usan los valores predeterminados de la aplicación",
+        "Nueva comprobación de actualizaciones: comprobaciones manuales y automáticas una vez al día contra las versiones oficiales de GitHub, con versiones ignorables y una página integrada de historial de versiones localizada"
       ],
       "fix": [
-        "Seguir AutoJs6 ahora es fiable gracias a la entrada protegida de información del plugin requerida por el proveedor de ajustes del host"
+        "Se corrigió que seguir los ajustes de AutoJs6 no tuviera efecto en algunos escenarios (el servicio de información del complemento que el host requiere no se exponía antes)"
       ],
       "improvement": [
-        "La reanudación recuerda exactamente el último vídeo abierto, descarta de inmediato el anterior al abrir otro y nunca conserva una reproducción terminada, tanto en el historial local como en el del host",
-        "El nombre fijo de aplicación y plugin pasa a ser 3-Ember Player y el espacio de nombres fuente, threeemberplayer, conservando los ID existentes para permitir actualizaciones"
+        "El historial de reanudación se reduce al único video más reciente sin terminar; abrir otro video borra de inmediato el registro anterior, y los videos terminados no conservan posición",
+        "La aplicación pasa a llamarse 3-Ember Player; el ID de aplicación y el ID de complemento no cambian, por lo que las instalaciones existentes se actualizan sin reinstalar"
       ]
     },
     "v1.4.0": {
       "released_date": "2026/08/28",
       "feature": [
-        "Colas de vídeos de la misma carpeta con orden natural mediante una Host Session de Explorer Action v12 limitada a la solicitud y vinculada al UID, con anterior / siguiente, secuencia, aleatorio, repetición individual y avance automático",
-        "Detección de subtítulos externos .srt y .ass coincidentes, incluidas variantes con sufijo de idioma; permanecen desactivados por defecto y solo se cargan tras una selección explícita",
-        "Historial de reanudación opcional administrado por el host: el registro está desactivado por defecto, se puede desactivar o borrar en los ajustes de AutoJs6 y no añade marcas de visto a la lista de archivos"
+        "Reproducción por carpeta: abrir un video crea automáticamente una cola de la misma carpeta (orden natural de nombre de archivo) con anterior/siguiente, modos secuencial, aleatorio, repetición individual y reproducción automática del siguiente",
+        "Subtítulos externos: los archivos .srt / .ass con el mismo nombre y sus variantes con sufijo de idioma se detectan automáticamente; los subtítulos permanecen desactivados hasta elegirlos en el menú de subtítulos",
+        "Historial de reanudación opcional gestionado por el host: desactivado de forma predeterminada, puede activarse, desactivarse o borrarse en los ajustes de AutoJs6; las listas de archivos no muestran marcas de visto"
       ],
       "fix": [
-        "Las solicitudes de Explorer clasificadas por el host como video se rechazaban si su extensión no figuraba en la lista heredada de 23 elementos; ahora se aceptan de manera uniforme las solicitudes `video/*` de confianza"
+        "Se corrigió que archivos reconocidos como video por el host se rechazaran porque su extensión no figuraba en la antigua lista de permitidos; ahora las solicitudes video/* de confianza se aceptan de manera uniforme"
       ],
       "improvement": [
-        "El acceso se limita al archivo seleccionado y a archivos hermanos directos legibles, sin recorrido recursivo, escritura, permisos persistentes ni rutas en texto claro dentro del plugin",
-        "Las colas serializadas se limitan a 128 vídeos, 8 subtítulos por vídeo y 128 asociaciones de subtítulos en total, conservando siempre el elemento seleccionado",
-        "La compatibilidad permanece en AutoJs6 6.8.0 build 5276 y Explorer Action v12; los hosts sin extensiones opcionales conservan de forma segura la reproducción de un solo archivo"
+        "El acceso a hermanos se limita estrictamente al archivo seleccionado y a sus hermanos directos legibles, con los directorios recursivos, la escritura y las concesiones persistentes prohibidos; el complemento no guarda rutas en texto claro",
+        "La cola de reproducción se limita a 128 videos con hasta 8 subtítulos externos cada uno, y el video elegido por el usuario permanece siempre en la cola",
+        "La base de compatibilidad queda fijada en AutoJs6 6.8.0 (build 5276); los hosts antiguos recurren a la reproducción de un solo archivo sin afectar las funciones básicas"
       ],
       "dependency": [
-        "Se actualizó la API Explorer Action incluida del protocolo v2 a la extensión de sesión multimedia v12 retrocompatible"
+        "Se actualizó la API Explorer Action incluida del protocolo v2 a la v12 retrocompatible"
       ]
     },
     "v1.3.1": {
       "released_date": "2026/08/27",
       "fix": [
-        "Se añadió una capa ligera de compatibilidad XVID en MKV que expone las pistas XVID VFW/FourCC validadas al decodificador MPEG-4 Part 2 integrado del dispositivo, sin transcodificar ni modificar el archivo original",
-        "Se detiene la reproducción de solo audio si no hay un decodificador del sistema compatible o si falla la decodificación, con una explicación específica y la opción de abrir con otra aplicación"
+        "Se añadió una capa de compatibilidad XVID en MKV: estos videos ahora se reproducen con el decodificador MPEG-4 Part 2 integrado del dispositivo, sin transcodificar ni tocar el archivo de origen",
+        "Cuando el dispositivo no tiene un decodificador compatible o la decodificación falla, ya no se produce la reproducción solo de audio; en su lugar se muestra un mensaje claro con la opción de abrir con otra aplicación"
       ]
     },
     "v1.3.0": {
       "released_date": "2026/08/27",
       "feature": [
-        "Temporizador: pausa tras 15, 30, 45 o 60 minutos o al finalizar el video actual, con gestión del conflicto con la repetición",
-        "Interacción con la imagen: zoom por pellizco de 0,25× a 4×, restablecimiento por doble toque y coordinación con los modos de ajuste existentes",
-        "Vista previa al arrastrar: tiempo de destino y miniaturas opcionales en memoria, con degradación silenciosa a solo el tiempo",
-        "Capturas del fotograma actual en Android 10+ guardadas como PNG independientes mediante MediaStore, sin permiso de almacenamiento ni modificación del origen",
-        "Ajustes persistentes de gestos para sensibilidad baja, normal o alta y saltos por doble toque de 5, 10 o 30 segundos"
+        "Temporizador de apagado: pausa automática tras 15, 30, 45 o 60 minutos, o al terminar el video actual",
+        "Zoom por pellizco (de 0,25× a 4×) con restablecimiento por doble toque mientras hay zoom",
+        "Arrastrar la barra de progreso muestra una burbuja con el tiempo de destino y una vista previa en miniatura; si la extracción falla, se muestra solo el tiempo",
+        "Captura de fotogramas: en Android 10+ guarda el fotograma actual como PNG en la galería del sistema, sin permiso de almacenamiento y sin modificar el video de origen",
+        "Nuevos ajustes de sensibilidad de gestos (baja/estándar/alta) y de paso de salto por doble toque (5/10/30 segundos), recordados automáticamente"
       ],
       "improvement": [
-        "Los plazos del temporizador usan tiempo transcurrido y sobreviven a la recreación de la página sin depender de cambios del reloj",
-        "La extracción de miniaturas combina las solicitudes rápidas en un único hilo y libera cada bitmap temporal que queda obsoleto"
+        "El temporizador de apagado cuenta según el tiempo de actividad del sistema, por lo que cambiar la hora del reloj no afecta la cuenta atrás, y esta sobrevive a la rotación de la pantalla",
+        "La extracción de miniaturas combina las solicitudes durante arrastres rápidos y libera pronto las imágenes obsoletas, ahorrando memoria"
       ]
     },
     "v1.2.0": {
       "released_date": "2026/08/27",
       "feature": [
-        "Selección de pistas: cambia entre pistas de audio integradas con idioma y canales, y activa bajo demanda los subtítulos integrados, desactivados de forma predeterminada",
-        "Imagen en imagen en Android 8.0+: entrada automática al salir durante la reproducción, entrada manual, relación de aspecto del video y reproducción/pausa remota",
-        "Integración multimedia del sistema: controles MediaSession para auriculares y Bluetooth, más una notificación con título, acciones y progreso",
-        "Herramientas de reproducción: repetición del video actual, panel de información y selección de orientación una sola vez según la relación de aspecto"
+        "Selección de pistas: cambia entre pistas de audio integradas por idioma y canales, y activa los subtítulos integrados, que permanecen desactivados de forma predeterminada",
+        "Imagen en imagen: en Android 8.0+, salir durante la reproducción entra automáticamente en una ventana flotante, con entrada manual y reproducir/pausar a distancia",
+        "Integración multimedia con el sistema: controles de auriculares y Bluetooth, más una notificación multimedia con título, progreso y acciones de reproducción",
+        "Herramientas de reproducción: repetición individual, un panel de información del video y orientación automática única según la relación de aspecto"
       ],
       "improvement": [
-        "Las pistas no compatibles se marcan claramente y no se pueden seleccionar; los controles se ocultan cuando no hay una elección real",
-        "La solicitud interna estricta ahora conserva solo el tamaño declarado validado junto al nombre seguro para el panel de información"
+        "Las pistas no compatibles se marcan claramente y no se pueden seleccionar; las entradas se ocultan automáticamente cuando no existe ninguna pista seleccionable",
+        "El tamaño de archivo del panel de información del video procede del tamaño declarado y validado, lo que lo hace más fiable"
       ],
       "dependency": [
         "Se añadió AndroidX Media3 Session 1.10.1"
@@ -80,41 +94,41 @@
     "v1.1.0": {
       "released_date": "2026/08/27",
       "feature": [
-        "Controles gestuales: deslizamientos verticales en la mitad izquierda o derecha para el brillo o el volumen multimedia, deslizamientos horizontales para buscar, doble toque lateral para saltar 10 segundos, doble toque central para reproducir/pausar y pulsación larga para una velocidad temporal de 2×",
-        "Velocidad de reproducción: nueve niveles de 0,25× a 3×, con la velocidad actual resaltada en la barra de control cuando no es 1×",
-        "Pantalla completa inmersiva: barras del sistema ocultas con soporte para muescas de pantalla, barras de título y de control flotantes con ocultado automático, y cambio con un toque de la orientación de la pantalla y el modo de ajuste",
-        "Bloqueo de controles: un toque desactiva todos los controles y gestos para evitar toques accidentales",
-        "Memoria de reanudación: la reproducción continúa desde la última posición local indexada por un resumen SHA-256 del content URI, borrada al terminar y limitada a 200 entradas"
+        "Controles por gestos: deslizar en vertical en la mitad izquierda para el brillo y en la derecha para el volumen, deslizar en horizontal para avanzar o retroceder, doble toque en los laterales para saltar 10 segundos, doble toque en el centro para reproducir/pausar y pulsación larga para una velocidad temporal de 2×",
+        "Velocidad de reproducción: 9 niveles de 0,25× a 3×, con la velocidad actual resaltada en la barra de control cuando no es 1×",
+        "Pantalla completa inmersiva: barras del sistema ocultas con soporte para muescas de pantalla, barras de título y de control con ocultación automática, y cambio con un toque de la orientación y del modo de escalado",
+        "Bloqueo de controles: bloquea todos los botones y gestos con un toque para evitar toques accidentales",
+        "Reanudación de la reproducción: la posición se recuerda automáticamente y se restaura al reabrir el mismo video; los videos terminados se borran, se conservan hasta 200 registros y se almacenan resúmenes de archivo en lugar de rutas"
       ],
       "improvement": [
-        "Barra de control inferior reconstruida con reproducir/pausar, saltos de 10 segundos, barra de progreso arrastrable y visualización del progreso de búfer",
-        "El panel de error de reproducción ahora ofrece una acción de reintento junto a abrir con otra aplicación",
-        "Los cambios de configuración como la rotación ya no reconstruyen el reproductor para un cambio más fluido"
+        "Barra de control inferior reconstruida: reproducir/pausar, saltos de 10 segundos, barra de progreso arrastrable y progreso de búfer, todo incluido",
+        "El panel de fallo de reproducción gana un botón de reintento y conserva abrir con otra aplicación",
+        "Los cambios de interfaz como la rotación ya no reconstruyen el reproductor, haciendo las transiciones más fluidas"
       ]
     },
     "v1.0.1": {
       "released_date": "2026/08/08",
       "fix": [
-        "Devolver un enlace válido al servicio Explorer Action al activarlo desde el centro de complementos"
+        "Se corrigió que el enlace del servicio quedara inválido tras activar el complemento en el centro de complementos de AutoJs6, lo que impedía al host usar el complemento"
       ],
       "improvement": [
-        "Acortar el nombre y la descripción del complemento y hacer más natural la documentación de usuario"
+        "Se simplificaron el nombre y la descripción del complemento, con una redacción más natural de la documentación en todos los idiomas"
       ]
     },
     "v1.0.0": {
       "released_date": "2026/08/02",
       "feature": [
-        "Plugin Video Player con ID de plugin `video-player`, ID de acción `play-video`, motor `explorer-action` y variante `default`",
-        "Acción principal de Explorador de solo lectura mediante el protocolo v2, con un comparador MIME vacío, que solo coincide con las 23 extensiones de video actuales del host y requiere la compilación 5269",
-        "Entrada de Explorador protegida por firma con validación estricta de content URI de destino y padre, ClipData, origen, nombre para mostrar, tamaño, tipo MIME, extensión y concesiones, seguida de un reenvío mínimo a un reproductor no exportado",
-        "Entrada ACTION_VIEW exportada e independiente para content URI de video de solo lectura, con descarte de extras y ClipData no confiables, rechazo de concesiones prohibidas y protección contra bucles propios",
-        "Reproducción mediante Media3 ExoPlayer y PlayerView con inicio automático, controles estándar, enfoque de audio, gestión del cambio a salida de audio noisy, posición y estado de reproducción guardados, y pantalla encendida solo durante la reproducción activa",
-        "Recuperación segura Abrir con otra aplicación después de un fallo de reproducción, mediante Intents de solo lectura recién creados que excluyen explícitamente este plugin",
-        "Metadatos, texto de interfaz, instrucciones de uso, archivos README e historiales localizados en español, francés, ruso, árabe, japonés, coreano, inglés, chino simplificado, chino tradicional de Hong Kong y chino tradicional de Taiwán"
+        "Primera versión: publicada como complemento del gestor de archivos de AutoJs6; tocar un archivo de video en el gestor de archivos lo reproduce directamente",
+        "Cubre 23 extensiones de video comunes (MP4, MKV, AVI, MOV, FLV, WEBM y más), asumiendo en modo de solo lectura la acción de abrir videos del gestor de archivos",
+        "Reproducción con AndroidX Media3 ExoPlayer: reproducción automática, controles estándar, gestión del enfoque de audio, pausa automática al desconectar los auriculares y pantalla encendida mientras se reproduce",
+        "Validación de seguridad estricta: la entrada de reproducción está protegida por un permiso de firma, los orígenes de las solicitudes, los archivos de destino y las concesiones de solo lectura se verifican uno a uno, y el reproductor no se exporta al sistema",
+        "Entrada independiente \"Abrir con\" del sistema: otras aplicaciones pueden invocar este reproductor con un content URI de solo lectura para ver videos",
+        "Cuando la reproducción falla, el video puede entregarse con seguridad a otra aplicación, con este complemento excluido de los candidatos",
+        "Incluye 10 idiomas: chino simplificado, chino tradicional (Hong Kong/Taiwán), inglés, francés, español, japonés, coreano, ruso y árabe"
       ],
       "dependency": [
-        "Añadido AndroidX Media3 ExoPlayer y UI versión 1.10.1",
-        "Añadido runtime de Kotlin Parcelize versión 2.2.21"
+        "Se incorporaron AndroidX Media3 ExoPlayer y UI 1.10.1",
+        "Se incorporó el runtime de Kotlin Parcelize 2.2.21"
       ]
     }
   }

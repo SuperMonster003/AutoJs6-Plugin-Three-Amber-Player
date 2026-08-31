@@ -119,6 +119,91 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/subtitle_style_section"
+                style="@style/SettingsSectionTitle"
+                android:paddingTop="8dp"
+                android:text="@string/settings_section_subtitle_style" />
+
+            <FrameLayout
+                android:id="@+id/subtitle_preview_panel"
+                android:layout_width="match_parent"
+                android:layout_height="104dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/black"
+                android:contentDescription="@string/subtitle_preview_description">
+
+                <androidx.media3.ui.SubtitleView
+                    android:id="@+id/subtitle_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/subtitle_text_size_setting"
+                style="@style/SettingsClickableRow">
+
+                <TextView
+                    android:id="@+id/subtitle_text_size_title"
+                    style="@style/SettingsRowTitle"
+                    android:text="@string/setting_subtitle_text_size" />
+
+                <TextView
+                    android:id="@+id/subtitle_text_size_summary"
+                    style="@style/SettingsRowSummary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/subtitle_foreground_setting"
+                style="@style/SettingsClickableRow">
+
+                <TextView
+                    android:id="@+id/subtitle_foreground_title"
+                    style="@style/SettingsRowTitle"
+                    android:text="@string/setting_subtitle_foreground" />
+
+                <TextView
+                    android:id="@+id/subtitle_foreground_summary"
+                    style="@style/SettingsRowSummary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/subtitle_background_setting"
+                style="@style/SettingsClickableRow">
+
+                <TextView
+                    android:id="@+id/subtitle_background_title"
+                    style="@style/SettingsRowTitle"
+                    android:text="@string/setting_subtitle_background" />
+
+                <TextView
+                    android:id="@+id/subtitle_background_summary"
+                    style="@style/SettingsRowSummary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/subtitle_bottom_margin_setting"
+                style="@style/SettingsClickableRow">
+
+                <TextView
+                    android:id="@+id/subtitle_bottom_margin_title"
+                    style="@style/SettingsRowTitle"
+                    android:text="@string/setting_subtitle_bottom_margin" />
+
+                <TextView
+                    android:id="@+id/subtitle_bottom_margin_summary"
+                    style="@style/SettingsRowSummary" />
+
+            </LinearLayout>
+
+            <TextView
                 android:id="@+id/updates_section"
                 style="@style/SettingsSectionTitle"
                 android:text="@string/settings_section_updates" />

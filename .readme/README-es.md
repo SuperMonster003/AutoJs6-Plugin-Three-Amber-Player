@@ -22,7 +22,7 @@
 
 ******
 
-El README.md actual admite los siguientes idiomas:
+El README.md está disponible actualmente en los siguientes idiomas:
 
 - [简体中文 [zh-Hans]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-zh-Hans.md)
 - [繁體中文 (香港) [zh-Hant-HK]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-zh-Hant-HK.md)
@@ -41,47 +41,65 @@ El README.md actual admite los siguientes idiomas:
 
 ******
 
-3-Ember Player es tanto un plugin del gestor de archivos de AutoJs6 como un reproductor de vídeo independiente y sencillo. Acepta content URI temporales de solo lectura, usa AndroidX Media3 ExoPlayer y nunca modifica el vídeo de origen.
+3-Ember Player es el complemento de reproducción de video del gestor de archivos de AutoJs6 y, al mismo tiempo, un reproductor de video local que funciona por sí solo. Toca un archivo de video en el gestor de archivos y empieza a reproducirse a pantalla completa; los gestos, la velocidad de reproducción, los subtítulos externos, la reproducción continua por carpeta y la imagen en imagen cubren la experiencia esencial de los reproductores más populares. La reproducción se basa en AndroidX Media3 ExoPlayer.
+
+El complemento se mantiene fiel a un modelo de seguridad de solo lectura: los videos entran al reproductor mediante concesiones temporales de solo lectura, nunca se solicita permiso de almacenamiento y los archivos de origen jamás se modifican ni se mueven; el acceso a la red se usa únicamente para comprobar actualizaciones del complemento.
 
 ******
 
-### Funciones
+### Funciones destacadas
 
 ******
 
-- Compatibilidad ligera con XVID en MKV mediante el decodificador MPEG-4 Part 2 integrado del dispositivo, con recuperación explícita mediante otro reproductor cuando el decodificador del sistema no está disponible o falla.
-- Registra una acción principal de Explorador de solo lectura mediante la versión 12 del protocolo compartido `org.autojs.plugin.EXPLORER_ACTION`, con capacidades opcionales y acotadas para archivos hermanos y progreso de reproducción.
-- Usa AndroidX Media3 ExoPlayer y PlayerView para reproducción automática, controles estándar, enfoque de audio, gestión del cambio a salida de audio noisy e integración con los códecs del dispositivo.
-- Restaura la posición y la intención de reproducción o pausa después de una recreación, y mantiene la pantalla encendida solo mientras el video se reproduce activamente.
-- Proporciona una entrada `android.intent.action.VIEW` exportada e independiente para content URI de solo lectura con un tipo MIME `video/*`.
-- Ofrece una acción segura Abrir con otra aplicación tras un fallo de reproducción mediante la reconstrucción de un Intent de visualización de solo lectura y la exclusión de este plugin de la lista de candidatos.
-- Ofrece reproducción inmersiva a pantalla completa con gestos para brillo, volumen y búsqueda, saltos con doble toque, velocidad temporal con pulsación larga y bloqueo de controles.
-- Proporciona velocidades de reproducción de 0,25× a 3× y cambio con un toque del modo de ajuste y la orientación de la pantalla.
-- El historial de reanudación conserva exactamente el último vídeo sin terminar como un resumen SHA-256 de identidad y valores de tiempo; abrir otro vídeo lo borra de inmediato y nunca se conserva una reproducción terminada.
-- Selecciona pistas de audio y subtítulos integrados, con los subtítulos desactivados de forma predeterminada y las pistas no compatibles claramente identificadas.
-- Ofrece repetición del video actual, un panel de metadatos detallado, orientación según la relación de aspecto e imagen en imagen en API 26+ con reproducción/pausa remota.
-- Integra MediaSession para controles de auriculares, Bluetooth y del sistema, además de una notificación multimedia con título y progreso.
-- Temporizador de 15, 30, 45 o 60 minutos y fin del video, con ajustes persistentes de sensibilidad y salto por doble toque de 5/10/30 segundos.
-- Zoom por pellizco de 0,25× a 4× con restablecimiento por doble toque y tiempo de destino al arrastrar con miniaturas opcionales en memoria.
-- Capturas del fotograma actual sin permisos en Android 10+, guardadas como PNG independientes mediante MediaStore sin modificar el video de origen.
-- Colas de videos de la misma carpeta con orden natural mediante Explorer Action v12, con anterior / siguiente, secuencia, aleatorio, repetición de uno y reproducción automática del siguiente elemento.
-- Descubre subtítulos externos .srt y .ass coincidentes, incluidos sufijos de idioma, desactivados de forma predeterminada y cargados solo tras una selección explícita.
-- Genera roles semánticos accesibles claros y oscuros desde un color HCT, sigue AutoJs6 de forma predeterminada y ofrece 19 preajustes Material 500 localizados y RGB personalizado con vista previa.
-- Ofrece un lanzador independiente y ajustes de idioma, noche y color que siguen al host, reanudación de un único vídeo, comprobaciones manuales y automáticas, versiones ignoradas, historial e información de la aplicación y el desarrollador.
+- Tocar y reproducir: toca un archivo de video en el gestor de archivos de AutoJs6 y se abre directamente en pantalla completa inmersiva, sin configurar nada.
+- Gestos prácticos: desliza en la mitad izquierda para ajustar el brillo y en la derecha el volumen, desliza en horizontal para avanzar o retroceder, doble toque en los laterales para saltar, doble toque en el centro para reproducir/pausar, pulsación larga para una velocidad temporal de 2×, y bloquea todos los controles con un solo toque para evitar toques accidentales.
+- Velocidad e imagen bajo control: 9 velocidades de reproducción de 0,25× a 3×, zoom por pellizco (de 0,25× a 4×), modos de escalado adaptar/rellenar/recortar, y cambio de orientación con un solo toque, con sugerencia automática según la relación de aspecto.
+- Reproducción continua por carpeta: al abrir un video se crea una cola con los videos de la misma carpeta (en orden natural de nombre de archivo), con anterior/siguiente, modos secuencial, aleatorio y repetición individual, además de reproducción automática del siguiente.
+- Subtítulos externos e integrados: detecta automáticamente los .srt / .ass coincidentes o carga uno manualmente, reconoce codificaciones antiguas comunes, ajusta el estilo y un desfase externo de ±600 segundos, y cambia pistas integradas; los subtítulos siguen apagados hasta que los actives expresamente.
+- Reproducción precisa: en pausa, avanza o retrocede fotograma a fotograma con repetición por pulsación larga, y define o borra un bucle A-B para revisar detalles.
+- Reanudación de la reproducción: recuerda la posición del último video sin terminar y la retoma al volver a abrirlo; los videos terminados se borran de inmediato, sin dejar rastro de visualización.
+- Imagen en imagen e integración con el sistema: imagen en imagen automática en Android 8.0+ al salir de la aplicación durante la reproducción, controles de auriculares y Bluetooth, y una notificación multimedia con título y progreso.
+- Temporizador de apagado: pausa automática tras 15/30/45/60 minutos o al terminar el video actual.
+- Vista previa al arrastrar: al arrastrar la barra de progreso se muestra una burbuja con el tiempo de destino y, cuando es posible, una miniatura de la escena.
+- Captura de fotogramas: en Android 10+ guarda el fotograma actual como PNG en la galería del sistema con un toque, sin permiso de almacenamiento y sin tocar el video de origen.
+- Respaldo para formatos difíciles: una capa ligera integrada de compatibilidad para XVID en MKV; cuando el dispositivo no puede decodificar un video, se muestra un aviso claro y la reproducción puede pasarse a otro reproductor.
+- Temas a tu gusto: un solo color semilla genera paletas claras y oscuras legibles, siguiendo AutoJs6 de forma predeterminada, con 19 colores predefinidos y un color RGB personalizado con vista previa en vivo.
+- Funciona por su cuenta: incluye un icono en la pantalla de inicio y una página de ajustes, abre videos mediante el selector de archivos del sistema y puede actuar como reproductor de video en el menú "Abrir con" del sistema.
+- Solo lectura por diseño: sin permiso de almacenamiento, los videos de origen nunca se escriben; la red se usa únicamente para comprobar actualizaciones.
 
 ******
 
-### Integración con el host
+### Instalación y uso
 
 ******
 
-El host usa este complemento para la ruta principal de apertura de video y la acción Reproducir.
+Antes de empezar, asegúrate de que el entorno cumple los siguientes requisitos:
 
-Después de instalar, activar, confiar y comprobar la compatibilidad del plugin, al abrir cualquier archivo que el host reconozca como video se ejecuta la acción `play-video` como visor principal del Explorador.
+```text
+host app: AutoJs6 (org.autojs.autojs6)
+minimum host build: 5276 (AutoJs6 6.8.0+)
+minimum android: 7.0 (API 24)
+plugin package: io.github.supermonster003.autojs6.plugin.videoplayer
+```
 
-Si el plugin falta, está desactivado, no está autorizado, no está disponible, es incompatible o no se puede iniciar, un host compatible muestra instrucciones de recuperación. El selector de aplicaciones del sistema solo se abre cuando el usuario elige explícitamente Abrir con otras aplicaciones.
+De la instalación al primer video en 4 pasos:
 
-Este plugin solo coincide con archivos de video. La reproducción de audio y la visualización de imágenes siguen siendo capacidades de plugins independientes y no se incluyen en este APK.
+1. Descarga e instala el APK del complemento. Aparecerá un icono de 3-Ember Player en la pantalla de inicio, mientras que las capacidades del complemento las gestiona AutoJs6.
+2. Abre AutoJs6, entra en el `Centro de complementos`, busca `3-Ember Player` y actívalo.
+3. Localiza cualquier archivo de video (como `movie.mp4`) en el gestor de archivos de AutoJs6.
+4. Toca el archivo y el video empezará a reproducirse a pantalla completa.
+
+Uso sin el host: abre 3-Ember Player desde la pantalla de inicio, toca `Abrir video` y elige un video con el selector de archivos del sistema; este reproductor también puede atender las solicitudes de visualización de video de otras aplicaciones. El requisito de versión del host indicado arriba solo afecta a la entrada del gestor de archivos; la reproducción independiente no se ve afectada.
+
+Guía rápida de gestos del reproductor:
+
+- Un toque: muestra u oculta la barra de control.
+- Doble toque en el centro: reproducir/pausar; doble toque en el lado izquierdo/derecho: retroceder/avanzar 10 segundos (ajustable a 5/10/30 segundos en los ajustes).
+- Deslizar en vertical en la mitad izquierda: ajustar el brillo; en la mitad derecha: ajustar el volumen.
+- Deslizar en horizontal: previsualiza el punto de destino y suelta para aplicar el salto.
+- Pulsación larga: velocidad temporal de 2×; suelta para recuperar la velocidad anterior.
+- Pellizcar con dos dedos: acerca o aleja la imagen (de 0,25× a 4×); con zoom activo, doble toque para restablecer.
+- Botón de bloqueo: bloquea todos los gestos y controles contra toques accidentales; después, toca la pantalla para mostrar el botón de desbloqueo.
 
 ******
 
@@ -89,19 +107,75 @@ Este plugin solo coincide con archivos de video. La reproducción de audio y la 
 
 ******
 
-La acción principal del Explorador acepta `video/*` para todos los tipos de video reconocidos por el host y conserva estos 23 comparadores exactos de extensión para mantener la compatibilidad con hosts anteriores:
+La acción de reproducción en el gestor de archivos coincide exactamente con las siguientes 23 extensiones:
 
 ```text
 MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT
 ```
 
-******
-
-### Interfaz del plugin
+La lista anterior es una lista de extensiones exactas permitidas que se conserva para hosts antiguos; en los hosts más recientes, cualquier archivo reconocido como video se entrega a este complemento mediante `video/*`. Figurar en la lista no garantiza la decodificación en todos los dispositivos; la reproducción real depende de Media3 y de los decodificadores de la plataforma. La entrada independiente y las llamadas de otras aplicaciones se aceptan igualmente por el tipo MIME `video/*`.
 
 ******
 
-El host descubre y ejecuta el complemento con las siguientes identidades:
+### Preguntas frecuentes
+
+******
+
+**¿Tocas un archivo de video y no se abre este reproductor?**
+
+Comprueba en este orden: que el código de versión de AutoJs6 sea al menos 5276 (versión 6.8.0 o superior); que el complemento esté activado en el `Centro de complementos`; y que el host reconozca el archivo como video. Si falla cualquiera de las tres condiciones, este complemento no atenderá el toque.
+
+**¿Qué ocurre si el complemento no está instalado o está desactivado?**
+
+Un host compatible muestra una guía de recuperación que sugiere instalar o activar el complemento; el selector de aplicaciones del sistema solo aparece cuando el usuario elige expresamente `Abrir con otra aplicación`, entregando el video a otros reproductores del dispositivo.
+
+**¿Se oye el audio pero la pantalla queda en negro, o la reproducción falla?**
+
+Que un video se decodifique depende de la plataforma del dispositivo y de Media3; figurar en la lista de extensiones no garantiza la reproducción. Para el habitual formato antiguo XVID en MKV, una capa de compatibilidad integrada entrega la pista al decodificador MPEG-4 Part 2 del sistema; si aun así no se puede decodificar, se muestra un mensaje claro y `Abrir con otra aplicación` pasa el video a otro reproductor.
+
+**¿Cómo reproduzco seguidos todos los videos de una carpeta?**
+
+Con un host que cumpla el requisito de versión, abrir cualquier video desde el gestor de archivos crea automáticamente una cola de la misma carpeta: orden natural de nombre de archivo, empezando por el video actual, con reproducción automática del siguiente al terminar y modos secuencial, aleatorio y repetición individual. En hosts antiguos o desde la entrada independiente se mantiene la reproducción de un solo archivo.
+
+**¿Cómo se cargan los subtítulos externos?**
+
+Coloca un archivo `.srt` o `.ass` con el mismo nombre junto al video (se admiten sufijos de idioma como `movie.es.srt`), abre el video desde el gestor de archivos y elige el subtítulo en el menú de subtítulos. Los subtítulos están desactivados de forma predeterminada y nunca se activan solos.
+
+**¿Qué registra la reanudación? ¿Se sube algo?**
+
+Solo se guarda la posición del último video sin terminar, almacenada como un resumen SHA-256 del archivo más valores de tiempo, sin nombre de archivo ni ruta; abrir otro video o terminar la reproducción la borra de inmediato. Todo permanece en el dispositivo y no se sube nada.
+
+**¿Qué permisos necesita el complemento?**
+
+No necesita permisos de almacenamiento, cámara, micrófono ni ningún otro permiso sensible en tiempo de ejecución. Solo declara el permiso de red para comprobar actualizaciones (iniciadas por el usuario o como mucho una vez al día), más el permiso de complemento protegido por firma para la entrada del gestor de archivos.
+
+**¿Se puede usar de forma independiente de AutoJs6?**
+
+Sí. Desde la v2.0.0 el complemento tiene entrada propia en la pantalla de inicio: elige un video con el selector de archivos del sistema y reprodúcelo, o selecciona este reproductor en el menú `Abrir con` de otra aplicación. La reproducción por carpeta, la detección de subtítulos externos y seguir los ajustes del host siguen requiriendo AutoJs6.
+
+******
+
+### Seguridad
+
+******
+
+El complemento está construido sobre el principio de denegación por defecto; todas las medidas siguientes están siempre activas y no se pueden desactivar:
+
+- Cero permisos sensibles: sin permisos de almacenamiento ni otros permisos en tiempo de ejecución; el acceso a la red se usa solo para comprobar versiones en GitHub, a petición del usuario o una vez al día.
+- Nunca escribe: la reproducción, la captura de fotogramas y la extracción de miniaturas son de solo lectura de principio a fin; los videos de origen nunca se modifican, se mueven ni se eliminan.
+- Validación entrada por entrada: la entrada del gestor de archivos está protegida por un permiso de complemento de nivel de firma, y en cada solicitud se verifican uno a uno la versión del protocolo, el URI de destino, ClipData, los metadatos, la compilación del host y las concesiones de solo lectura; cualquier discrepancia rechaza la solicitud.
+- Acceso acotado a archivos hermanos: la cola y la detección de subtítulos pasan por una sesión efímera gestionada por el host que solo puede enumerar los hermanos directos del archivo seleccionado, con los directorios recursivos, la escritura y las concesiones persistentes prohibidos; el reproductor interno recibe únicamente una cola acotada y validada y nunca toca rutas del sistema de archivos.
+- Entradas dobles aisladas: la entrada `ACTION_VIEW` orientada al sistema solo acepta solicitudes `video/*` con content URI de solo lectura, rechaza las concesiones de escritura, persistentes y prefix, y se mantiene independiente de la entrada del gestor de archivos.
+- Datos de reanudación mínimos: el historial de reanudación conserva solo el último registro sin terminar como un resumen SHA-256 más valores de tiempo, y se borra al terminar la reproducción.
+- Entrega segura: `Abrir con otra aplicación` reconstruye un intent de solo lectura y excluye este complemento de los candidatos, evitando la propagación de concesiones y los bucles propios.
+
+******
+
+### Interfaz del complemento (para desarrolladores)
+
+******
+
+El host descubre e invoca el complemento mediante los siguientes identificadores:
 
 ```text
 service action: org.autojs.plugin.EXPLORER_ACTION
@@ -111,6 +185,7 @@ source namespace: io.github.supermonster003.autojs6.plugin.threeemberplayer
 stable application id: io.github.supermonster003.autojs6.plugin.videoplayer
 engine: explorer-action
 variant: default
+protocol version: v12
 Explorer action id: play-video
 Explorer placement: primary
 access mode: read-only
@@ -120,31 +195,19 @@ external MIME type: video/*
 required host build: 5276
 ```
 
-La versión 2.0 proporciona una acción principal de Explorador de solo lectura con protocolo v12. Un host compatible puede adjuntar capacidades por solicitud para hermanos directos y progreso de reproducción; los hosts sin estas extensiones opcionales conservan la reproducción de un único archivo. La entrada externa independiente sigue aceptando solo un content URI de lectura con un subtipo MIME `video/*` válido.
+La implementación actual se basa en el protocolo explorer-action v12: el complemento registra la acción principal de solo lectura del gestor de archivos `play-video`, acepta mediante `video/*` todos los tipos de video que el host reconoce y conserva 23 comparadores de extensiones exactas para hosts antiguos. Los hosts compatibles pueden adjuntar lectura de hermanos limitada a la solicitud (usada para las colas de la misma carpeta y la detección de subtítulos externos) y capacidades de progreso de reproducción; los hosts sin estas extensiones opcionales recurren automáticamente a la reproducción de un solo archivo. La reproducción de audio y la visualización de imágenes son capacidades de complementos independientes y no forman parte de este APK.
 
-Las funciones completas de cooperación requieren AutoJs6 6.8.0 build 5276 o posterior y Explorer Action v12; este requisito no aumentará con capacidades futuras del plugin.
-
-******
-
-### Seguridad
+La cooperación completa con el host requiere AutoJs6 6.8.0 (build 5276) o posterior con Explorer Action v12; las próximas actualizaciones del complemento no elevarán este requisito.
 
 ******
 
-La aplicación no solicita permisos de almacenamiento y nunca escribe los vídeos de origen. Internet se usa solo para comprobaciones de versiones de GitHub iniciadas por el usuario o diarias. Su límite del Explorador protegido por firma valida el sobre completo del protocolo v12, el único destino seleccionado, la relación con el padre, ClipData, metadatos, compilación del host y concesiones de solo lectura. Las Host Session opcionales quedan vinculadas por el host al UID del plugin y solo permiten listar el padre directo del archivo seleccionado y abrir este o un hermano directo legible. El reproductor privado valida una cola opaca acotada y nunca recibe una ruta del sistema de archivos. El límite público ACTION_VIEW permanece independiente y de un único archivo.
+### Hoja de ruta
 
 ******
 
-### Límites de seguridad
+Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md como una lista de casillas marcables. Los elementos sin marcar expresan una intención y no describen capacidades de la versión actual.
 
-******
-
-- El Explorador parte exactamente de un content URI seleccionado; una Host Session opcional solo puede exponer hermanos directos legibles y nunca acceso recursivo a directorios.
-- La ejecución desde el Explorador requiere el permiso de nivel signature `org.autojs.permission.PLUGIN`.
-- Las concesiones de escritura y persistentes siempre se rechazan. El acceso prefix utilizado para validar el URI padre nunca se reenvía al reproductor.
-- El límite público ACTION_VIEW rechaza concesiones de escritura, persistentes y prefix.
-- Los candidatos externos se resuelven primero, se filtran para conservar otros paquetes y se inician con un Intent de solo lectura recién creado.
-- El historial de reanudación conserva exactamente el último vídeo sin terminar como un resumen SHA-256 de identidad y valores de tiempo; abrir otro vídeo lo borra de inmediato y nunca se conserva una reproducción terminada.
-- El reconocimiento como video o una extensión heredada incluida no garantiza compatibilidad de decodificación en todos los dispositivos. Media3 y los códecs de plataforma instalados determinan la compatibilidad real de reproducción.
+- [Abrir el Roadmap.md con casillas marcables](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/Roadmap.md)
 
 ******
 
@@ -152,39 +215,44 @@ La aplicación no solicita permisos de almacenamiento y nunca escribe los vídeo
 
 ******
 
-# v2.0.0
+#### v2.1.0
+
+###### 2026/08/31
+
+* `Función` Ajustes de estilo de subtítulos: tamaño del 75% al 150%, color, fondo opaco/semitransparente/sin fondo y margen inferior del 0%/4%/8% con vista previa en directo; las opciones se conservan en reproducción e imagen en imagen
+* `Función` Detección de codificación para subtítulos externos: primero BOM y después GBK, Big5, Shift_JIS, EUC-KR, Windows-1251 y Windows-1256, con un aviso claro cuando el resultado no es seguro
+* `Función` Carga manual de un subtítulo .srt o .ass desde el menú mediante el selector de documentos del sistema; se rechazan archivos mayores de 4 MiB o con otra extensión
+* `Función` Desfase del subtítulo externo seleccionado entre −600,0 y +600,0 segundos en pasos de 0,1 segundos con información inmediata en pantalla
+* `Función` En pausa, avance o retroceso fotograma a fotograma (mantener pulsado para repetir) y bucle A-B con límites normalizados
+* `Mejora` La decodificación, conversión a UTF-8 y traslación temporal se realizan por completo en memoria, sin archivos temporales, permiso de almacenamiento ni autorización persistente
+* `Mejora` El desfase vuelve a cero al cambiar de vídeo; el bucle A-B tiene prioridad mientras está activo y una selección posterior de repetición o temporizador hasta el final lo borra
+
+#### v2.0.0
 
 ###### 2026/08/29
 
-* `Función` Se añadió un sistema de color detallado basado en HCT que genera desde un solo color roles semánticos accesibles para modos claro y oscuro, barras, controles, superficies, contornos y errores, con 19 preajustes Material 500 localizados y RGB personalizado con vista previa
-* `Función` Se añadió una pantalla de inicio y un reproductor independiente para un archivo, además de ajustes propios de idioma, modo nocturno, color, reanudación, actualizaciones, historial e información de la aplicación y el desarrollador
-* `Función` El idioma, el modo nocturno y el color siguen AutoJs6 de forma predeterminada mediante su contrato oficial de solo lectura; si el host no está disponible, las opciones siguen visibles pero deshabilitadas y usan los valores predeterminados
-* `Función` Se añadieron comprobaciones manuales y automáticas diarias, gestión de versiones ignoradas e historial localizado integrado
-* `Corrección` Seguir AutoJs6 ahora es fiable gracias a la entrada protegida de información del plugin requerida por el proveedor de ajustes del host
-* `Mejora` La reanudación recuerda exactamente el último vídeo abierto, descarta de inmediato el anterior al abrir otro y nunca conserva una reproducción terminada, tanto en el historial local como en el del host
-* `Mejora` El nombre fijo de aplicación y plugin pasa a ser 3-Ember Player y el espacio de nombres fuente, threeemberplayer, conservando los ID existentes para permitir actualizaciones
+* `Función` Sistema de temas totalmente nuevo: un solo color semilla genera paletas claras y oscuras legibles, siguiendo el tema de AutoJs6 de forma predeterminada, con 19 colores predefinidos y un color RGB personalizado con vista previa en vivo
+* `Función` El complemento se convierte en una aplicación independiente: se añade una entrada en la pantalla de inicio y los videos pueden abrirse directamente con el selector de archivos del sistema
+* `Función` Nueva página de ajustes: idioma, modo nocturno, color del tema, reanudación, actualizaciones e historial de versiones en un solo lugar; el idioma, el modo nocturno y el color del tema siguen AutoJs6 de forma predeterminada, y cuando el host no está disponible las opciones se deshabilitan y se usan los valores predeterminados de la aplicación
+* `Función` Nueva comprobación de actualizaciones: comprobaciones manuales y automáticas una vez al día contra las versiones oficiales de GitHub, con versiones ignorables y una página integrada de historial de versiones localizada
+* `Corrección` Se corrigió que seguir los ajustes de AutoJs6 no tuviera efecto en algunos escenarios (el servicio de información del complemento que el host requiere no se exponía antes)
+* `Mejora` El historial de reanudación se reduce al único video más reciente sin terminar; abrir otro video borra de inmediato el registro anterior, y los videos terminados no conservan posición
+* `Mejora` La aplicación pasa a llamarse 3-Ember Player; el ID de aplicación y el ID de complemento no cambian, por lo que las instalaciones existentes se actualizan sin reinstalar
 
-# v1.4.0
+#### v1.4.0
 
 ###### 2026/08/28
 
-* `Función` Colas de vídeos de la misma carpeta con orden natural mediante una Host Session de Explorer Action v12 limitada a la solicitud y vinculada al UID, con anterior / siguiente, secuencia, aleatorio, repetición individual y avance automático
-* `Función` Detección de subtítulos externos .srt y .ass coincidentes, incluidas variantes con sufijo de idioma; permanecen desactivados por defecto y solo se cargan tras una selección explícita
-* `Función` Historial de reanudación opcional administrado por el host: el registro está desactivado por defecto, se puede desactivar o borrar en los ajustes de AutoJs6 y no añade marcas de visto a la lista de archivos
-* `Corrección` Las solicitudes de Explorer clasificadas por el host como video se rechazaban si su extensión no figuraba en la lista heredada de 23 elementos; ahora se aceptan de manera uniforme las solicitudes `video/*` de confianza
-* `Mejora` El acceso se limita al archivo seleccionado y a archivos hermanos directos legibles, sin recorrido recursivo, escritura, permisos persistentes ni rutas en texto claro dentro del plugin
-* `Mejora` Las colas serializadas se limitan a 128 vídeos, 8 subtítulos por vídeo y 128 asociaciones de subtítulos en total, conservando siempre el elemento seleccionado
-* `Mejora` La compatibilidad permanece en AutoJs6 6.8.0 build 5276 y Explorer Action v12; los hosts sin extensiones opcionales conservan de forma segura la reproducción de un solo archivo
-* `Dependencia` Se actualizó la API Explorer Action incluida del protocolo v2 a la extensión de sesión multimedia v12 retrocompatible
+* `Función` Reproducción por carpeta: abrir un video crea automáticamente una cola de la misma carpeta (orden natural de nombre de archivo) con anterior/siguiente, modos secuencial, aleatorio, repetición individual y reproducción automática del siguiente
+* `Función` Subtítulos externos: los archivos .srt / .ass con el mismo nombre y sus variantes con sufijo de idioma se detectan automáticamente; los subtítulos permanecen desactivados hasta elegirlos en el menú de subtítulos
+* `Función` Historial de reanudación opcional gestionado por el host: desactivado de forma predeterminada, puede activarse, desactivarse o borrarse en los ajustes de AutoJs6; las listas de archivos no muestran marcas de visto
+* `Corrección` Se corrigió que archivos reconocidos como video por el host se rechazaran porque su extensión no figuraba en la antigua lista de permitidos; ahora las solicitudes video/* de confianza se aceptan de manera uniforme
+* `Mejora` El acceso a hermanos se limita estrictamente al archivo seleccionado y a sus hermanos directos legibles, con los directorios recursivos, la escritura y las concesiones persistentes prohibidos; el complemento no guarda rutas en texto claro
+* `Mejora` La cola de reproducción se limita a 128 videos con hasta 8 subtítulos externos cada uno, y el video elegido por el usuario permanece siempre en la cola
+* `Mejora` La base de compatibilidad queda fijada en AutoJs6 6.8.0 (build 5276); los hosts antiguos recurren a la reproducción de un solo archivo sin afectar las funciones básicas
+* `Dependencia` Se actualizó la API Explorer Action incluida del protocolo v2 a la v12 retrocompatible
 
-# v1.3.1
-
-###### 2026/08/27
-
-* `Corrección` Se añadió una capa ligera de compatibilidad XVID en MKV que expone las pistas XVID VFW/FourCC validadas al decodificador MPEG-4 Part 2 integrado del dispositivo, sin transcodificar ni modificar el archivo original
-* `Corrección` Se detiene la reproducción de solo audio si no hay un decodificador del sistema compatible o si falla la decodificación, con una explicación específica y la opción de abrir con otra aplicación
-
-##### Para consultar más versiones
+##### Historial completo
 
 * [CHANGELOG-es.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/assets/doc/CHANGELOG-es.md)
 
@@ -204,7 +272,7 @@ Compilación Release:
 .\gradlew.bat :app:assembleRelease
 ```
 
-Los parámetros de compilación proceden de `version.properties`. El SDK mínimo actual es 24 y el SDK de destino es 36.
+Los parámetros de compilación proceden de `version.properties`; el SDK mínimo actual es 24 y el SDK de destino es 36.
 
 ******
 
@@ -221,7 +289,7 @@ app/src/main/res/values-*/strings.xml
 app/src/main/res/raw-*/plugin_instruction.md
 ```
 
-`strings.xml` localiza los metadatos del plugin y el texto de la interfaz. `plugin_instruction.md` proporciona instrucciones de uso y seguridad. `.python/generate_markdown.py` genera archivos README y de cambios localizados a partir de fuentes JSON.
+`strings.xml` localiza la información del complemento y la interfaz del reproductor, y `plugin_instruction.md` aporta las notas de uso que se muestran en el lado del host. Todos los archivos README y CHANGELOG se generan a partir de fuentes JSON con `.python/generate_markdown.py`: para modificar la documentación, edita los archivos `lang_*.json` de `.readme` y `.changelog` y vuelve a ejecutar el script, en lugar de editar los archivos Markdown generados.
 
 ******
 
@@ -230,5 +298,5 @@ app/src/main/res/raw-*/plugin_instruction.md
 ******
 
 - Documentación de AutoJs6: https://docs.autojs6.com
+- AndroidX Media3 ExoPlayer (motor de reproducción): https://developer.android.com/media/media3/exoplayer
 - Uso compartido seguro de archivos en Android: https://developer.android.com/training/secure-file-sharing
-- AndroidX Media3 ExoPlayer: https://developer.android.com/media/media3/exoplayer

@@ -4,7 +4,7 @@
   <h1>{{ product_name }}</h1>
 
   <p>
-    <img src="{{ repo_url }}/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    <img src="{{ repo_url }}/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="{{ icon_alt }}" border="0" width="128" />
   </p>
 
   <p>{{ text_plugin_synopsis }}</p>
@@ -34,27 +34,40 @@
 
 {{ p_introduction }}
 
-******
-
-### {{ h3_functions }}
+{{ p_introduction_secure }}
 
 ******
 
-{{ placeholder_features }}
+### {{ h3_highlights }}
 
 ******
 
-### {{ h3_host_integration }}
+{{ placeholder_highlights }}
 
 ******
 
-{{ p_host_integration_location }}
+### {{ h3_usage }}
 
-{{ p_host_integration_installed }}
+******
 
-{{ p_host_integration_fallback }}
+{{ p_usage_prerequisites }}:
 
-{{ p_plugin_independence }}
+```text
+host app: AutoJs6 ({{ host_package }})
+minimum host build: {{ required_host_build }} (AutoJs6 {{ required_host_version }}+)
+minimum android: {{ min_android }}
+plugin package: {{ stable_application_id }}
+```
+
+{{ p_usage_steps_intro }}:
+
+{{ placeholder_usage_steps }}
+
+{{ p_usage_standalone }}
+
+{{ p_usage_gestures_intro }}:
+
+{{ placeholder_gestures }}
 
 ******
 
@@ -67,6 +80,26 @@
 ```text
 {{ supported_formats }}
 ```
+
+{{ p_supported_formats_note }}
+
+******
+
+### {{ h3_faq }}
+
+******
+
+{{ placeholder_faq }}
+
+******
+
+### {{ h3_security }}
+
+******
+
+{{ p_security_intro }}:
+
+{{ placeholder_security_points }}
 
 ******
 
@@ -84,6 +117,7 @@ source namespace: {{ source_namespace }}
 stable application id: {{ stable_application_id }}
 engine: {{ plugin_engine }}
 variant: {{ plugin_variant }}
+protocol version: {{ protocol_version }}
 Explorer action id: {{ explorer_action_id }}
 Explorer placement: {{ explorer_placement }}
 access mode: {{ access_mode }}
@@ -95,23 +129,17 @@ required host build: {{ required_host_build }}
 
 {{ p_plugin_scope }}
 
-{{ p_plugin_packaging }}
+{{ p_plugin_compat }}
 
 ******
 
-### {{ h3_security }}
+### {{ h3_roadmap }}
 
 ******
 
-{{ p_security }}
+{{ p_roadmap_status }}
 
-******
-
-### {{ h3_security_limits }}
-
-******
-
-{{ placeholder_security_limits }}
+- [{{ text_open_roadmap }}]({{ repo_url }}/blob/master/Roadmap.md)
 
 ******
 
@@ -167,5 +195,5 @@ app/src/main/res/raw-*/plugin_instruction.md
 ******
 
 - {{ text_link_autojs6_docs }}: {{ docs_autojs6_url }}
-- {{ text_link_android_secure_file_sharing }}: https://developer.android.com/training/secure-file-sharing
 - {{ text_link_media3_exoplayer }}: {{ media3_url }}
+- {{ text_link_android_secure_file_sharing }}: {{ android_secure_files_url }}

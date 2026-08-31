@@ -9,10 +9,19 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.media3.common.text.Cue
+import androidx.media3.common.util.UnstableApi
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.PlaybackPositionStore
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.PlayerSettingsStore
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.R
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.SubtitleBackgroundStyle
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.SubtitleBottomMargin
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.SubtitleForegroundColor
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.SubtitleStyleApplier
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.SubtitleStyleSettings
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.SubtitleTextScale
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.ActivitySettingsBinding
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.AutoJs6AppearanceClient
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.AutoJs6AppearanceResult
@@ -29,15 +38,20 @@ import java.util.Locale
 import org.autojs.plugin.common.api.AutoJs6HostSettingsContract as HostContract
 
 /** Standalone-app settings. Host-following options remain visible when unavailable. */
+@androidx.annotation.OptIn(UnstableApi::class)
 class SettingsActivity : VideoThemedActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var preferenceStore: AppPreferenceStore
+    private lateinit var playerSettingsStore: PlayerSettingsStore
+    private var subtitleStyle = SubtitleStyleSettings()
     private var hostResult = AutoJs6AppearanceResult(AutoJs6HostAvailability.NOT_INSTALLED)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferenceStore = AppPreferenceStore(this)
+        playerSettingsStore = PlayerSettingsStore(this)
+        subtitleStyle = playerSettingsStore.readSubtitleStyle()
         hostResult = AutoJs6AppearanceClient.query(this)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -66,6 +80,10 @@ class SettingsActivity : VideoThemedActivity() {
             binding.rememberPositionSwitch.isChecked = enabled
             if (!enabled) PlaybackPositionStore(this).clearAll()
         }
+        binding.subtitleTextSizeSetting.setOnClickListener { showSubtitleTextSizeDialog() }
+        binding.subtitleForegroundSetting.setOnClickListener { showSubtitleForegroundDialog() }
+        binding.subtitleBackgroundSetting.setOnClickListener { showSubtitleBackgroundDialog() }
+        binding.subtitleBottomMarginSetting.setOnClickListener { showSubtitleBottomMarginDialog() }
         binding.checkUpdateSetting.setOnClickListener {
             AppUpdateCoordinator.checkManually(this)
         }
@@ -161,6 +179,7 @@ class SettingsActivity : VideoThemedActivity() {
         binding.themeColorSummary.text = themeSummary()
         binding.rememberPositionSwitch.isChecked = preferenceStore.rememberPlaybackPosition
         binding.autoUpdateSwitch.isChecked = preferenceStore.autoCheckUpdates
+        renderSubtitleStyle()
         val ignoredCount = AppUpdateStore(this).ignoredVersions().size
         binding.ignoredUpdatesSummary.text = resources.getQuantityString(
             R.plurals.ignored_update_count,
@@ -168,6 +187,106 @@ class SettingsActivity : VideoThemedActivity() {
             ignoredCount,
         )
     }
+
+    private fun showSubtitleTextSizeDialog() {
+        val values = SubtitleTextScale.entries
+        showSubtitleChoiceDialog(
+            title = R.string.setting_subtitle_text_size,
+            labels = values.map(::subtitleTextScaleLabel),
+            checkedIndex = values.indexOf(subtitleStyle.textScale),
+        ) { index -> subtitleStyle.copy(textScale = values[index], customized = true) }
+    }
+
+    private fun showSubtitleForegroundDialog() {
+        val values = SubtitleForegroundColor.entries
+        showSubtitleChoiceDialog(
+            title = R.string.setting_subtitle_foreground,
+            labels = values.map(::subtitleForegroundLabel),
+            checkedIndex = values.indexOf(subtitleStyle.foregroundColor),
+        ) { index -> subtitleStyle.copy(foregroundColor = values[index], customized = true) }
+    }
+
+    private fun showSubtitleBackgroundDialog() {
+        val values = SubtitleBackgroundStyle.entries
+        showSubtitleChoiceDialog(
+            title = R.string.setting_subtitle_background,
+            labels = values.map(::subtitleBackgroundLabel),
+            checkedIndex = values.indexOf(subtitleStyle.backgroundStyle),
+        ) { index -> subtitleStyle.copy(backgroundStyle = values[index], customized = true) }
+    }
+
+    private fun showSubtitleBottomMarginDialog() {
+        val values = SubtitleBottomMargin.entries
+        showSubtitleChoiceDialog(
+            title = R.string.setting_subtitle_bottom_margin,
+            labels = values.map(::subtitleBottomMarginLabel),
+            checkedIndex = values.indexOf(subtitleStyle.bottomMargin),
+        ) { index -> subtitleStyle.copy(bottomMargin = values[index], customized = true) }
+    }
+
+    private fun showSubtitleChoiceDialog(
+        title: Int,
+        labels: List<String>,
+        checkedIndex: Int,
+        selectedStyle: (Int) -> SubtitleStyleSettings,
+    ) {
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(title)
+            .setSingleChoiceItems(labels.toTypedArray(), checkedIndex) { selectedDialog, which ->
+                subtitleStyle = selectedStyle(which)
+                playerSettingsStore.writeSubtitleStyle(subtitleStyle)
+                renderSubtitleStyle()
+                selectedDialog.dismiss()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+        showThemedDialog(dialog)
+    }
+
+    private fun renderSubtitleStyle() {
+        binding.subtitleTextSizeSummary.text = subtitleTextScaleLabel(subtitleStyle.textScale)
+        binding.subtitleForegroundSummary.text = subtitleForegroundLabel(subtitleStyle.foregroundColor)
+        binding.subtitleBackgroundSummary.text = subtitleBackgroundLabel(subtitleStyle.backgroundStyle)
+        binding.subtitleBottomMarginSummary.text = subtitleBottomMarginLabel(subtitleStyle.bottomMargin)
+        SubtitleStyleApplier.apply(binding.subtitlePreview, subtitleStyle, forcePreview = true)
+        binding.subtitlePreview.setCues(
+            listOf(Cue.Builder().setText(getString(R.string.subtitle_preview_text)).build()),
+        )
+    }
+
+    private fun subtitleTextScaleLabel(value: SubtitleTextScale): String = getString(
+        when (value) {
+            SubtitleTextScale.PERCENT_75 -> R.string.subtitle_text_size_75
+            SubtitleTextScale.PERCENT_100 -> R.string.subtitle_text_size_100
+            SubtitleTextScale.PERCENT_125 -> R.string.subtitle_text_size_125
+            SubtitleTextScale.PERCENT_150 -> R.string.subtitle_text_size_150
+        },
+    )
+
+    private fun subtitleForegroundLabel(value: SubtitleForegroundColor): String = getString(
+        when (value) {
+            SubtitleForegroundColor.WHITE -> R.string.subtitle_color_white
+            SubtitleForegroundColor.YELLOW -> R.string.subtitle_color_yellow
+            SubtitleForegroundColor.CYAN -> R.string.subtitle_color_cyan
+            SubtitleForegroundColor.GREEN -> R.string.subtitle_color_green
+        },
+    )
+
+    private fun subtitleBackgroundLabel(value: SubtitleBackgroundStyle): String = getString(
+        when (value) {
+            SubtitleBackgroundStyle.OPAQUE -> R.string.subtitle_background_opaque
+            SubtitleBackgroundStyle.TRANSLUCENT -> R.string.subtitle_background_translucent
+            SubtitleBackgroundStyle.NONE -> R.string.subtitle_background_none
+        },
+    )
+
+    private fun subtitleBottomMarginLabel(value: SubtitleBottomMargin): String = getString(
+        when (value) {
+            SubtitleBottomMargin.PERCENT_0 -> R.string.subtitle_bottom_margin_0
+            SubtitleBottomMargin.PERCENT_4 -> R.string.subtitle_bottom_margin_4
+            SubtitleBottomMargin.PERCENT_8 -> R.string.subtitle_bottom_margin_8
+        },
+    )
 
     private fun languageSummary(): String = when (val preference = preferenceStore.language()) {
         is AppLanguagePreference -> when (preference.mode) {
@@ -258,6 +377,7 @@ class SettingsActivity : VideoThemedActivity() {
         listOf(
             binding.appearanceSection,
             binding.playbackSection,
+            binding.subtitleStyleSection,
             binding.updatesSection,
             binding.aboutSection,
         ).forEach { view -> view.setTextColor(palette.primary) }
@@ -266,6 +386,10 @@ class SettingsActivity : VideoThemedActivity() {
             binding.nightModeTitle,
             binding.themeColorTitle,
             binding.rememberPositionTitle,
+            binding.subtitleTextSizeTitle,
+            binding.subtitleForegroundTitle,
+            binding.subtitleBackgroundTitle,
+            binding.subtitleBottomMarginTitle,
             binding.checkUpdateTitle,
             binding.autoUpdateTitle,
             binding.ignoredUpdatesTitle,
@@ -277,6 +401,10 @@ class SettingsActivity : VideoThemedActivity() {
             binding.nightModeSummary,
             binding.themeColorSummary,
             binding.rememberPositionSummary,
+            binding.subtitleTextSizeSummary,
+            binding.subtitleForegroundSummary,
+            binding.subtitleBackgroundSummary,
+            binding.subtitleBottomMarginSummary,
             binding.checkUpdateSummary,
             binding.autoUpdateSummary,
             binding.ignoredUpdatesSummary,

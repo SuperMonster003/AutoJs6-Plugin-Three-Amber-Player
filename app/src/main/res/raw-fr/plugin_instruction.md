@@ -19,6 +19,12 @@ Commandes de lecture:
 - Sur Android 10 ou version ultérieure, Enregistrer l’image actuelle écrit un PNG dans Images/3-Ember Player. L’option est masquée sur les versions antérieures.
 - Génère des rôles sémantiques clairs et sombres lisibles depuis une couleur HCT, suit AutoJs6 par défaut et propose 19 couleurs Material 500 localisées ainsi qu’un RGB personnalisé prévisualisé. Fournit un lanceur autonome et des paramètres de langue, nuit et couleur suivant l’hôte, reprise d’une seule vidéo, vérifications manuelles et automatiques, versions ignorées, historique et informations sur l’application et le développeur.
 
+Outils de sous-titres et de lecture précise:
+
+- Les paramètres de sous-titres offrent un aperçu en direct pour une taille de texte de 75 % à 150 %, quatre couleurs de premier plan, un arrière-plan opaque, translucide ou absent, et une marge inférieure de 0 %, 4 % ou 8 % ; ces choix s'appliquent aussi en incrustation vidéo.
+- Le menu des sous-titres peut charger temporairement un fichier .srt ou .ass de 4 Mio maximum, détecter en mémoire BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 et décaler un sous-titre externe de ±600,0 secondes par pas de 0,1 seconde. Aucune autorisation persistante n'est conservée.
+- Mettez la lecture en pause pour afficher les boutons image précédente/suivante (maintenez-les pour répéter) et la boucle A–B. Une boucle A–B active empêche le passage à l'élément suivant ; choisir ensuite un mode de répétition ou le minuteur de fin de vidéo l'efface.
+
 Extensions de l'explorateur:
 
 - MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT.

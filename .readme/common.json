@@ -1,9 +1,12 @@
 {
   "product_name": "3-Ember Player",
+  "icon_alt": "3-Ember Player icon",
   "repo_url": "https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player",
   "repo_slug": "SuperMonster003/AutoJs6-Plugin-Video-Player",
   "docs_autojs6_url": "https://docs.autojs6.com",
   "media3_url": "https://developer.android.com/media/media3/exoplayer",
+  "android_secure_files_url": "https://developer.android.com/training/secure-file-sharing",
+  "host_package": "org.autojs.autojs6",
   "plugin_action": "org.autojs.plugin.EXPLORER_ACTION",
   "plugin_execute_action": "org.autojs.plugin.EXPLORER_ACTION_EXECUTE",
   "external_view_action": "android.intent.action.VIEW",
@@ -15,9 +18,12 @@
   "explorer_action_id": "play-video",
   "explorer_placement": "primary",
   "access_mode": "read-only",
+  "protocol_version": "v12",
   "explorer_mime_types": "video/*",
   "external_mime_type": "video/*",
   "required_host_build": "5276",
+  "required_host_version": "6.8.0",
+  "min_android": "7.0 (API 24)",
   "supported_formats": "MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT",
   "media3_version": "1.10.1"
 }

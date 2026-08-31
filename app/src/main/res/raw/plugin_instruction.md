@@ -19,6 +19,12 @@ Playback controls:
 - On Android 10 or later, Save current frame writes a PNG to Pictures/3-Ember Player. The entry stays hidden on earlier Android versions.
 - Builds accessible light and dark semantic roles from one HCT source color, follows AutoJs6 by default, and offers 19 localized Material 500 presets plus live-preview custom RGB colors. Provides a standalone launcher and settings for host-following language, night mode and color, single-video resume behavior, manual and automatic update checks, ignored versions, release history, and app/developer information.
 
+Subtitle and precision tools:
+
+- Subtitle settings provide a live preview for 75%–150% text size, four foreground colors, opaque/translucent/no background, and 0%/4%/8% bottom margin; choices also apply in picture-in-picture.
+- The subtitle menu can temporarily load one .srt or .ass file up to 4 MiB, detects BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 in memory, and adjusts an external subtitle by ±600.0 seconds in 0.1-second steps. No subtitle grant is persisted.
+- Pause to reveal previous/next-frame buttons (long-press to repeat) and the A–B loop control. An active A–B loop prevents queue advance; choosing a repeat mode or end-of-video timer afterward clears it.
+
 Explorer extensions:
 
 - MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT.

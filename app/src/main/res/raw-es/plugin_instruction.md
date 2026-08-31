@@ -19,6 +19,12 @@ Controles de reproducción:
 - En Android 10 o posterior, Guardar fotograma actual escribe un PNG en Imágenes/3-Ember Player. La opción está oculta en versiones anteriores.
 - Genera roles semánticos accesibles claros y oscuros desde un color HCT, sigue AutoJs6 de forma predeterminada y ofrece 19 preajustes Material 500 localizados y RGB personalizado con vista previa. Ofrece un lanzador independiente y ajustes de idioma, noche y color que siguen al host, reanudación de un único vídeo, comprobaciones manuales y automáticas, versiones ignoradas, historial e información de la aplicación y el desarrollador.
 
+Herramientas de subtítulos y reproducción precisa:
+
+- Los ajustes de subtítulos ofrecen una vista previa en directo para tamaños de texto del 75 % al 150 %, cuatro colores de primer plano, fondo opaco, translúcido o sin fondo y un margen inferior del 0 %, 4 % u 8 %; las opciones también se aplican en imagen en imagen.
+- El menú de subtítulos puede cargar temporalmente un archivo .srt o .ass de hasta 4 MiB, detectar en memoria BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 y desplazar un subtítulo externo ±600,0 segundos en pasos de 0,1 segundos. No se conserva ningún permiso persistente.
+- Pausa la reproducción para mostrar los botones de fotograma anterior/siguiente (mantenlos pulsados para repetir) y el bucle A–B. Un bucle A–B activo impide avanzar por la cola; elegir después un modo de repetición o el temporizador de fin de vídeo lo borra.
+
 Extensiones del Explorador:
 
 - MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT.

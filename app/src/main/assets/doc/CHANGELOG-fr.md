@@ -4,92 +4,104 @@
 
 ******
 
+# v2.1.0
+
+###### 2026/08/31
+
+* `Fonctionnalité` Paramètres de style des sous-titres: taille de 75% à 150%, couleur, fond opaque/semi-transparent/absent et marge basse de 0%/4%/8% avec aperçu en direct; les choix persistent en lecture et en incrustation
+* `Fonctionnalité` Détection de l'encodage des sous-titres externes: BOM en priorité, puis GBK, Big5, Shift_JIS, EUC-KR, Windows-1251 et Windows-1256, avec un avertissement clair en cas d'incertitude
+* `Fonctionnalité` Chargement manuel d'un sous-titre .srt ou .ass depuis le menu via le sélecteur de documents système; les fichiers de plus de 4 Mio ou d'une autre extension sont refusés
+* `Fonctionnalité` Décalage du sous-titre externe sélectionné de −600,0 à +600,0 secondes par pas de 0,1 seconde avec retour immédiat à l'écran
+* `Fonctionnalité` En pause, avance ou recul image par image (appui long pour répéter) et boucle d'intervalle A-B avec normalisation des limites
+* `Amélioration` Le décodage, la conversion UTF-8 et le décalage temporel des sous-titres restent entièrement en mémoire, sans fichier temporaire, autorisation de stockage ni droit persistant
+* `Amélioration` Le décalage revient à zéro à chaque changement de vidéo; la boucle A-B est prioritaire tant qu'elle est active, puis un mode de répétition ou un minuteur de fin explicitement choisi l'efface
+
 # v2.0.0
 
 ###### 2026/08/29
 
-* `Fonctionnalité` Ajout d’un système de couleurs HCT détaillé qui génère depuis une seule couleur des rôles sémantiques lisibles en modes clair et sombre pour barres, commandes, surfaces, contours et erreurs, avec 19 couleurs Material 500 localisées et un RGB personnalisé prévisualisé
-* `Fonctionnalité` Ajout d’un écran de lancement et d’un lecteur autonome pour un fichier, ainsi que de paramètres dédiés à la langue, au mode nuit, à la couleur, à la reprise, aux mises à jour, à l’historique et aux informations sur l’application et le développeur
-* `Fonctionnalité` La langue, le mode nuit et la couleur suivent AutoJs6 par défaut via son contrat officiel en lecture seule ; si l’hôte est indisponible, les choix restent visibles mais désactivés et reviennent aux valeurs par défaut
-* `Fonctionnalité` Ajout de la vérification manuelle et automatique quotidienne, de la gestion des versions ignorées et d’un historique localisé intégré
-* `Correctif` Le suivi d’AutoJs6 est désormais fiable grâce à l’entrée protégée d’informations du plugin requise par le fournisseur de paramètres de l’hôte
-* `Amélioration` La reprise mémorise exactement la dernière vidéo ouverte, efface immédiatement l’ancienne à l’ouverture d’une autre et ne conserve jamais une lecture terminée, dans l’historique local comme celui de l’hôte
-* `Amélioration` Le nom fixe de l’application et du plugin devient 3-Ember Player et l’espace de noms source threeemberplayer, tout en conservant les identifiants publiés pour les mises à niveau
+* `Fonctionnalité` Tout nouveau système de thèmes: une seule couleur de base génère une palette claire et une palette sombre lisibles, en suivant le thème AutoJs6 par défaut, avec 19 couleurs prédéfinies et une couleur RGB personnalisée avec aperçu en direct
+* `Fonctionnalité` Le plugin devient une application autonome: une entrée sur l'écran d'accueil est ajoutée, et les vidéos peuvent être ouvertes directement via le sélecteur de fichiers du système
+* `Fonctionnalité` Nouvelle page de paramètres: langue, mode nuit, couleur du thème, reprise, mises à jour et historique des versions réunis au même endroit; la langue, le mode nuit et la couleur du thème suivent AutoJs6 par défaut, et ces options sont désactivées avec les valeurs par défaut de l'application quand l'hôte est indisponible
+* `Fonctionnalité` Nouvelle vérification des mises à jour: vérification manuelle et vérification automatique quotidienne des versions officielles GitHub, avec possibilité d'ignorer des versions et une page d'historique des versions localisée intégrée
+* `Correctif` Correction du suivi des paramètres AutoJs6 qui ne prenait pas effet dans certains scénarios (le service d'informations du plugin requis par l'hôte n'était pas exposé auparavant)
+* `Amélioration` L'historique de reprise est réduit à la seule dernière vidéo non terminée; ouvrir une autre vidéo efface immédiatement l'ancien enregistrement, et les vidéos terminées ne conservent aucune position
+* `Amélioration` L'application est renommée 3-Ember Player; l'ID d'application et l'ID de plugin restent inchangés, les installations existantes se mettent donc à niveau directement
 
 # v1.4.0
 
 ###### 2026/08/28
 
-* `Fonctionnalité` Création de files vidéo du même dossier triées naturellement via une Host Session Explorer Action v12 limitée à la requête et liée à l'UID, avec précédent / suivant, séquence, lecture aléatoire, répétition d'un élément et passage automatique au suivant
-* `Fonctionnalité` Détection des sous-titres externes .srt et .ass correspondants, y compris les variantes à suffixe de langue ; ils restent désactivés par défaut et ne sont chargés qu'après une sélection explicite
-* `Fonctionnalité` Historique de reprise facultatif géré par l'hôte : l'enregistrement est désactivé par défaut, peut être désactivé ou effacé dans les paramètres AutoJs6 et n'ajoute aucun indicateur vu à la liste des fichiers
-* `Correctif` Les requêtes Explorer classées comme vidéo par l'hôte étaient rejetées si leur extension ne figurait pas dans l'ancienne liste de 23 éléments ; les requêtes `video/*` approuvées sont désormais acceptées uniformément
-* `Amélioration` L'accès est limité au fichier sélectionné et aux fichiers frères directs lisibles, sans parcours récursif, écriture, autorisation persistante ni chemin en clair dans le plugin
-* `Amélioration` Les files sérialisées sont limitées à 128 vidéos, 8 sous-titres par vidéo et 128 associations de sous-titres au total, tout en conservant toujours l'élément sélectionné
-* `Amélioration` La compatibilité reste fixée à AutoJs6 6.8.0 build 5276 et Explorer Action v12 ; les hôtes sans extensions facultatives conservent en toute sécurité la lecture d'un seul fichier
-* `Dépendance` Mise à niveau de l'API Explorer Action intégrée du protocole v2 vers l'extension de session multimédia v12 rétrocompatible
+* `Fonctionnalité` Lecture enchaînée du dossier: ouvrir une vidéo construit automatiquement une file de lecture du même dossier (tri naturel des noms de fichiers), avec précédent/suivant, les modes séquentiel, aléatoire et répétition d'un seul élément, et l'enchaînement automatique sur la vidéo suivante
+* `Fonctionnalité` Sous-titres externes: les fichiers .srt / .ass du même nom et leurs variantes à suffixe de langue sont détectés automatiquement; les sous-titres restent désactivés tant qu'ils ne sont pas choisis dans le menu des sous-titres
+* `Fonctionnalité` Historique de reprise facultatif géré par l'hôte: désactivé par défaut, il peut être activé, désactivé ou effacé dans les paramètres AutoJs6; les listes de fichiers n'affichent aucun marqueur de visionnage
+* `Correctif` Correction du rejet de fichiers reconnus comme vidéo par l'hôte parce que leur extension manquait dans l'ancienne liste blanche; les requêtes video/* de confiance sont désormais acceptées uniformément
+* `Amélioration` L'accès aux fichiers frères est strictement limité au fichier sélectionné et à ses frères directs lisibles, avec interdiction des dossiers récursifs, des écritures et des accès persistants; le plugin ne stocke aucun chemin en clair
+* `Amélioration` La file de lecture est plafonnée à 128 vidéos avec jusqu'à 8 sous-titres externes chacune, et la vidéo choisie par l'utilisateur reste toujours dans la file
+* `Amélioration` La base de compatibilité est fixée à AutoJs6 6.8.0 (build 5276); les hôtes plus anciens reviennent à la lecture d'un seul fichier, sans impact sur les fonctions de base
+* `Dépendance` Mise à niveau de l'API Explorer Action intégrée du protocole v2 vers la v12 rétrocompatible
 
 # v1.3.1
 
 ###### 2026/08/27
 
-* `Correctif` Ajout d’une couche légère de compatibilité XVID dans MKV qui confie les pistes XVID VFW/FourCC validées au décodeur MPEG-4 Part 2 intégré de l’appareil, sans transcodage ni modification de la source
-* `Correctif` Arrêt de la lecture audio seule lorsqu’aucun décodeur système compatible n’est disponible ou que le décodage échoue, avec une explication dédiée et l’ouverture dans une autre application
+* `Correctif` Ajout d'une couche de compatibilité XVID dans MKV: ces vidéos sont désormais lues par le décodeur MPEG-4 Part 2 intégré de l'appareil, sans transcodage et sans toucher au fichier source
+* `Correctif` Quand l'appareil n'a pas de décodeur compatible ou que le décodage échoue, la lecture avec le son seul ne se produit plus; un message clair s'affiche à la place, avec la possibilité d'ouvrir la vidéo avec une autre application
 
 # v1.3.0
 
 ###### 2026/08/27
 
-* `Fonctionnalité` Minuteur: pause après 15, 30, 45 ou 60 minutes ou à la fin de la vidéo, avec gestion du conflit avec la répétition
-* `Fonctionnalité` Interaction avec l’image: zoom par pincement de 0,25× à 4×, réinitialisation par double appui et coordination avec les modes d’affichage existants
-* `Fonctionnalité` Aperçu du déplacement: temps cible et miniatures facultatives en mémoire, avec repli silencieux vers le temps seul
-* `Fonctionnalité` Captures de l’image actuelle sur Android 10+ enregistrées comme PNG séparés via MediaStore, sans autorisation de stockage ni modification de la source
-* `Fonctionnalité` Paramètres persistants des gestes pour une sensibilité faible, normale ou élevée et un saut par double appui de 5, 10 ou 30 secondes
-* `Amélioration` Les échéances du minuteur utilisent le temps écoulé et survivent à la recréation de la page sans dépendre des changements d’horloge
-* `Amélioration` L’extraction des miniatures regroupe les demandes rapides sur un seul thread et libère chaque bitmap temporaire devenu obsolète
+* `Fonctionnalité` Minuteur de veille: pause automatique après 15, 30, 45 ou 60 minutes, ou à la fin de la vidéo en cours
+* `Fonctionnalité` Zoom par pincement (0,25× à 4×) avec réinitialisation par double appui pendant le zoom
+* `Fonctionnalité` Faire glisser la barre de progression affiche une bulle avec le temps cible et un aperçu en miniature, avec repli sur le temps seul quand l'extraction échoue
+* `Fonctionnalité` Capture d'image: sur Android 10+, enregistrement de l'image actuelle en PNG dans la galerie système, sans autorisation de stockage et sans modifier la vidéo source
+* `Fonctionnalité` Nouveaux réglages de sensibilité des gestes (faible/standard/élevée) et de pas de saut par double appui (5/10/30 secondes), mémorisés automatiquement
+* `Amélioration` Le minuteur de veille se base sur le temps de fonctionnement du système: changer l'heure de l'appareil n'affecte pas le compte à rebours, et celui-ci survit à la rotation de l'écran
+* `Amélioration` L'extraction de miniatures fusionne les demandes pendant les déplacements rapides et libère rapidement les images périmées, ce qui économise la mémoire
 
 # v1.2.0
 
 ###### 2026/08/27
 
-* `Fonctionnalité` Sélection des pistes: bascule entre les pistes audio intégrées avec langue et canaux, et activation à la demande des sous-titres intégrés désactivés par défaut
-* `Fonctionnalité` Incrustation vidéo sur Android 8.0+: entrée automatique en quittant pendant la lecture, entrée manuelle, respect du format vidéo et lecture/pause à distance
-* `Fonctionnalité` Intégration multimédia système: commandes MediaSession pour écouteurs et Bluetooth, avec notification affichant titre, actions et progression
-* `Fonctionnalité` Outils de lecture: répétition de la vidéo actuelle, panneau d’informations et sélection unique de l’orientation selon le format
-* `Amélioration` Les pistes non prises en charge sont clairement signalées et non sélectionnables; les commandes restent masquées sans choix réel
-* `Amélioration` La requête interne stricte conserve désormais uniquement la taille déclarée validée avec le nom sûr pour le panneau d’informations
-* `Dépendance` Ajout d’AndroidX Media3 Session 1.10.1
+* `Fonctionnalité` Sélection des pistes: changement de piste audio intégrée selon la langue et les canaux, et activation des sous-titres intégrés qui restent désactivés par défaut
+* `Fonctionnalité` Incrustation vidéo: sur Android 8.0+, quitter l'application pendant la lecture ouvre automatiquement une fenêtre flottante, avec entrée manuelle possible et lecture/pause à distance
+* `Fonctionnalité` Intégration multimédia système: commandes au casque et en Bluetooth, plus une notification multimédia avec titre, progression et actions de lecture
+* `Fonctionnalité` Outils de lecture: répétition d'un seul élément, un panneau d'informations vidéo, et un choix automatique unique de l'orientation selon le format de l'image
+* `Amélioration` Les pistes non prises en charge sont clairement signalées et non sélectionnables; les entrées se masquent automatiquement quand aucune piste sélectionnable n'existe
+* `Amélioration` La taille de fichier du panneau d'informations vidéo provient de la taille déclarée validée, ce qui la rend plus fiable
+* `Dépendance` Ajout d'AndroidX Media3 Session 1.10.1
 
 # v1.1.0
 
 ###### 2026/08/27
 
-* `Fonctionnalité` Commandes gestuelles: balayages verticaux sur la moitié gauche ou droite pour la luminosité ou le volume multimédia, balayages horizontaux pour naviguer, double touche latérale pour sauter de 10 secondes, double touche centrale pour lecture/pause et appui long pour une vitesse temporaire de 2×
-* `Fonctionnalité` Vitesse de lecture: neuf paliers de 0,25× à 3×, avec mise en évidence de la vitesse actuelle dans la barre de commandes lorsqu'elle diffère de 1×
-* `Fonctionnalité` Plein écran immersif: barres système masquées avec prise en charge des encoches, barres de titre et de commandes flottantes à masquage automatique, et bascule en un geste de l'orientation de l'écran et du mode d'affichage
-* `Fonctionnalité` Verrouillage des commandes: une touche désactive toutes les commandes et tous les gestes pour éviter les touches accidentelles
-* `Fonctionnalité` Mémoire de reprise: la lecture reprend à la dernière position locale indexée par un condensé SHA-256 du content URI, effacée après la fin et limitée à 200 entrées
-* `Amélioration` Barre de commandes inférieure reconstruite avec lecture/pause, sauts de 10 secondes, barre de progression déplaçable et affichage de la progression du tampon
-* `Amélioration` Le panneau d'échec de lecture propose désormais une action Réessayer en plus de l'ouverture avec une autre application
-* `Amélioration` Les changements de configuration comme la rotation ne reconstruisent plus le lecteur pour des transitions plus fluides
+* `Fonctionnalité` Commandes gestuelles: balayage vertical sur la moitié gauche pour la luminosité et sur la moitié droite pour le volume, balayage horizontal pour naviguer, double appui sur les côtés pour sauter de 10 secondes, double appui au centre pour lecture/pause, appui long pour une vitesse temporaire de 2×
+* `Fonctionnalité` Vitesse de lecture: 9 paliers de 0,25× à 3×, avec mise en évidence de la vitesse actuelle dans la barre de commandes quand elle diffère de 1×
+* `Fonctionnalité` Plein écran immersif: barres système masquées avec prise en charge des encoches, barres de titre et de commandes à masquage automatique, bascule en un appui de l'orientation et du mode d'affichage
+* `Fonctionnalité` Verrouillage des commandes: blocage de tous les boutons et de tous les gestes d'un seul appui pour éviter les appuis accidentels
+* `Fonctionnalité` Reprise de lecture: la position est mémorisée automatiquement et restaurée à la réouverture de la même vidéo; les vidéos terminées sont effacées, jusqu'à 200 enregistrements sont conservés, sous forme de condensés de fichiers plutôt que de chemins
+* `Amélioration` La barre de commandes inférieure est reconstruite: lecture/pause, sauts de 10 secondes, barre de progression déplaçable et progression de la mise en mémoire tampon, tout y est
+* `Amélioration` Le panneau d'échec de lecture gagne un bouton Réessayer tout en conservant l'ouverture avec une autre application
+* `Amélioration` Les changements d'interface comme la rotation ne reconstruisent plus le lecteur, pour des transitions plus fluides
 
 # v1.0.1
 
 ###### 2026/08/08
 
-* `Correctif` Renvoyer une liaison de service Explorer Action valide lors de l'activation depuis le centre des plugins
-* `Amélioration` Raccourcir le nom et la description du plugin et rendre la documentation utilisateur plus naturelle
+* `Correctif` Correction de la liaison de service invalide après l'activation du plugin dans le centre des plugins AutoJs6, qui empêchait l'hôte d'utiliser le plugin
+* `Amélioration` Nom et description du plugin allégés, avec une formulation plus naturelle de la documentation dans toutes les langues
 
 # v1.0.0
 
 ###### 2026/08/02
 
-* `Fonctionnalité` Plugin Video Player avec ID de plugin `video-player`, ID d'action `play-video`, moteur `explorer-action` et variante `default`
-* `Fonctionnalité` Action principale de l'explorateur en lecture seule via le protocole v2, avec filtre MIME vide, correspondant uniquement aux 23 extensions vidéo actuelles de l'hôte et nécessitant la version 5269
-* `Fonctionnalité` Entrée de l'explorateur protégée par signature avec validation stricte des content URI cible et parent, de ClipData, de la source, du nom affiché, de la taille, du type MIME, de l'extension et des accès, suivie d'une transmission minimale vers un lecteur non exporté
-* `Fonctionnalité` Entrée ACTION_VIEW exportée et indépendante pour les content URI vidéo en lecture seule, avec abandon des extras et ClipData non fiables, refus des accès interdits et protection contre les boucles internes
-* `Fonctionnalité` Lecture Media3 ExoPlayer et PlayerView avec démarrage automatique, commandes standard, focus audio, gestion du passage à une sortie audio noisy, sauvegarde de la position et de l'état de lecture, et écran allumé uniquement pendant la lecture active
-* `Fonctionnalité` Récupération sécurisée Ouvrir avec une autre application après un échec de lecture, au moyen de nouveaux Intents en lecture seule qui excluent explicitement ce plugin
-* `Fonctionnalité` Métadonnées, texte d'interface, instructions d'utilisation, fichiers README et historiques localisés en espagnol, français, russe, arabe, japonais, coréen, anglais, chinois simplifié, chinois traditionnel de Hong Kong et chinois traditionnel de Taïwan
-* `Dépendance` Ajout de AndroidX Media3 ExoPlayer et UI version 1.10.1
-* `Dépendance` Ajout du runtime Kotlin Parcelize version 2.2.21
+* `Fonctionnalité` Première version: publiée comme plugin du gestionnaire de fichiers AutoJs6; appuyer sur un fichier vidéo dans le gestionnaire de fichiers le lit directement
+* `Fonctionnalité` Couvre 23 extensions vidéo courantes (MP4, MKV, AVI, MOV, FLV, WEBM et plus), en prenant en charge l'action d'ouverture vidéo du gestionnaire de fichiers en mode lecture seule
+* `Fonctionnalité` Lecture basée sur AndroidX Media3 ExoPlayer: démarrage automatique, commandes standard, gestion du focus audio, pause automatique au débranchement du casque, et écran maintenu allumé pendant la lecture
+* `Fonctionnalité` Validation de sécurité stricte: l'entrée de lecture est protégée par une autorisation de signature, l'origine des requêtes, les fichiers cibles et les accès en lecture seule sont vérifiés point par point, et le lecteur n'est pas exporté vers le système
+* `Fonctionnalité` Une entrée système distincte pour l'ouverture depuis d'autres applications: elles peuvent appeler ce lecteur avec un content URI en lecture seule pour regarder des vidéos
+* `Fonctionnalité` En cas d'échec de lecture, la vidéo peut être confiée en toute sécurité à une autre application, ce plugin étant exclu des candidats
+* `Fonctionnalité` Livré en 10 langues: chinois simplifié, chinois traditionnel (Hong Kong/Taïwan), anglais, français, espagnol, japonais, coréen, russe et arabe
+* `Dépendance` Introduction d'AndroidX Media3 ExoPlayer et UI 1.10.1
+* `Dépendance` Introduction du runtime Kotlin Parcelize 2.2.21

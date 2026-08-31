@@ -26,6 +26,10 @@ internal class PlayerTrackController(
     private val activity: VideoThemedActivity,
     private val playerProvider: () -> ExoPlayer?,
     private val onAvailabilityChanged: (hasAudioChoices: Boolean, hasSubtitles: Boolean) -> Unit,
+    private val onLoadSubtitleRequested: () -> Unit,
+    private val onSubtitleOffsetRequested: () -> Unit,
+    private val subtitleOffsetButtonLabel: (enabled: Boolean) -> String,
+    private val onSubtitleSelectionChanged: () -> Unit,
     private val onDialogDismissed: () -> Unit,
 ) {
 
@@ -34,6 +38,12 @@ internal class PlayerTrackController(
 
     var selectedSubtitleKey: MediaTrackSelectionKey? = null
         private set
+
+    var selectedSubtitleId: String? = null
+        private set
+
+    val selectedSubtitleIsExternal: Boolean
+        get() = selectedSubtitleId?.startsWith(EXTERNAL_SUBTITLE_ID_PREFIX) == true
 
     private var audioOptions = emptyList<TrackOption>()
     private var subtitleOptions = emptyList<TrackOption>()
@@ -44,9 +54,11 @@ internal class PlayerTrackController(
         audioTrackIndex: Int,
         subtitleGroupIndex: Int,
         subtitleTrackIndex: Int,
+        subtitleId: String? = null,
     ) {
         selectedAudioKey = selectionKeyOrNull(audioGroupIndex, audioTrackIndex)
         selectedSubtitleKey = selectionKeyOrNull(subtitleGroupIndex, subtitleTrackIndex)
+        selectedSubtitleId = subtitleId
     }
 
     /** Embedded subtitles are deliberately opt-in for every newly created player. */
@@ -76,6 +88,7 @@ internal class PlayerTrackController(
     fun resetSelectionsForMediaItem() {
         selectedAudioKey = null
         selectedSubtitleKey = null
+        selectedSubtitleId = null
         playerProvider()?.let { player ->
             player.trackSelectionParameters = player.trackSelectionParameters.buildUpon()
                 .clearOverridesOfType(C.TRACK_TYPE_AUDIO)
@@ -99,7 +112,6 @@ internal class PlayerTrackController(
     }
 
     fun showSubtitleDialog() {
-        if (subtitleOptions.none(TrackOption::supported)) return
         val options = listOf(
             DialogOption(
                 label = activity.getString(R.string.subtitle_off),
@@ -121,12 +133,21 @@ internal class PlayerTrackController(
             val option = selected.trackOption
             if (option == null) {
                 selectedSubtitleKey = null
+                selectedSubtitleId = null
                 disableSubtitles()
             } else {
                 selectedSubtitleKey = option.key
+                selectedSubtitleId = option.id
                 applySelection(C.TRACK_TYPE_TEXT, option)
             }
+            onSubtitleSelectionChanged()
         }
+    }
+
+    fun prepareExternalSubtitleSelection(stableId: String) {
+        require(stableId.startsWith(EXTERNAL_SUBTITLE_ID_PREFIX))
+        selectedSubtitleKey = null
+        selectedSubtitleId = stableId
     }
 
     private fun showTrackDialog(
@@ -149,6 +170,7 @@ internal class PlayerTrackController(
         onSelected: (DialogOption) -> Unit,
     ) {
         val adapter = EnabledSingleChoiceAdapter(activity, options)
+        val isSubtitleDialog = title == activity.getString(R.string.action_subtitle_track)
         val dialog = AlertDialog.Builder(activity)
             .setTitle(title)
             .setSingleChoiceItems(adapter, checkedIndex) { activeDialog, which ->
@@ -160,14 +182,42 @@ internal class PlayerTrackController(
                 onSelected(option)
                 activeDialog.dismiss()
             }
+            .apply {
+                if (isSubtitleDialog) {
+                    setNeutralButton(R.string.subtitle_load_from_file) { _, _ ->
+                        onLoadSubtitleRequested()
+                    }
+                    setPositiveButton(subtitleOffsetButtonLabel(selectedSubtitleIsExternal), null)
+                }
+            }
             .setNegativeButton(android.R.string.cancel, null)
             .create()
         dialog.setOnDismissListener { onDialogDismissed() }
-        activity.showThemedDialog(dialog)
+        activity.showThemedDialog(dialog) { shownDialog ->
+            if (isSubtitleDialog) {
+                shownDialog.getButton(AlertDialog.BUTTON_POSITIVE).apply {
+                    isEnabled = selectedSubtitleIsExternal
+                    text = subtitleOffsetButtonLabel(selectedSubtitleIsExternal)
+                    setOnClickListener {
+                        if (!selectedSubtitleIsExternal) return@setOnClickListener
+                        shownDialog.dismiss()
+                        onSubtitleOffsetRequested()
+                    }
+                }
+            }
+        }
     }
 
     private fun restoreExplicitSelectionsIfPossible() {
         if (applyingSelection) return
+        selectedSubtitleId?.let { id ->
+            subtitleOptions.firstOrNull { it.id == id && it.supported && !it.selected }
+                ?.let {
+                    selectedSubtitleKey = it.key
+                    applySelection(C.TRACK_TYPE_TEXT, it)
+                    onSubtitleSelectionChanged()
+                }
+        }
         selectedAudioKey?.let { key ->
             audioOptions.firstOrNull { it.key == key && it.supported && !it.selected }
                 ?.let { applySelection(C.TRACK_TYPE_AUDIO, it) }
@@ -215,11 +265,18 @@ internal class PlayerTrackController(
                     typeIndex += 1
                     val format = group.getTrackFormat(trackIndex)
                     val supported = group.isTrackSupported(trackIndex, true)
-                    val rawLabel = buildTrackLabel(format, trackType, typeIndex)
+                    val externalIdentity = if (trackType == C.TRACK_TYPE_TEXT) {
+                        ExternalSubtitleTrackPolicy.identify(format.id, format.label)
+                    } else {
+                        null
+                    }
+                    val rawLabel = externalIdentity?.displayName
+                        ?: buildTrackLabel(format, trackType, typeIndex)
                     add(
                         TrackOption(
                             key = MediaTrackSelectionKey(groupIndex, trackIndex),
                             group = group,
+                            id = externalIdentity?.stableId ?: format.id,
                             label = if (supported) {
                                 rawLabel
                             } else {
@@ -273,6 +330,7 @@ internal class PlayerTrackController(
     private data class TrackOption(
         val key: MediaTrackSelectionKey,
         val group: Tracks.Group,
+        val id: String?,
         val label: String,
         val supported: Boolean,
         val selected: Boolean,

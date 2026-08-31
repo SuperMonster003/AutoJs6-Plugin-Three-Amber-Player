@@ -3,39 +3,46 @@ package io.github.supermonster003.autojs6.plugin.threeemberplayer
 import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.ColorStateList
 import android.content.pm.ActivityInfo
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.format.Formatter
 import android.util.Rational
+import android.view.MotionEvent
 import android.view.WindowManager
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.widget.ImageViewCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.ImageViewCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -46,19 +53,50 @@ import androidx.media3.common.Player
 import androidx.media3.common.Tracks
 import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.ExoPlaybackException
-import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.exoplayer.SeekParameters
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.TimeBar
+import com.google.android.material.slider.Slider
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.ActivityVideoPlayerBinding
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.DialogSubtitleOffsetBinding
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.settings.AppPreferenceStore
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.VideoThemePaletteGenerator
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.VideoThemeViewStyler
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.VideoThemedActivity
+import java.util.Collections
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+private data class ManualSubtitleDocument(
+    val uri: Uri,
+    val displayName: String,
+    val mimeType: String,
+    val size: Long,
+)
+
+private data class SessionSubtitleSource(
+    val sourceUri: Uri,
+    val displayName: String,
+    val mimeType: String,
+    val languageTag: String?,
+    val stableSuffix: String,
+)
+
+private sealed interface ManualSubtitleResolution {
+    data class Success(val document: ManualSubtitleDocument) : ManualSubtitleResolution
+    data object InvalidType : ManualSubtitleResolution
+    data object TooLarge : ManualSubtitleResolution
+    data object Unreadable : ManualSubtitleResolution
+}
 
 @androidx.annotation.OptIn(UnstableApi::class)
 class VideoPlayerActivity : VideoThemedActivity() {
@@ -92,6 +130,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private val lastPositionsByIndex = HashMap<Int, Long>()
     private val durationsByIndex = HashMap<Int, Long>()
     private lateinit var gestureSettings: PlayerGestureSettings
+    private lateinit var subtitleStyle: SubtitleStyleSettings
     private var sleepTimerMode = SleepTimerMode.OFF
     private var sleepTimerDeadlineElapsedRealtimeMs = 0L
     private var manualZoomScale = PlayerGesturePolicy.DEFAULT_ZOOM_SCALE
@@ -119,6 +158,16 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private var screenshotInProgress = false
     private var scrubPreviewPosition = 0L
     private var scrubPreviewBitmap: Bitmap? = null
+    private val subtitleSourceRegistry = SubtitleSourceRegistry()
+    private val subtitleEncodingWarnings = Collections.synchronizedSet(HashSet<String>())
+    private var subtitleOffsetMs = 0L
+    private var subtitleRouteRevision = 0L
+    private var manualSubtitle: ManualSubtitleDocument? = null
+    private var manualSubtitleMediaIndex = -1
+    private var resolvingManualSubtitle = false
+    private var reloadingSubtitleSources = false
+    private var abLoopState = AbLoopState()
+    private var frameRepeatDirection = 0
     @Volatile
     private var xvidFourCcCompatibilityApplied = false
 
@@ -127,6 +176,19 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private val hideOsdRunnable = Runnable { binding.osdPanel.isVisible = false }
     private val hideUnlockRunnable = Runnable { binding.unlockButton.isVisible = false }
     private val sleepTimerRunnable = Runnable { updateSleepTimer() }
+    private val frameRepeatRunnable = object : Runnable {
+        override fun run() {
+            val direction = frameRepeatDirection
+            if (direction == 0) return
+            stepFrame(direction)
+            mainHandler.postDelayed(this, FRAME_REPEAT_INTERVAL_MS)
+        }
+    }
+    private val subtitlePicker = registerForActivityResult(
+        ActivityResultContracts.OpenDocument(),
+    ) { uri ->
+        uri?.let(::resolveManualSubtitle)
+    }
     private val pictureInPictureActionToken = Integer.toHexString(System.identityHashCode(this))
     private val pictureInPicturePlayAction = "$ACTION_PIP_PLAY_PREFIX.$pictureInPictureActionToken"
     private val pictureInPicturePauseAction = "$ACTION_PIP_PAUSE_PREFIX.$pictureInPictureActionToken"
@@ -142,7 +204,10 @@ class VideoPlayerActivity : VideoThemedActivity() {
     private val progressRunnable = object : Runnable {
         override fun run() {
             updateProgress()
-            mainHandler.postDelayed(this, PROGRESS_INTERVAL_MS)
+            mainHandler.postDelayed(
+                this,
+                if (abLoopState.active) AB_LOOP_PROGRESS_INTERVAL_MS else PROGRESS_INTERVAL_MS,
+            )
         }
     }
 
@@ -166,6 +231,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         if (!appPreferenceStore.rememberPlaybackPosition) positionStore.clearAll()
         settingsStore = PlayerSettingsStore(this)
         gestureSettings = settingsStore.read()
+        subtitleStyle = settingsStore.readSubtitleStyle()
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             frameCapture = PlayerFrameCapture(this)
@@ -174,10 +240,24 @@ class VideoPlayerActivity : VideoThemedActivity() {
         binding = ActivityVideoPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         applyPlayerTheme()
+        SubtitleStyleApplier.apply(binding.playerView.subtitleView, subtitleStyle)
         trackController = PlayerTrackController(
             activity = this,
             playerProvider = { player },
             onAvailabilityChanged = ::onTrackAvailabilityChanged,
+            onLoadSubtitleRequested = ::launchSubtitlePicker,
+            onSubtitleOffsetRequested = ::showSubtitleOffsetDialog,
+            subtitleOffsetButtonLabel = { enabled ->
+                if (enabled) {
+                    getString(
+                        R.string.subtitle_offset_value,
+                        SubtitleTimingPolicy.formatOffset(subtitleOffsetMs),
+                    )
+                } else {
+                    getString(R.string.subtitle_offset_external_only)
+                }
+            },
+            onSubtitleSelectionChanged = ::updateToolbarMenu,
             onDialogDismissed = ::postponeControlsAutoHide,
         )
         systemIntegration = PlayerSystemIntegration(this)
@@ -223,6 +303,8 @@ class VideoPlayerActivity : VideoThemedActivity() {
         hideScrubPreview()
         scrubThumbnailProvider?.close()
         scrubThumbnailProvider = null
+        subtitleSourceRegistry.clear()
+        frameRepeatDirection = 0
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             frameCapture?.close()
             frameCapture = null
@@ -286,6 +368,17 @@ class VideoPlayerActivity : VideoThemedActivity() {
         outState.putInt(STATE_AUDIO_TRACK, trackController.selectedAudioKey?.trackIndex ?: -1)
         outState.putInt(STATE_SUBTITLE_GROUP, trackController.selectedSubtitleKey?.groupIndex ?: -1)
         outState.putInt(STATE_SUBTITLE_TRACK, trackController.selectedSubtitleKey?.trackIndex ?: -1)
+        outState.putString(STATE_SUBTITLE_ID, trackController.selectedSubtitleId)
+        outState.putLong(STATE_SUBTITLE_OFFSET, subtitleOffsetMs)
+        outState.putLong(STATE_AB_POINT_A, abLoopState.pointAMs ?: C.TIME_UNSET)
+        outState.putLong(STATE_AB_POINT_B, abLoopState.pointBMs ?: C.TIME_UNSET)
+        manualSubtitle?.let { subtitle ->
+            outState.putInt(STATE_MANUAL_SUBTITLE_MEDIA_INDEX, manualSubtitleMediaIndex)
+            outState.putString(STATE_MANUAL_SUBTITLE_URI, subtitle.uri.toString())
+            outState.putString(STATE_MANUAL_SUBTITLE_NAME, subtitle.displayName)
+            outState.putString(STATE_MANUAL_SUBTITLE_MIME, subtitle.mimeType)
+            outState.putLong(STATE_MANUAL_SUBTITLE_SIZE, subtitle.size)
+        }
         super.onSaveInstanceState(outState)
     }
 
@@ -324,7 +417,18 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 audioTrackIndex = savedInstanceState.getInt(STATE_AUDIO_TRACK, -1),
                 subtitleGroupIndex = savedInstanceState.getInt(STATE_SUBTITLE_GROUP, -1),
                 subtitleTrackIndex = savedInstanceState.getInt(STATE_SUBTITLE_TRACK, -1),
+                subtitleId = savedInstanceState.getString(STATE_SUBTITLE_ID),
             )
+            subtitleOffsetMs = SubtitleTimingPolicy.normalizeOffsetMs(
+                savedInstanceState.getLong(STATE_SUBTITLE_OFFSET, 0L),
+            )
+            abLoopState = AbLoopState(
+                pointAMs = savedInstanceState.getLong(STATE_AB_POINT_A, C.TIME_UNSET)
+                    .takeUnless { it == C.TIME_UNSET },
+                pointBMs = savedInstanceState.getLong(STATE_AB_POINT_B, C.TIME_UNSET)
+                    .takeUnless { it == C.TIME_UNSET },
+            )
+            restoreManualSubtitle(savedInstanceState)
         } else {
             val item = request.items[resumeMediaItemIndex]
             val rememberedPosition = rememberedPosition(item)
@@ -373,6 +477,8 @@ class VideoPlayerActivity : VideoThemedActivity() {
             binding.playPauseButton,
             binding.seekBackButton,
             binding.seekForwardButton,
+            binding.frameBackButton,
+            binding.frameForwardButton,
             binding.resizeButton,
             binding.rotateButton,
             binding.lockButton,
@@ -381,6 +487,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
             ImageViewCompat.setImageTintList(button, ColorStateList.valueOf(control))
         }
         binding.speedButton.setTextColor(control)
+        binding.abLoopButton.setTextColor(control)
         binding.positionText.setTextColor(content)
         binding.durationText.setTextColor(content)
         binding.timeBar.setPlayedColor(control)
@@ -482,6 +589,12 @@ class VideoPlayerActivity : VideoThemedActivity() {
             seekBy(PlayerGesturePolicy.DOUBLE_TAP_SEEK_MS)
             postponeControlsAutoHide()
         }
+        bindFrameStepButton(binding.frameBackButton, direction = -1)
+        bindFrameStepButton(binding.frameForwardButton, direction = 1)
+        binding.abLoopButton.setOnClickListener {
+            toggleAbLoopPoint()
+            postponeControlsAutoHide()
+        }
         binding.speedButton.setOnClickListener { showSpeedDialog() }
         binding.resizeButton.setOnClickListener {
             if (!resetManualZoom(showOsd = true)) {
@@ -507,31 +620,37 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
         binding.timeBar.addListener(scrubListener)
         updateSpeedButton()
+        updatePrecisionControls()
         updateToolbarMenu()
     }
 
     private fun initializePlayer() {
         if (player != null) return
         xvidFourCcCompatibilityApplied = false
-        val mediaItems = request.items.mapIndexed { index, item -> mediaItem(index, item) }
+        val mediaItems = buildMediaItems()
         val extractorsFactory = XvidCompatibleExtractorsFactory(
             onCompatibilityApplied = {
                 xvidFourCcCompatibilityApplied = true
             },
         )
-        val mediaSourceFactory = request.hostSession?.let { session ->
-            DefaultMediaSourceFactory(
-                DefaultDataSource.Factory(
-                    this,
-                    ExplorerSessionDataSource.Factory(
-                        session = session,
-                        targetId = requireNotNull(request.hostTargetId),
-                        relativePathsByUri = request.hostRelativePathsByUri(),
-                    ),
+        val upstreamFactory: DataSource.Factory = request.hostSession?.let { session ->
+            DefaultDataSource.Factory(
+                this,
+                ExplorerSessionDataSource.Factory(
+                    session = session,
+                    targetId = requireNotNull(request.hostTargetId),
+                    relativePathsByUri = request.hostRelativePathsByUri(),
                 ),
-                extractorsFactory,
             )
-        } ?: DefaultMediaSourceFactory(this, extractorsFactory)
+        } ?: DefaultDataSource.Factory(this)
+        val mediaSourceFactory = DefaultMediaSourceFactory(
+            SubtitleTransformingDataSource.Factory(
+                upstreamFactory = upstreamFactory,
+                registry = subtitleSourceRegistry,
+                onUncertainEncoding = ::showSubtitleEncodingWarning,
+            ),
+            extractorsFactory,
+        )
         player = ExoPlayer.Builder(this)
             .setMediaSourceFactory(mediaSourceFactory)
             .setSeekBackIncrementMs(PlayerGesturePolicy.DOUBLE_TAP_SEEK_MS)
@@ -552,6 +671,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 applyPlaybackMode(exoPlayer)
                 exoPlayer.addListener(playerListener)
                 binding.playerView.player = exoPlayer
+                SubtitleStyleApplier.apply(binding.playerView.subtitleView, subtitleStyle)
                 systemIntegration.attach(exoPlayer)
                 exoPlayer.prepare()
         }
@@ -576,7 +696,18 @@ class VideoPlayerActivity : VideoThemedActivity() {
         }
     }
 
-    private fun mediaItem(index: Int, item: AndroidPlaybackItem): MediaItem {
+    private fun buildMediaItems(): List<MediaItem> {
+        val routes = ArrayList<SubtitleSourceRoute>()
+        val mediaItems = request.items.mapIndexed { index, item -> mediaItem(index, item, routes) }
+        subtitleSourceRegistry.replace(routes)
+        return mediaItems
+    }
+
+    private fun mediaItem(
+        index: Int,
+        item: AndroidPlaybackItem,
+        routes: MutableList<SubtitleSourceRoute>,
+    ): MediaItem {
         val builder = MediaItem.Builder()
             .setMediaId(index.toString())
             .setUri(item.sourceUri)
@@ -588,18 +719,69 @@ class VideoPlayerActivity : VideoThemedActivity() {
                     .build(),
             )
         if (item.mimeType != "video/*") builder.setMimeType(item.mimeType)
-        if (item.subtitles.isNotEmpty()) {
+        val subtitleSources = buildList {
+            item.subtitles.forEachIndexed { subtitleIndex, subtitle ->
+                add(
+                    SessionSubtitleSource(
+                        sourceUri = subtitle.sourceUri,
+                        displayName = subtitle.displayName,
+                        mimeType = subtitle.mimeType,
+                        languageTag = subtitle.languageTag,
+                        stableSuffix = "sidecar-$subtitleIndex",
+                    ),
+                )
+            }
+            manualSubtitle?.takeIf { manualSubtitleMediaIndex == index }?.let { subtitle ->
+                add(
+                    SessionSubtitleSource(
+                        sourceUri = subtitle.uri,
+                        displayName = subtitle.displayName,
+                        mimeType = subtitle.mimeType,
+                        languageTag = null,
+                        stableSuffix = "manual",
+                    ),
+                )
+            }
+        }
+        if (subtitleSources.isNotEmpty()) {
             builder.setSubtitleConfigurations(
-                item.subtitles.map { subtitle ->
-                    MediaItem.SubtitleConfiguration.Builder(subtitle.sourceUri)
+                subtitleSources.mapIndexed { subtitleIndex, subtitle ->
+                    val stableId = "$EXTERNAL_SUBTITLE_ID_PREFIX$index:${subtitle.stableSuffix}"
+                    val virtualUri = Uri.Builder()
+                        .scheme(SUBTITLE_MEMORY_SCHEME)
+                        .authority(SUBTITLE_MEMORY_AUTHORITY)
+                        .appendPath(index.toString())
+                        .appendPath(subtitleIndex.toString())
+                        .appendQueryParameter("revision", subtitleRouteRevision.toString())
+                        .build()
+                    routes += SubtitleSourceRoute(
+                        virtualUri = virtualUri,
+                        sourceUri = subtitle.sourceUri,
+                        mimeType = subtitle.mimeType,
+                        offsetMs = if (index == activeMediaItemIndex) subtitleOffsetMs else 0L,
+                        stableId = stableId,
+                    )
+                    MediaItem.SubtitleConfiguration.Builder(virtualUri)
+                        .setId(stableId)
                         .setMimeType(subtitle.mimeType)
-                        .setLabel(subtitle.displayName)
+                        .setLabel(
+                            ExternalSubtitleTrackPolicy.encodedLabel(stableId, subtitle.displayName),
+                        )
                         .apply { subtitle.languageTag?.let(::setLanguage) }
                         .build()
                 },
             )
         }
         return builder.build()
+    }
+
+    private fun showSubtitleEncodingWarning(route: SubtitleSourceRoute) {
+        if (!subtitleEncodingWarnings.add(route.stableId)) return
+        mainHandler.post {
+            if (!isFinishing && !isDestroyed) {
+                Toast.makeText(this, R.string.subtitle_encoding_uncertain, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun currentItem(): AndroidPlaybackItem =
@@ -614,6 +796,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         scrubThumbnailProvider = null
         hideScrubPreview()
         updateToolbarMenu()
+        updatePrecisionControls()
     }
 
     private fun resumeItemIfAvailable(index: Int) {
@@ -667,6 +850,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
         val exoPlayer = player ?: return
         capturePlaybackState()
         speedBoostActive = false
+        stopFrameRepeat()
         systemIntegration.detach()
         trackController.clearAvailability()
         binding.playerView.player = null
@@ -737,6 +921,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
             if (isPlaying) postponeControlsAutoHide() else showControls()
             updateToolbarMenu()
             updatePictureInPictureParameters()
+            updatePrecisionControls()
         }
 
         override fun onPlaybackStateChanged(playbackState: Int) {
@@ -758,12 +943,14 @@ class VideoPlayerActivity : VideoThemedActivity() {
             updatePlayPauseButton()
             updateToolbarMenu()
             updatePictureInPictureParameters()
+            updatePrecisionControls()
         }
 
         override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
             updatePlayPauseButton()
             updateToolbarMenu()
             updatePictureInPictureParameters()
+            updatePrecisionControls()
         }
 
         override fun onTracksChanged(tracks: Tracks) {
@@ -785,8 +972,16 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 ?: player?.currentMediaItemIndex
                 ?: return
             if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT) {
-                persistCachedItemPosition(activeMediaItemIndex, completed = true)
+                val loopStart = abLoopState.pointAMs
+                if (abLoopState.active && loopStart != null) {
+                    player?.seekTo(loopStart)
+                } else {
+                    persistCachedItemPosition(activeMediaItemIndex, completed = true)
+                }
             } else if (nextIndex != activeMediaItemIndex) {
+                val needsSubtitleRefresh = subtitleOffsetMs != 0L
+                subtitleOffsetMs = 0L
+                clearAbLoop(showFeedback = false)
                 persistCachedItemPosition(
                     activeMediaItemIndex,
                     completed = reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO,
@@ -794,6 +989,13 @@ class VideoPlayerActivity : VideoThemedActivity() {
                 activeMediaItemIndex = nextIndex
                 trackController.resetSelectionsForMediaItem()
                 resumeItemIfAvailable(nextIndex)
+                if (needsSubtitleRefresh && !reloadingSubtitleSources) {
+                    mainHandler.post {
+                        if (player?.currentMediaItemIndex == nextIndex) {
+                            reloadSubtitleSources(selectedExternalId = null)
+                        }
+                    }
+                }
             }
             updateActiveItemUi()
         }
@@ -1126,6 +1328,135 @@ class VideoPlayerActivity : VideoThemedActivity() {
         updateProgress()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun bindFrameStepButton(button: ImageButton, direction: Int) {
+        button.setOnClickListener {
+            stepFrame(direction)
+            postponeControlsAutoHide()
+        }
+        button.setOnLongClickListener {
+            if (!canStepFrame()) return@setOnLongClickListener false
+            frameRepeatDirection = direction
+            mainHandler.removeCallbacks(frameRepeatRunnable)
+            stepFrame(direction)
+            mainHandler.postDelayed(frameRepeatRunnable, FRAME_REPEAT_INTERVAL_MS)
+            true
+        }
+        button.setOnTouchListener { _, event ->
+            if (event.actionMasked == MotionEvent.ACTION_UP || event.actionMasked == MotionEvent.ACTION_CANCEL) {
+                stopFrameRepeat()
+            }
+            false
+        }
+    }
+
+    private fun canStepFrame(): Boolean {
+        val exoPlayer = player ?: return false
+        return !exoPlayer.playWhenReady && exoPlayer.playbackState != Player.STATE_IDLE &&
+            exoPlayer.duration > 0L
+    }
+
+    private fun stepFrame(direction: Int) {
+        if (!canStepFrame()) return
+        val exoPlayer = player ?: return
+        exoPlayer.setSeekParameters(SeekParameters.EXACT)
+        val target = FrameStepPolicy.targetPositionMs(
+            positionMs = exoPlayer.currentPosition,
+            durationMs = exoPlayer.duration,
+            frameRate = exoPlayer.videoFormat?.frameRate,
+            direction = direction,
+        )
+        exoPlayer.seekTo(target)
+        exoPlayer.setSeekParameters(SeekParameters.DEFAULT)
+        updateProgress()
+        showOsd(
+            if (direction < 0) R.drawable.ic_frame_previous else R.drawable.ic_frame_next,
+            PlayerGesturePolicy.formatTime(target),
+        )
+    }
+
+    private fun stopFrameRepeat() {
+        frameRepeatDirection = 0
+        mainHandler.removeCallbacks(frameRepeatRunnable)
+    }
+
+    private fun toggleAbLoopPoint() {
+        val exoPlayer = player ?: return
+        val duration = exoPlayer.duration.takeIf { it > 0L } ?: return
+        val previous = abLoopState
+        abLoopState = AbLoopPolicy.toggle(previous, exoPlayer.currentPosition, duration)
+        when {
+            abLoopState.awaitingPointB -> showOsd(
+                R.drawable.ic_repeat,
+                getString(
+                    R.string.ab_loop_point_a_set,
+                    PlayerGesturePolicy.formatTime(requireNotNull(abLoopState.pointAMs)),
+                ),
+            )
+            abLoopState.active -> {
+                if (playbackMode == VideoPlaybackMode.REPEAT_ONE) {
+                    playbackMode = VideoPlaybackMode.SEQUENCE
+                }
+                // Keep the current item pinned even when B is at the media boundary. The regular
+                // progress tick still performs the precise B -> A seek; repeat-one is a safety net
+                // against an automatic queue transition between ticks.
+                applyPlaybackMode(exoPlayer)
+                if (sleepTimerMode == SleepTimerMode.END_OF_VIDEO) {
+                    sleepTimerMode = SleepTimerMode.OFF
+                    sleepTimerDeadlineElapsedRealtimeMs = 0L
+                    scheduleSleepTimer()
+                }
+                showOsd(
+                    R.drawable.ic_repeat,
+                    getString(
+                        R.string.ab_loop_active,
+                        PlayerGesturePolicy.formatTime(requireNotNull(abLoopState.pointAMs)),
+                        PlayerGesturePolicy.formatTime(requireNotNull(abLoopState.pointBMs)),
+                    ),
+                )
+            }
+            previous != AbLoopState() -> showOsd(
+                R.drawable.ic_repeat,
+                getString(R.string.ab_loop_cleared),
+            )
+        }
+        updatePrecisionControls()
+        updateToolbarMenu()
+    }
+
+    private fun clearAbLoop(showFeedback: Boolean) {
+        if (abLoopState == AbLoopState()) return
+        abLoopState = AbLoopState()
+        player?.let(::applyPlaybackMode)
+        if (showFeedback && ::binding.isInitialized) {
+            showOsd(R.drawable.ic_repeat, getString(R.string.ab_loop_cleared))
+        }
+        if (::binding.isInitialized) updatePrecisionControls()
+    }
+
+    private fun updatePrecisionControls() {
+        if (!::binding.isInitialized) return
+        val exoPlayer = player
+        val paused = exoPlayer != null && !exoPlayer.playWhenReady &&
+            exoPlayer.playbackState != Player.STATE_IDLE && !inPictureInPicture &&
+            !binding.playbackErrorPanel.isVisible
+        binding.precisionControls.isVisible = paused
+        binding.frameBackButton.isEnabled = paused && exoPlayer?.duration?.let { it > 0L } == true
+        binding.frameForwardButton.isEnabled = binding.frameBackButton.isEnabled
+        binding.abLoopButton.isEnabled = binding.frameBackButton.isEnabled
+        val overlay = VideoThemePaletteGenerator.generate(videoPalette.source, dark = true)
+        binding.abLoopButton.text = getString(
+            when {
+                abLoopState.active -> R.string.ab_loop_active_label
+                abLoopState.awaitingPointB -> R.string.ab_loop_point_a_label
+                else -> R.string.ab_loop_clear_label
+            },
+        )
+        binding.abLoopButton.setTextColor(
+            if (abLoopState == AbLoopState()) overlay.playerControl else overlay.secondary,
+        )
+    }
+
     private fun updatePlayPauseButton() {
         binding.playPauseButton.setImageResource(
             if (shouldShowPauseAction()) R.drawable.ic_pause else R.drawable.ic_play_arrow,
@@ -1141,6 +1472,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
     private fun updateProgress() {
         val exoPlayer = player ?: return
+        if (exoPlayer.isPlaying) {
+            AbLoopPolicy.loopTargetMs(abLoopState, exoPlayer.currentPosition)?.let(exoPlayer::seekTo)
+        }
         val duration = exoPlayer.duration.takeIf { it > 0L } ?: 0L
         val index = exoPlayer.currentMediaItemIndex
         if (index in request.items.indices) {
@@ -1183,6 +1517,10 @@ class VideoPlayerActivity : VideoThemedActivity() {
     }
 
     private fun togglePlaybackMode() {
+        if (abLoopState != AbLoopState()) {
+            clearAbLoop(showFeedback = false)
+            Toast.makeText(this, R.string.ab_loop_cancelled_for_mode, Toast.LENGTH_SHORT).show()
+        }
         playbackMode = VideoPlaybackModePolicy.next(playbackMode, request.items.size)
         if (playbackMode == VideoPlaybackMode.REPEAT_ONE && sleepTimerMode == SleepTimerMode.END_OF_VIDEO) {
             sleepTimerMode = SleepTimerMode.OFF
@@ -1201,7 +1539,7 @@ class VideoPlayerActivity : VideoThemedActivity() {
 
     private fun applyPlaybackMode(exoPlayer: ExoPlayer) {
         exoPlayer.shuffleModeEnabled = playbackMode == VideoPlaybackMode.SHUFFLE
-        exoPlayer.repeatMode = if (playbackMode == VideoPlaybackMode.REPEAT_ONE) {
+        exoPlayer.repeatMode = if (abLoopState.active || playbackMode == VideoPlaybackMode.REPEAT_ONE) {
             Player.REPEAT_MODE_ONE
         } else {
             Player.REPEAT_MODE_OFF
@@ -1248,6 +1586,203 @@ class VideoPlayerActivity : VideoThemedActivity() {
         updateToolbarMenu()
     }
 
+    private fun launchSubtitlePicker() {
+        if (resolvingManualSubtitle) return
+        subtitlePicker.launch(SUBTITLE_DOCUMENT_MIME_TYPES)
+    }
+
+    private fun resolveManualSubtitle(uri: Uri) {
+        if (resolvingManualSubtitle) return
+        resolvingManualSubtitle = true
+        lifecycleScope.launch {
+            val result = withContext(Dispatchers.IO) { inspectManualSubtitle(uri) }
+            resolvingManualSubtitle = false
+            when (result) {
+                is ManualSubtitleResolution.Success -> {
+                    manualSubtitle = result.document
+                    manualSubtitleMediaIndex = activeMediaItemIndex
+                    val stableId = "$EXTERNAL_SUBTITLE_ID_PREFIX$activeMediaItemIndex:manual"
+                    reloadSubtitleSources(selectedExternalId = stableId)
+                    Toast.makeText(
+                        this@VideoPlayerActivity,
+                        getString(R.string.subtitle_loaded, result.document.displayName),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+                ManualSubtitleResolution.InvalidType -> Toast.makeText(
+                    this@VideoPlayerActivity,
+                    R.string.subtitle_load_invalid_type,
+                    Toast.LENGTH_LONG,
+                ).show()
+                ManualSubtitleResolution.TooLarge -> Toast.makeText(
+                    this@VideoPlayerActivity,
+                    R.string.subtitle_load_too_large,
+                    Toast.LENGTH_LONG,
+                ).show()
+                ManualSubtitleResolution.Unreadable -> Toast.makeText(
+                    this@VideoPlayerActivity,
+                    R.string.subtitle_load_failed,
+                    Toast.LENGTH_LONG,
+                ).show()
+            }
+            postponeControlsAutoHide()
+        }
+    }
+
+    private fun inspectManualSubtitle(uri: Uri): ManualSubtitleResolution {
+        if (uri.scheme != "content") return ManualSubtitleResolution.InvalidType
+        var displayName: String? = null
+        var declaredSize = -1L
+        runCatching {
+            contentResolver.query(
+                uri,
+                arrayOf(OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE),
+                null,
+                null,
+                null,
+            )?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                    if (nameIndex >= 0 && !cursor.isNull(nameIndex)) displayName = cursor.getString(nameIndex)
+                    if (sizeIndex >= 0 && !cursor.isNull(sizeIndex)) declaredSize = cursor.getLong(sizeIndex)
+                }
+            }
+        }.getOrElse { return ManualSubtitleResolution.Unreadable }
+        if (declaredSize > SubtitleDocumentPolicy.MAX_SUBTITLE_BYTES) {
+            return ManualSubtitleResolution.TooLarge
+        }
+        val validated = SubtitleDocumentPolicy.validate(displayName, declaredSize.coerceAtLeast(0L))
+            ?: return ManualSubtitleResolution.InvalidType
+        val actualSize = runCatching {
+            contentResolver.openInputStream(uri)?.use { input ->
+                val buffer = ByteArray(MANUAL_SUBTITLE_VALIDATION_BUFFER_SIZE)
+                var total = 0L
+                while (true) {
+                    val read = input.read(buffer)
+                    if (read < 0) break
+                    total += read
+                    if (total > SubtitleDocumentPolicy.MAX_SUBTITLE_BYTES) return@use total
+                }
+                total
+            }
+        }.getOrNull() ?: return ManualSubtitleResolution.Unreadable
+        if (actualSize > SubtitleDocumentPolicy.MAX_SUBTITLE_BYTES) return ManualSubtitleResolution.TooLarge
+        return ManualSubtitleResolution.Success(
+            ManualSubtitleDocument(
+                uri = uri,
+                displayName = validated.displayName,
+                mimeType = validated.mimeType,
+                size = actualSize,
+            ),
+        )
+    }
+
+    private fun showSubtitleOffsetDialog() {
+        if (!trackController.selectedSubtitleIsExternal) return
+        val dialogBinding = DialogSubtitleOffsetBinding.inflate(layoutInflater)
+        val initialSeconds = subtitleOffsetMs / 1_000f
+        dialogBinding.offsetSlider.value = initialSeconds.coerceIn(-600f, 600f)
+        fun render(value: Float) {
+            val offset = SubtitleTimingPolicy.normalizeOffsetMs((value * 1_000f).roundToLong())
+            dialogBinding.offsetValue.text = getString(
+                R.string.subtitle_offset_value,
+                SubtitleTimingPolicy.formatOffset(offset),
+            )
+            showOsd(
+                R.drawable.ic_subtitles,
+                getString(R.string.subtitle_offset_value, SubtitleTimingPolicy.formatOffset(offset)),
+                sticky = true,
+            )
+        }
+        fun apply(value: Float) {
+            val offset = SubtitleTimingPolicy.normalizeOffsetMs((value * 1_000f).roundToLong())
+            applySubtitleOffset(offset)
+        }
+        dialogBinding.offsetSlider.addOnChangeListener { _, value, _ -> render(value) }
+        dialogBinding.offsetSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) = Unit
+
+            override fun onStopTrackingTouch(slider: Slider) {
+                apply(slider.value)
+            }
+        })
+        dialogBinding.offsetDecrease.setOnClickListener {
+            dialogBinding.offsetSlider.value = (dialogBinding.offsetSlider.value - 0.1f).coerceAtLeast(-600f)
+            apply(dialogBinding.offsetSlider.value)
+        }
+        dialogBinding.offsetReset.setOnClickListener {
+            dialogBinding.offsetSlider.value = 0f
+            apply(0f)
+        }
+        dialogBinding.offsetIncrease.setOnClickListener {
+            dialogBinding.offsetSlider.value = (dialogBinding.offsetSlider.value + 0.1f).coerceAtMost(600f)
+            apply(dialogBinding.offsetSlider.value)
+        }
+        render(initialSeconds)
+        AlertDialog.Builder(this)
+            .setTitle(R.string.subtitle_offset)
+            .setView(dialogBinding.root)
+            .setPositiveButton(android.R.string.ok, null)
+            .setOnDismissListener {
+                hideOsdSoon()
+                postponeControlsAutoHide()
+            }
+            .showWithPalette()
+    }
+
+    private fun applySubtitleOffset(offsetMs: Long) {
+        if (!trackController.selectedSubtitleIsExternal) return
+        val normalized = SubtitleTimingPolicy.normalizeOffsetMs(offsetMs)
+        val selectedId = trackController.selectedSubtitleId ?: return
+        if (normalized != subtitleOffsetMs) {
+            subtitleOffsetMs = normalized
+            reloadSubtitleSources(selectedExternalId = selectedId)
+        }
+        showOsd(
+            R.drawable.ic_subtitles,
+            getString(R.string.subtitle_offset_value, SubtitleTimingPolicy.formatOffset(normalized)),
+            sticky = true,
+        )
+    }
+
+    private fun reloadSubtitleSources(selectedExternalId: String?) {
+        val exoPlayer = player ?: return
+        val index = exoPlayer.currentMediaItemIndex.coerceIn(request.items.indices)
+        val position = exoPlayer.currentPosition.coerceAtLeast(0L)
+        val playWhenReady = exoPlayer.playWhenReady
+        subtitleRouteRevision += 1L
+        reloadingSubtitleSources = true
+        try {
+            trackController.resetSelectionsForMediaItem()
+            selectedExternalId?.let(trackController::prepareExternalSubtitleSelection)
+            exoPlayer.setMediaItems(buildMediaItems(), index, position)
+            exoPlayer.playWhenReady = playWhenReady
+            exoPlayer.setPlaybackSpeed(playbackSpeed)
+            applyPlaybackMode(exoPlayer)
+            exoPlayer.prepare()
+        } finally {
+            reloadingSubtitleSources = false
+        }
+        updateActiveItemUi()
+    }
+
+    private fun restoreManualSubtitle(state: Bundle) {
+        val index = state.getInt(STATE_MANUAL_SUBTITLE_MEDIA_INDEX, -1)
+        val uri = state.getString(STATE_MANUAL_SUBTITLE_URI)?.let(Uri::parse)
+        val displayName = state.getString(STATE_MANUAL_SUBTITLE_NAME)
+        val mimeType = state.getString(STATE_MANUAL_SUBTITLE_MIME)
+        val size = state.getLong(STATE_MANUAL_SUBTITLE_SIZE, -1L)
+        val validated = SubtitleDocumentPolicy.validate(displayName, size)
+        if (index !in request.items.indices || uri?.scheme != "content" || validated == null ||
+            validated.mimeType != mimeType
+        ) {
+            return
+        }
+        manualSubtitleMediaIndex = index
+        manualSubtitle = ManualSubtitleDocument(uri, validated.displayName, validated.mimeType, size)
+    }
+
     private fun updateToolbarMenu() {
         val menu = binding.toolbar.menu
         val overlay = VideoThemePaletteGenerator.generate(videoPalette.source, dark = true)
@@ -1257,10 +1792,16 @@ class VideoPlayerActivity : VideoThemedActivity() {
             isEnabled = player != null
         }
         menu.findItem(R.id.action_subtitle_track)?.apply {
-            isVisible = hasSubtitleTracks
+            isVisible = true
             isEnabled = player != null
             icon?.mutate()?.setTint(
-                if (trackController.selectedSubtitleKey == null) overlay.playerControl else overlay.secondary,
+                if (trackController.selectedSubtitleId == null &&
+                    trackController.selectedSubtitleKey == null
+                ) {
+                    overlay.playerControl
+                } else {
+                    overlay.secondary
+                },
             )
         }
         menu.findItem(R.id.action_repeat)?.apply {
@@ -1328,6 +1869,10 @@ class VideoPlayerActivity : VideoThemedActivity() {
     )
 
     private fun setSleepTimer(mode: SleepTimerMode) {
+        if (mode == SleepTimerMode.END_OF_VIDEO && abLoopState != AbLoopState()) {
+            clearAbLoop(showFeedback = false)
+            Toast.makeText(this, R.string.ab_loop_cancelled_for_mode, Toast.LENGTH_SHORT).show()
+        }
         val previousMode = sleepTimerMode
         sleepTimerMode = mode
         sleepTimerDeadlineElapsedRealtimeMs = SleepTimerPolicy.deadlineElapsedRealtimeMs(
@@ -1889,6 +2434,15 @@ class VideoPlayerActivity : VideoThemedActivity() {
         const val STATE_AUDIO_TRACK = "audio_track"
         const val STATE_SUBTITLE_GROUP = "subtitle_group"
         const val STATE_SUBTITLE_TRACK = "subtitle_track"
+        const val STATE_SUBTITLE_ID = "subtitle_id"
+        const val STATE_SUBTITLE_OFFSET = "subtitle_offset"
+        const val STATE_AB_POINT_A = "ab_point_a"
+        const val STATE_AB_POINT_B = "ab_point_b"
+        const val STATE_MANUAL_SUBTITLE_MEDIA_INDEX = "manual_subtitle_media_index"
+        const val STATE_MANUAL_SUBTITLE_URI = "manual_subtitle_uri"
+        const val STATE_MANUAL_SUBTITLE_NAME = "manual_subtitle_name"
+        const val STATE_MANUAL_SUBTITLE_MIME = "manual_subtitle_mime"
+        const val STATE_MANUAL_SUBTITLE_SIZE = "manual_subtitle_size"
         const val ACTION_PIP_PLAY_PREFIX =
             "io.github.supermonster003.autojs6.plugin.threeemberplayer.action.PIP_PLAY"
         const val ACTION_PIP_PAUSE_PREFIX =
@@ -1896,6 +2450,8 @@ class VideoPlayerActivity : VideoThemedActivity() {
         const val PIP_PLAY_REQUEST_CODE = 6_001
         const val PIP_PAUSE_REQUEST_CODE = 6_002
         const val PROGRESS_INTERVAL_MS = 500L
+        const val AB_LOOP_PROGRESS_INTERVAL_MS = 50L
+        const val FRAME_REPEAT_INTERVAL_MS = 120L
         const val OSD_HIDE_MS = 800L
         const val OSD_LINGER_MS = 400L
         const val UNLOCK_BUTTON_HIDE_MS = 3_000L
@@ -1904,5 +2460,9 @@ class VideoPlayerActivity : VideoThemedActivity() {
         const val SCRUB_THUMBNAIL_HEIGHT_PX = 180
         const val SCRUB_PREVIEW_MARGIN_DP = 8f
         const val ZOOM_EPSILON = 0.001f
+        const val MANUAL_SUBTITLE_VALIDATION_BUFFER_SIZE = 16 * 1024
+        const val SUBTITLE_MEMORY_SCHEME = "threeember-subtitle"
+        const val SUBTITLE_MEMORY_AUTHORITY = "session"
+        val SUBTITLE_DOCUMENT_MIME_TYPES = arrayOf("application/*", "text/*")
     }
 }

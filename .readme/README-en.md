@@ -22,7 +22,7 @@
 
 ******
 
-The current README.md supports the following languages:
+The README.md is currently available in the following languages:
 
 - [简体中文 [zh-Hans]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-zh-Hans.md)
 - [繁體中文 (香港) [zh-Hant-HK]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-zh-Hant-HK.md)
@@ -41,67 +41,141 @@ The current README.md supports the following languages:
 
 ******
 
-3-Ember Player is both an AutoJs6 file-manager plugin and a standalone simple video player. It accepts temporary read-only content URIs, uses AndroidX Media3 ExoPlayer, and never modifies the source video.
+3-Ember Player is the video playback plugin for the AutoJs6 file manager, and a standalone local video player at the same time. Tap a video file in the file manager and it starts playing full screen; gestures, playback speed, external subtitles, folder-based continuous playback and picture-in-picture cover the core experience of mainstream players. Playback is built on AndroidX Media3 ExoPlayer.
+
+The plugin sticks to a read-only security model: videos enter the player through temporary read-only grants, no storage permission is ever requested, and source files are never modified or moved; network access is used solely to check for plugin updates.
 
 ******
 
-### Features
+### Highlights
 
 ******
 
-- Lightweight XVID-in-MKV compatibility through the device's built-in MPEG-4 Part 2 decoder, with explicit external-player recovery when the system decoder is unavailable or fails.
-- Registers a read-only primary Explorer action through version 12 of the shared `org.autojs.plugin.EXPLORER_ACTION` protocol, with optional bounded direct-sibling and playback-progress capabilities.
-- Uses AndroidX Media3 ExoPlayer and PlayerView for automatic playback, standard controls, audio focus, audio-becoming-noisy handling, and device codec integration.
-- Restores playback position and play/pause intent after recreation, and keeps the screen on only while video is actively playing.
-- Provides a separate exported `android.intent.action.VIEW` entry for read-only `content://` URIs with a `video/*` MIME type.
-- Offers a safe Open with another app action after playback failure by rebuilding a read-only view intent and excluding this plugin from the candidate list.
-- Fullscreen immersive playback with gestures for brightness, volume and seeking, double-tap jumps, a long-press speed boost, and a control lock.
-- Playback speeds from 0.25× to 3× with one-tap resize mode and screen orientation switching.
-- Resume history retains exactly one most recently opened unfinished video as a SHA-256 identity digest plus time values; opening another video clears it immediately, and completed playback is never retained.
-- Embedded audio-track and subtitle selection with subtitles off by default and unsupported tracks clearly identified.
-- Current-video repeat, a detailed metadata panel, aspect-based orientation, and API 26+ picture-in-picture with remote play/pause.
-- MediaSession integration for headset, Bluetooth, and system controls, plus a media-style notification with title and playback progress.
-- Sleep timer options for 15, 30, 45, or 60 minutes and end-of-video, plus persistent gesture sensitivity and 5/10/30-second double-tap seek settings.
-- Pinch zoom from 0.25× to 4× with double-tap reset, and a scrub target-time bubble with best-effort in-memory thumbnails.
-- Permission-free current-frame screenshots on Android 10+ saved as separate PNG files through MediaStore without modifying the source video.
-- Naturally ordered same-folder video queues through Explorer Action v12, with previous / next, sequence, shuffle, repeat-one, and automatic next-item playback.
-- Matching .srt and .ass sidecars, including language suffixes, discovered with subtitles off by default and loaded only after explicit selection.
-- Builds accessible light and dark semantic roles from one HCT source color, follows AutoJs6 by default, and offers 19 localized Material 500 presets plus live-preview custom RGB colors.
-- Provides a standalone launcher and settings for host-following language, night mode and color, single-video resume behavior, manual and automatic update checks, ignored versions, release history, and app/developer information.
+- Tap to play: tap a video file in the AutoJs6 file manager and it opens directly in immersive full screen, no setup required.
+- Handy gestures: swipe the left half for brightness and the right half for volume, swipe horizontally to seek, double-tap the sides to jump, double-tap the center to play/pause, long-press for temporary 2× speed, and lock all controls with one tap to prevent accidental touches.
+- Speed and picture control: 9 playback speeds from 0.25× to 3×, pinch-to-zoom (0.25× to 4×), fit/fill/crop scaling modes, and one-tap orientation switching with an automatic suggestion based on the aspect ratio.
+- Folder playback: opening one video builds a same-folder queue (natural filename order) with previous/next, sequential, shuffle and single-item repeat modes, plus autoplay of the next item.
+- External and embedded subtitles: automatically discover same-name .srt / .ass files or load one manually, detect common legacy encodings, adjust style and a ±600-second external-subtitle offset, and switch embedded subtitle or audio tracks; subtitles stay off until explicitly enabled.
+- Precision playback: while paused, step frames backward or forward with long-press repeat, and set or clear an A-B interval loop for close inspection.
+- Resume playback: remembers the position of the most recent unfinished video and resumes it on reopen; finished videos are cleared immediately, leaving no watch trail.
+- Picture-in-picture and system integration: automatic PiP on Android 8.0+ when leaving during playback, headset and Bluetooth controls, and a media notification with title and progress.
+- Sleep timer: pause automatically after 15/30/45/60 minutes or when the current video ends.
+- Seek preview: dragging the progress bar shows a target-time bubble and, when possible, a thumbnail preview.
+- Frame capture: on Android 10+ save the current frame as a PNG to the system gallery with one tap, without storage permission and without touching the source video.
+- Tricky format fallback: a lightweight built-in XVID-in-MKV compatibility layer; when the device cannot decode a video, a clear message is shown and playback can be handed to another player.
+- Themes your way: one seed color generates readable light and dark palettes, following AutoJs6 by default, with 19 presets and a custom RGB color with live preview.
+- Works standalone: comes with a launcher icon and a settings page, opens videos through the system file picker, and can act as a video player in the system "Open with" menu.
+- Read-only by design: no storage permission, source videos are never written; the network is used only for update checks.
 
 ******
 
-### Host integration
+### Install and Use
 
 ******
 
-The host uses this plugin for the primary video-open path and the Play action.
+Before starting, make sure the environment meets the following requirements:
 
-After the plugin is installed, enabled, trusted, and compatible, opening any file that the host recognizes as video launches action `play-video` as the primary Explorer viewer.
+```text
+host app: AutoJs6 (org.autojs.autojs6)
+minimum host build: 5276 (AutoJs6 6.8.0+)
+minimum android: 7.0 (API 24)
+plugin package: io.github.supermonster003.autojs6.plugin.videoplayer
+```
 
-If the plugin is missing, disabled, unauthorized, unavailable, incompatible, or cannot be launched, a compatible host shows recovery guidance. The system application chooser opens only after the user explicitly selects Open with other apps.
+From installation to the first video in 4 steps:
 
-This plugin matches video files only. Audio playback and image viewing remain independent plugin capabilities and are not bundled into this APK.
+1. Download and install the plugin APK. A 3-Ember Player icon appears on the launcher, while the plugin capabilities are managed by AutoJs6.
+2. Open AutoJs6, enter the `Plugin Center`, locate `3-Ember Player` and enable it.
+3. Locate any video file (such as `movie.mp4`) in the AutoJs6 file manager.
+4. Tap the file and the video starts playing full screen.
+
+Using it without the host: open 3-Ember Player from the launcher, tap `Open video` and pick a video through the system file picker; video viewing requests from other apps can also be handled by this player. The host build requirement above only applies to the file manager entry; standalone playback is unaffected.
+
+Player gesture cheat sheet:
+
+- Single tap: show or hide the control bar.
+- Double-tap the center: play/pause; double-tap the left/right side: rewind/forward 10 seconds (adjustable to 5/10/30 seconds in settings).
+- Swipe vertically on the left half: adjust brightness; on the right half: adjust volume.
+- Swipe horizontally: preview the seek target, release to apply.
+- Long-press: temporary 2× speed, release to restore.
+- Pinch with two fingers: zoom the picture (0.25× to 4×); double-tap while zoomed to reset.
+- Lock button: blocks all gestures and controls against accidental touches; tap the screen afterwards to reveal the unlock button.
 
 ******
 
-### Supported formats
+### Supported Formats
 
 ******
 
-The primary Explorer action accepts `video/*` for every video type recognized by the host and retains these 23 exact extension matchers for compatibility with older hosts:
+The playback action in the file manager exactly matches the following 23 extensions:
 
 ```text
 MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT
 ```
 
-******
-
-### Plugin interface
+The list above is an exact-extension allowlist kept for older hosts; on newer hosts, any file recognized as video is handed to this plugin via `video/*`. Matching the list does not guarantee decoding on every device; actual playability depends on Media3 and the platform decoders. The standalone entry and calls from other apps are likewise accepted by `video/*` MIME type.
 
 ******
 
-The host discovers and executes the plugin with the following identities:
+### FAQ
+
+******
+
+**Tapping a video file does not open this player?**
+
+Check in order: the AutoJs6 version code is at least 5276 (version 6.8.0 and above); the plugin is enabled in the `Plugin Center`; the file is recognized as a video by the host. If any of the three fails, the tap is not handled by this plugin.
+
+**What happens when the plugin is missing or disabled?**
+
+A compatible host shows recovery guidance suggesting to install or enable the plugin; the system app chooser appears only after the user explicitly picks `Open with another app`, handing the video to other players on the device.
+
+**Audio plays but the screen stays black, or playback fails?**
+
+Whether a video decodes depends on the device platform and Media3; matching the extension list does not guarantee playback. For the common legacy XVID-in-MKV format, a built-in compatibility layer hands the track to the system MPEG-4 Part 2 decoder; if decoding still fails, a clear message is shown and `Open with another app` forwards the video to another player.
+
+**How do I play all videos in a folder continuously?**
+
+With a host meeting the build requirement, opening any video from the file manager builds a same-folder queue automatically: natural filename order, starting from the current video, autoplaying the next when one ends, with sequential, shuffle and single-item repeat modes. On older hosts or via the standalone entry, single-file playback is kept.
+
+**How do external subtitles load?**
+
+Place an `.srt` or `.ass` file with the same name next to the video (language suffixes such as `movie.en.srt` are allowed), open the video from the file manager, then pick the subtitle in the subtitle menu. Subtitles are off by default and never enable themselves.
+
+**What does resume playback record? Is anything uploaded?**
+
+Only the position of the most recent unfinished video is kept, stored as a SHA-256 digest of the file plus time values, with no file name or path; opening another video or finishing playback clears it immediately. Everything stays on the device and nothing is uploaded.
+
+**Which permissions does the plugin need?**
+
+No storage, camera, microphone or other sensitive runtime permissions. It only declares the network permission for update checks (user-triggered or at most once per day), plus the signature-protected plugin permission for the file manager entry.
+
+**Can it be used independently of AutoJs6?**
+
+Yes. Since v2.0.0 the plugin has a launcher entry: pick a video through the system file picker and play it, or choose this player from another app's `Open with` menu. Folder playback, external subtitle discovery and following host settings still require AutoJs6.
+
+******
+
+### Security
+
+******
+
+The plugin is built on a deny-by-default principle; all measures below are always on and cannot be disabled:
+
+- Zero sensitive permissions: no storage or other runtime permissions; network access is used only for user-triggered or once-daily GitHub release checks.
+- Never writes: playback, frame capture and thumbnail extraction are read-only end to end; source videos are never modified, moved or deleted.
+- Entry-by-entry validation: the file manager entry is protected by a signature-level plugin permission, and every request has its protocol version, target URI, ClipData, metadata, host build and read-only grants verified item by item; any mismatch rejects the request.
+- Bounded sibling access: queueing and subtitle discovery go through a short-lived host-managed session that can only enumerate direct siblings of the selected file, with recursive directories, writes and persistable grants all forbidden; the internal player receives only a validated bounded queue and never touches file system paths.
+- Isolated dual entries: the system-facing `ACTION_VIEW` entry accepts only read-only content URI `video/*` requests, rejects write, persistable and prefix grants, and stays independent from the file manager entry.
+- Minimal resume data: the resume history keeps only the latest unfinished record as a SHA-256 digest plus time values, cleared once playback finishes.
+- Safe handover: `Open with another app` rebuilds a read-only intent and excludes this plugin from the candidates, preventing grant spread and self-loops.
+
+******
+
+### Plugin Interface (for Developers)
+
+******
+
+The host discovers and invokes the plugin via the following identifiers:
 
 ```text
 service action: org.autojs.plugin.EXPLORER_ACTION
@@ -111,6 +185,7 @@ source namespace: io.github.supermonster003.autojs6.plugin.threeemberplayer
 stable application id: io.github.supermonster003.autojs6.plugin.videoplayer
 engine: explorer-action
 variant: default
+protocol version: v12
 Explorer action id: play-video
 Explorer placement: primary
 access mode: read-only
@@ -120,71 +195,64 @@ external MIME type: video/*
 required host build: 5276
 ```
 
-Version 2.0 provides a protocol v12 primary read-only Explorer action. A compatible host may attach request-scoped direct-sibling and playback-progress capabilities; hosts without those optional extensions retain single-file playback. The independent external entry accepts a read-only content URI with any valid `video/*` MIME subtype.
+The current implementation is based on explorer-action protocol v12: the plugin registers the read-only primary file manager action `play-video`, accepts every video type the host recognizes via `video/*`, and keeps 23 exact extension matchers for older hosts. Compatible hosts may attach request-scoped sibling reading (used for same-folder queues and external subtitle discovery) and playback progress capabilities; hosts without these optional extensions fall back to single-file playback automatically. Audio playback and image viewing are separate plugin capabilities and are not part of this APK.
 
-AutoJs6 6.8.0 build 5276 or later and Explorer Action v12 are required for the full host-cooperation features; this requirement will not be raised for later plugin capabilities.
-
-******
-
-### Security
+Full host cooperation requires AutoJs6 6.8.0 (build 5276) or later with Explorer Action v12; future plugin updates will not raise this requirement.
 
 ******
 
-The app requests no storage permission and never writes source videos. Internet access is used only for user-triggered or daily GitHub release checks. Its signature-protected Explorer boundary validates the complete protocol v12 envelope, exact single selected target, parent relationship, ClipData, metadata, host build, and read-only grants. Optional Host Sessions are pinned by the host to the plugin UID and permit only listing the selected file's direct parent and opening the selected file or a readable direct sibling. The private player validates a bounded opaque queue and never receives a filesystem path. The public ACTION_VIEW boundary remains independent and single-file only.
+### Roadmap
 
 ******
 
-### Safety limits
+Shipped capabilities and upcoming plans are maintained as a checkable list in Roadmap.md. Unchecked items express intent and do not describe current version capabilities.
+
+- [Open the checkable Roadmap.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/Roadmap.md)
 
 ******
 
-- Explorer starts from exactly one selected content URI; an optional Host Session can expose only readable direct siblings and never recursive directory access.
-- Explorer execution requires the signature-level `org.autojs.permission.PLUGIN` permission.
-- Write and persistable grants are always rejected. Prefix access used to validate the Explorer parent URI is never forwarded to the player.
-- The public ACTION_VIEW boundary rejects write, persistable, and prefix grants.
-- External fallback candidates are resolved first, filtered to other packages, and launched with a newly built read-only intent.
-- Resume history retains exactly one most recently opened unfinished video as a SHA-256 identity digest plus time values; opening another video clears it immediately, and completed playback is never retained.
-- Recognition as video or a listed legacy extension does not guarantee decoding support on every device. Media3 and the installed platform codecs determine actual playback support.
+### Release History
 
 ******
 
-### Release history
+#### v2.1.0
 
-******
+###### 2026/08/31
 
-# v2.0.0
+* `Feature` Subtitle style settings: choose 75%-150% text size, foreground color, opaque/translucent/no background and 0%/4%/8% bottom margin with a live preview; choices persist in playback and picture-in-picture
+* `Feature` External subtitle encoding detection: BOM first, then GBK, Big5, Shift_JIS, EUC-KR, Windows-1251 and Windows-1256, with a clear warning when detection is uncertain
+* `Feature` Load one .srt or .ass subtitle manually from the subtitle menu through the system document picker; files over 4 MiB or with another extension are rejected
+* `Feature` Adjust the selected external subtitle from −600.0 to +600.0 seconds in 0.1-second steps with immediate on-screen feedback
+* `Feature` While paused, step one frame backward or forward (long-press to repeat), and set an A-B interval loop with normalized boundaries
+* `Improvement` Subtitle decoding, UTF-8 conversion and time shifting run entirely in memory without temporary files, storage permission or persistent subtitle grants
+* `Improvement` Subtitle offset resets whenever the video changes; A-B looping takes priority while active, and a later explicit repeat mode or end-of-video timer clears it
+
+#### v2.0.0
 
 ###### 2026/08/29
 
-* `Feature` Added a detailed HCT-based color system that generates accessible light and dark semantic roles for toolbars, controls, surfaces, outlines, and errors from one source color, with 19 localized Material 500 presets and live-preview custom RGB colors
-* `Feature` Added a launcher and standalone single-file player mode, plus a dedicated settings screen for language, night mode, theme color, resume behavior, updates, release history, and app/developer information
-* `Feature` Language, night mode, and source color now follow AutoJs6 by default through its official read-only settings contract; unavailable host choices remain visible but disabled and fall back to app defaults
-* `Feature` Added manual and daily automatic update checks, ignored-version management, and localized bundled release history
-* `Fix` Made Follow AutoJs6 reliable by exposing the protected plugin-info service entry required by the host settings provider
-* `Improvement` Resume playback now remembers exactly one most recently opened video, immediately discards it when another video opens, and never keeps completed playback in either standalone or host-managed history
-* `Improvement` Renamed the fixed app and plugin display name to 3-Ember Player and the source namespace to threeemberplayer while retaining the established application and plugin IDs for upgrade compatibility
+* `Feature` Brand-new theme system: one seed color generates readable light and dark palettes, following the AutoJs6 theme by default, with 19 presets and a custom RGB color with live preview
+* `Feature` The plugin becomes a standalone app: a launcher entry is added, and videos can be opened directly through the system file picker
+* `Feature` New settings page: language, night mode, theme color, resume, updates and release history in one place; language, night mode and theme color follow AutoJs6 by default, and the options are disabled with app defaults when the host is unavailable
+* `Feature` New update checks: manual and once-daily automatic checks against official GitHub releases, with ignorable versions and a built-in localized release history page
+* `Fix` Fixed following AutoJs6 settings not taking effect in some scenarios (the plugin info service required by the host was not exposed before)
+* `Improvement` Resume history is trimmed to the single most recent unfinished video; opening another video clears the old record immediately, and finished videos keep no position
+* `Improvement` The app is renamed to 3-Ember Player; the application ID and plugin ID stay unchanged, so existing installations upgrade in place
 
-# v1.4.0
+#### v1.4.0
 
 ###### 2026/08/28
 
-* `Feature` Built naturally ordered same-folder video queues through Explorer Action v12's request-scoped, UID-bound Host Session, with previous / next, sequence, shuffle, repeat-one, and automatic next-item playback
-* `Feature` Discovered matching .srt and .ass sidecars, including language-suffix variants, kept subtitles off by default, and loaded them only after explicit selection
-* `Feature` Added opt-in host-owned resume history: recording is off by default, can be disabled or cleared in AutoJs6 settings, and adds no watched marker to file lists
-* `Fix` Explorer requests classified by the host as video were rejected unless their extensions appeared in the legacy 23-item allowlist; trusted `video/*` requests are now accepted uniformly
-* `Improvement` Restricted sibling access to the selected file and readable direct siblings only, with no recursive directory traversal, writes, persistent grants, or plaintext paths in the plugin
-* `Improvement` Bound serialized queues to 128 videos, 8 sidecars per video, and 128 total subtitle attachments while always retaining the selected item
-* `Improvement` Kept compatibility at AutoJs6 6.8.0 build 5276 and Explorer Action v12; hosts without the optional extensions safely retain single-file playback
-* `Dependency` Upgraded the bundled Explorer Action API from protocol v2 to the backward-compatible v12 media-session extension
+* `Feature` Folder playback: opening one video builds a same-folder queue automatically (natural filename order) with previous/next, sequential, shuffle, single-item repeat and autoplay of the next item
+* `Feature` External subtitles: same-name .srt / .ass files and their language-suffix variants are discovered automatically; subtitles stay off until picked in the subtitle menu
+* `Feature` Optional host-managed resume history: off by default, can be enabled, disabled or cleared in AutoJs6 settings; file lists show no watched markers
+* `Fix` Fixed files recognized as video by the host being rejected because their extension was missing from the legacy allowlist; trusted video/* requests are now accepted uniformly
+* `Improvement` Sibling access is strictly limited to the selected file and its readable direct siblings, with recursive directories, writes and persistable grants forbidden; the plugin stores no plain-text paths
+* `Improvement` The playback queue is capped at 128 videos with up to 8 external subtitles each, and the user-selected video always stays in the queue
+* `Improvement` The compatibility baseline is fixed at AutoJs6 6.8.0 (build 5276); older hosts fall back to single-file playback with base features unaffected
+* `Dependency` Upgraded the bundled Explorer Action API from protocol v2 to the backward-compatible v12
 
-# v1.3.1
-
-###### 2026/08/27
-
-* `Fix` Added a narrow XVID-in-MKV compatibility layer that exposes validated VFW/FourCC XVID tracks to the device's built-in MPEG-4 Part 2 decoder without transcoding or modifying the source
-* `Fix` Stopped audio-only playback when no compatible system decoder exists or decoding fails, with a specific explanation and Open with another app recovery
-
-##### For more releases
+##### Full history
 
 * [CHANGELOG-en.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/assets/doc/CHANGELOG-en.md)
 
@@ -204,11 +272,11 @@ Release build:
 .\gradlew.bat :app:assembleRelease
 ```
 
-Build parameters come from `version.properties`. The current minimum SDK is 24 and the target SDK is 36.
+Build parameters come from `version.properties`; the current minimum SDK is 24 and the target SDK is 36.
 
 ******
 
-### Resource layout
+### Resource Layout
 
 ******
 
@@ -221,7 +289,7 @@ app/src/main/res/values-*/strings.xml
 app/src/main/res/raw-*/plugin_instruction.md
 ```
 
-`strings.xml` localizes plugin metadata and UI text. `plugin_instruction.md` provides usage and security instructions. `.python/generate_markdown.py` generates localized README and changelog files from JSON sources.
+`strings.xml` localizes the plugin information and player interface, and `plugin_instruction.md` provides the usage notes shown on the host side. All README and CHANGELOG files are generated from JSON sources by `.python/generate_markdown.py`: to change the documentation, edit `lang_*.json` under `.readme` and `.changelog` and rerun the script instead of editing the generated Markdown files.
 
 ******
 
@@ -230,5 +298,5 @@ app/src/main/res/raw-*/plugin_instruction.md
 ******
 
 - AutoJs6 documentation: https://docs.autojs6.com
+- AndroidX Media3 ExoPlayer (playback engine): https://developer.android.com/media/media3/exoplayer
 - Android secure file sharing: https://developer.android.com/training/secure-file-sharing
-- AndroidX Media3 ExoPlayer: https://developer.android.com/media/media3/exoplayer

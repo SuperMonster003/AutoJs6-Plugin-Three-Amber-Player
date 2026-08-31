@@ -32,9 +32,44 @@ internal class PlayerSettingsStore(context: Context) {
             .apply()
     }
 
+    fun readSubtitleStyle(): SubtitleStyleSettings = SubtitleStyleSettings(
+        textScale = SubtitleStylePolicy.enumOrDefault(
+            preferences.getString(KEY_SUBTITLE_TEXT_SCALE, null),
+            SubtitleTextScale.PERCENT_100,
+        ),
+        foregroundColor = SubtitleStylePolicy.enumOrDefault(
+            preferences.getString(KEY_SUBTITLE_FOREGROUND, null),
+            SubtitleForegroundColor.WHITE,
+        ),
+        backgroundStyle = SubtitleStylePolicy.enumOrDefault(
+            preferences.getString(KEY_SUBTITLE_BACKGROUND, null),
+            SubtitleBackgroundStyle.OPAQUE,
+        ),
+        bottomMargin = SubtitleStylePolicy.enumOrDefault(
+            preferences.getString(KEY_SUBTITLE_BOTTOM_MARGIN, null),
+            SubtitleBottomMargin.PERCENT_8,
+        ),
+        customized = preferences.getBoolean(KEY_SUBTITLE_CUSTOMIZED, false),
+    )
+
+    fun writeSubtitleStyle(settings: SubtitleStyleSettings) {
+        preferences.edit()
+            .putString(KEY_SUBTITLE_TEXT_SCALE, settings.textScale.name)
+            .putString(KEY_SUBTITLE_FOREGROUND, settings.foregroundColor.name)
+            .putString(KEY_SUBTITLE_BACKGROUND, settings.backgroundStyle.name)
+            .putString(KEY_SUBTITLE_BOTTOM_MARGIN, settings.bottomMargin.name)
+            .putBoolean(KEY_SUBTITLE_CUSTOMIZED, true)
+            .apply()
+    }
+
     private companion object {
         const val PREFERENCES_NAME = "player_settings"
         const val KEY_GESTURE_SENSITIVITY = "gesture_sensitivity"
         const val KEY_DOUBLE_TAP_SEEK_MS = "double_tap_seek_ms"
+        const val KEY_SUBTITLE_TEXT_SCALE = "subtitle_text_scale"
+        const val KEY_SUBTITLE_FOREGROUND = "subtitle_foreground"
+        const val KEY_SUBTITLE_BACKGROUND = "subtitle_background"
+        const val KEY_SUBTITLE_BOTTOM_MARGIN = "subtitle_bottom_margin"
+        const val KEY_SUBTITLE_CUSTOMIZED = "subtitle_customized"
     }
 }

@@ -121,6 +121,48 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/precision_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/frame_back_button"
+                android:layout_width="48dp"
+                android:layout_height="44dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/action_previous_frame"
+                android:padding="12dp"
+                android:src="@drawable/ic_frame_previous" />
+
+            <TextView
+                android:id="@+id/ab_loop_button"
+                android:layout_width="64dp"
+                android:layout_height="44dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="@string/action_ab_loop"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/ab_loop_clear_label"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/frame_forward_button"
+                android:layout_width="48dp"
+                android:layout_height="44dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/action_next_frame"
+                android:padding="12dp"
+                android:src="@drawable/ic_frame_next" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
