@@ -1,13 +1,14 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
-  <h1>3-Ember Player</h1>
-
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    <picture>
+      <source srcset="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap-night/ic_launcher.png?raw=true" media="(prefers-color-scheme: dark)" />
+      <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    </picture>
   </p>
 
-  <p>파일 관리자 플러그인. 동영상 파일 직접 재생</p>
+  <p>재생 목록, 자막, 백그라운드 오디오를 지원하는 동영상 재생</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -221,13 +222,17 @@ required host build: 5276
 
 #### v3.0.0
 
-###### 2026/08/31
+###### 2026/09/01
 
 * `기능` 플레이어 접근성 전체 점검: 이름과 동적 상태가 있는 컨트롤, TalkBack 터치 탐색 중 계속 표시되는 조작부, 모든 제스처의 버튼 또는 메뉴 대체 경로, 명확한 포커스 순서, 200% 글꼴/화면 배율 검증을 추가했습니다
 * `기능` 키보드 및 리모컨 지원: 보이는 포커스 링, DPAD 탐색, Space/Enter 재생 및 일시정지, 설정한 5/10/30초 단위 좌우 탐색, MediaSession을 통한 미디어 키를 지원합니다
 * `기능` 기본값이 꺼진 선택형 백그라운드 오디오: 알림 권한을 허용하면 PIP를 사용할 수 없을 때 재생 중인 플레이어를 끊김 없이 알림 제어가 있는 미디어 재생 포그라운드 서비스로 넘길 수 있습니다
 * `개선` PIP가 항상 백그라운드 오디오보다 우선합니다; 설정 해제, 재생 완료, 오류 또는 명시적 종료 시 서비스를 중지하고, 알림을 탭하면 같은 플레이어와 이어지는 위치를 되찾습니다
 * `개선` 헤드셋 동작은 Media3를 따릅니다: 한 번 누르면 재생/일시정지, 외부 기기 두 번 누르기는 다음 대기열 항목이 있을 때 이동, 명시적 Previous 미디어 명령은 이전 항목으로 이동합니다; 비표준 세 번 누르기 타이밍을 추가하지 않습니다
+* `개선` README 레이아웃과 Gradle 플랫폼 버전 관리 방식을 통일
+* `개선` 플러그인 설명을 간결하게 다듬고 다국어 리소스의 문장 부호를 통일
+* `개선` 외부 보기 진입점을 External Viewer로 변경해 뷰어 의미를 통일
+* `개선` 업데이트 대화상자의 릴리스 기록 버튼에서 내장 릴리스 기록 페이지를 열도록 변경
 
 #### v2.3.0
 

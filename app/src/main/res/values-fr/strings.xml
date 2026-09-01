@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="action_back">Retour</string>
     <string name="action_audio_track">Piste audio</string>
     <string name="action_lock_controls">Verrouiller les commandes</string>
@@ -44,7 +44,7 @@
     <string name="orientation_landscape">Paysage</string>
     <string name="orientation_portrait">Portrait</string>
     <string name="pip_requires_playback">Lancez la lecture avant l’incrustation vidéo</string>
-    <string name="plugin_description">Plugin de gestionnaire de fichiers. Lire directement les fichiers vidéo</string>
+    <string name="plugin_description">Lecture vidéo avec listes, sous-titres et audio en arrière-plan</string>
     <string name="resize_mode_fill">Remplir</string>
     <string name="resize_mode_fit">Ajuster</string>
     <string name="resize_mode_zoom">Zoom</string>
@@ -138,7 +138,7 @@
     <string name="about_open_project">Ouvrir la page du projet</string>
     <string name="about_open_releases">Voir les versions publiées</string>
     <string name="about_version">Version %1$s · build %2$d</string>
-    <string name="update_checking">Recherche de mises à jour…</string>
+    <string name="update_checking" tools:ignore="TypographyEllipsis">Recherche de mises à jour...</string>
     <string name="update_checking_description">Connexion à la page officielle des versions GitHub</string>
     <string name="update_check_failed">Échec de la recherche de mises à jour</string>
     <string name="update_check_failed_description">Vérifiez votre connexion réseau et réessayez plus tard.</string>

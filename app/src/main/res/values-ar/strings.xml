@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="action_back">رجوع</string>
     <string name="action_audio_track">المسار الصوتي</string>
     <string name="action_lock_controls">قفل عناصر التحكم</string>
@@ -44,7 +44,7 @@
     <string name="orientation_landscape">أفقي</string>
     <string name="orientation_portrait">عمودي</string>
     <string name="pip_requires_playback">ابدأ التشغيل قبل الانتقال إلى وضع صورة داخل صورة</string>
-    <string name="plugin_description">ملحق مدير الملفات. تشغيل ملفات الفيديو مباشرة</string>
+    <string name="plugin_description">تشغيل الفيديو مع قوائم التشغيل والترجمة والصوت في الخلفية</string>
     <string name="resize_mode_fill">ملء</string>
     <string name="resize_mode_fit">احتواء</string>
     <string name="resize_mode_zoom">تكبير</string>
@@ -138,7 +138,7 @@
     <string name="about_open_project">فتح صفحة المشروع</string>
     <string name="about_open_releases">عرض الإصدارات المنشورة</string>
     <string name="about_version">الإصدار %1$s · البنية %2$d</string>
-    <string name="update_checking">جار التحقق من التحديثات…</string>
+    <string name="update_checking" tools:ignore="TypographyEllipsis">جار التحقق من التحديثات...</string>
     <string name="update_checking_description">جار الاتصال بصفحة إصدارات GitHub الرسمية</string>
     <string name="update_check_failed">تعذر التحقق من التحديثات</string>
     <string name="update_check_failed_description">تحقق من اتصال الشبكة وحاول مرة أخرى لاحقا.</string>

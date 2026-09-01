@@ -1,7 +1,7 @@
 {
   "$name": "한국어",
   "text_current_lowercase": "현재",
-  "text_plugin_synopsis": "파일 관리자 플러그인. 동영상 파일 직접 재생",
+  "text_plugin_synopsis": "재생 목록, 자막, 백그라운드 오디오를 지원하는 동영상 재생",
   "h3_languages_with_ascii": "언어 (Languages)",
   "p_languages_all_supported_for_readme": "README.md는 현재 다음 언어로 제공됩니다",
   "h3_introduction": "소개",

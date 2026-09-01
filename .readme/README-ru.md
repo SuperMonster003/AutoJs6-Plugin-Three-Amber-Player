@@ -1,13 +1,14 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
-  <h1>3-Ember Player</h1>
-
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    <picture>
+      <source srcset="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap-night/ic_launcher.png?raw=true" media="(prefers-color-scheme: dark)" />
+      <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    </picture>
   </p>
 
-  <p>Плагин файлового менеджера. Прямое воспроизведение видеофайлов</p>
+  <p>Воспроизведение видео с плейлистами, субтитрами и фоновым звуком</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -221,13 +222,17 @@ required host build: 5276
 
 #### v3.0.0
 
-###### 2026/08/31
+###### 2026/09/01
 
 * `Функция` Полная проверка доступности плеера: подписанные элементы с динамическим состоянием, постоянные органы управления при сенсорном исследовании TalkBack, кнопка или меню для каждого жеста, определённый порядок фокуса и проверка при масштабе текста и экрана 200 %
 * `Функция` Поддержка клавиатуры и пульта: видимые рамки фокуса, навигация DPAD, воспроизведение/пауза по Пробелу/Вводу, перемотка влево/вправо на настроенные 5/10/30 секунд и медиаклавиши через MediaSession
 * `Функция` Необязательный фоновый звук, по умолчанию выключен: после разрешения уведомлений активное воспроизведение без разрыва передаётся foreground-сервису мультимедиа с управлением из уведомления, когда PiP недоступен
 * `Улучшение` PiP всегда имеет приоритет; выключение настройки, завершение, ошибка или явный выход останавливают сервис, а нажатие уведомления возвращает тот же плеер с непрерывной позицией
 * `Улучшение` Гарнитура следует Media3: одно нажатие переключает воспроизведение/паузу, двойное на внешнем устройстве переходит вперёд при наличии следующего элемента, явная команда Previous возвращает назад; нестандартный таймер тройного нажатия не добавляется
+* `Улучшение` Унифицировать оформление README и управление версиями платформы Gradle
+* `Улучшение` Сократить описание плагина и унифицировать пунктуацию в многоязычных ресурсах
+* `Улучшение` Переименовать внешний просмотр в External Viewer для единообразной семантики средства просмотра
+* `Улучшение` Открывать встроенную страницу истории выпусков кнопкой истории выпусков в диалоге обновления
 
 #### v2.3.0
 

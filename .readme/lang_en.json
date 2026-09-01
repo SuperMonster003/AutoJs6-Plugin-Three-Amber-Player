@@ -1,7 +1,7 @@
 {
   "$name": "English",
   "text_current_lowercase": "current",
-  "text_plugin_synopsis": "File manager plugin. Play video files directly",
+  "text_plugin_synopsis": "Video playback with playlists, subtitles, and background audio",
   "h3_languages_with_ascii": "Languages",
   "p_languages_all_supported_for_readme": "The README.md is currently available in the following languages",
   "h3_introduction": "Introduction",

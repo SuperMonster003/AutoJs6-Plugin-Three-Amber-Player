@@ -1,7 +1,7 @@
 {
   "$name": "Русский",
   "text_current_lowercase": "текущий",
-  "text_plugin_synopsis": "Плагин файлового менеджера. Прямое воспроизведение видеофайлов",
+  "text_plugin_synopsis": "Воспроизведение видео с плейлистами, субтитрами и фоновым звуком",
   "h3_languages_with_ascii": "Языки (Languages)",
   "p_languages_all_supported_for_readme": "Сейчас README.md доступен на следующих языках",
   "h3_introduction": "Введение",

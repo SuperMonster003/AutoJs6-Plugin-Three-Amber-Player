@@ -8,6 +8,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.BuildConfig
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.R
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.settings.AppPreferenceStore
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.settings.ReleaseHistoryActivity
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.VideoThemedActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -147,8 +148,8 @@ internal object AppUpdateCoordinator {
             .setPositiveButton(R.string.update_view_release) { _, _ ->
                 openUrl(activity, release.pageUrl)
             }
-            .setNeutralButton(R.string.update_ignore_version) { _, _ ->
-                AppUpdateStore(activity).ignore(release.version)
+            .setNeutralButton(R.string.setting_release_history) { _, _ ->
+                activity.startActivity(Intent(activity, ReleaseHistoryActivity::class.java))
             }
             .setNegativeButton(R.string.update_later, null)
             .create()

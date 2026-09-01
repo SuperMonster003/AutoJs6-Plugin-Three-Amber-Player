@@ -2,7 +2,7 @@
 -keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.PluginInfoService { *; }
 -keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.LauncherActivity { *; }
 -keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.ExplorerActionActivity { *; }
--keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.ExternalViewActivity { *; }
+-keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.ExternalViewerActivity { *; }
 -keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.VideoPlayerActivity { *; }
 -keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.WakeActivity { *; }
 -keep class org.autojs.plugin.common.api.PluginInfo { *; }

@@ -1,7 +1,7 @@
 {
   "$name": "العربية",
   "text_current_lowercase": "الحالي",
-  "text_plugin_synopsis": "ملحق مدير الملفات. تشغيل ملفات الفيديو مباشرة",
+  "text_plugin_synopsis": "تشغيل الفيديو مع قوائم التشغيل والترجمة والصوت في الخلفية",
   "h3_languages_with_ascii": "اللغات (Languages)",
   "p_languages_all_supported_for_readme": "يتوفر ملف README.md حاليا باللغات التالية",
   "h3_introduction": "مقدمة",

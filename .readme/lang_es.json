@@ -1,7 +1,7 @@
 {
   "$name": "Español",
   "text_current_lowercase": "actual",
-  "text_plugin_synopsis": "Complemento del gestor de archivos. Reproducir archivos de video directamente",
+  "text_plugin_synopsis": "Reproducción de vídeo con listas, subtítulos y audio en segundo plano",
   "h3_languages_with_ascii": "Idiomas (Languages)",
   "p_languages_all_supported_for_readme": "El README.md está disponible actualmente en los siguientes idiomas",
   "h3_introduction": "Introducción",

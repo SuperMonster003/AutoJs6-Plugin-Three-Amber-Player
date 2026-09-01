@@ -1,13 +1,14 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
-  <h1>3-Ember Player</h1>
-
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    <picture>
+      <source srcset="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap-night/ic_launcher.png?raw=true" media="(prefers-color-scheme: dark)" />
+      <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    </picture>
   </p>
 
-  <p>文件管理器插件. 直接播放视频文件</p>
+  <p>支持播放列表, 字幕与后台音频的视频播放器</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -221,13 +222,17 @@ required host build: 5276
 
 #### v3.0.0
 
-###### 2026/08/31
+###### 2026/09/01
 
 * `新增` 完成播放页可访问性审计: 控件具备名称与动态状态, TalkBack 触摸探索时不自动隐藏, 每种手势都有按钮或菜单等价入口, 焦点顺序确定, 并通过 200% 字体与显示缩放验证
 * `新增` 支持键盘与遥控器: 清晰焦点环, DPAD 导航, 空格/回车播放暂停, 左右键按已配置的 5/10/30 秒步长跳转, 媒体键交由 MediaSession 处理
 * `新增` 新增默认关闭的可选后台听音: 授予通知权限后, 画中画不可用时可将当前播放无缝移交给媒体播放前台服务并通过通知控制
 * `优化` 画中画始终优先于后台听音; 关闭设置, 播放完成, 发生错误或主动退出播放都会停止服务, 点击通知则以相同播放器和连续进度返回播放页
 * `优化` 耳机行为遵循 Media3: 单击切换播放暂停, 外接设备双击在队列存在下一项时前进, 显式 Previous 媒体命令返回上一项; 不强加非标准三击计时
+* `优化` 统一 README 版式与 Gradle 平台版本管理方式
+* `优化` 精简插件描述并规范多语言资源中的标点符号
+* `优化` 将外部查看入口统一命名为 External Viewer
+* `优化` 插件更新对话框的发行历史按钮改为打开内置发行历史页面
 
 #### v2.3.0
 

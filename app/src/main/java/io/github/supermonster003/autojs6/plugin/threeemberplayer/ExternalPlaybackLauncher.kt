@@ -34,7 +34,7 @@ internal object ExternalPlaybackLauncher {
             putExtra(Intent.EXTRA_INITIAL_INTENTS, explicitIntents.drop(1).toTypedArray())
             putExtra(
                 Intent.EXTRA_EXCLUDE_COMPONENTS,
-                arrayOf(ComponentName(activity, ExternalViewActivity::class.java)),
+                arrayOf(ComponentName(activity, ExternalViewerActivity::class.java)),
             )
         }
         activity.startActivity(chooser)

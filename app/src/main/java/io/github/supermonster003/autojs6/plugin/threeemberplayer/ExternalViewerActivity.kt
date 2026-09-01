@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 
 /** Public ACTION_VIEW boundary. It rebuilds, rather than forwards, the incoming Intent. */
-class ExternalViewActivity : Activity() {
+class ExternalViewerActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

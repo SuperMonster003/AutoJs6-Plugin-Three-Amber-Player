@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="action_back">뒤로</string>
     <string name="action_audio_track">오디오 트랙</string>
     <string name="action_lock_controls">컨트롤 잠금</string>
@@ -44,7 +44,7 @@
     <string name="orientation_landscape">가로</string>
     <string name="orientation_portrait">세로</string>
     <string name="pip_requires_playback">재생을 시작한 후 PIP 모드로 전환하세요</string>
-    <string name="plugin_description">파일 관리자 플러그인. 동영상 파일 직접 재생</string>
+    <string name="plugin_description">재생 목록, 자막, 백그라운드 오디오를 지원하는 동영상 재생</string>
     <string name="resize_mode_fill">채우기</string>
     <string name="resize_mode_fit">맞추기</string>
     <string name="resize_mode_zoom">확대</string>
@@ -138,7 +138,7 @@
     <string name="about_open_project">프로젝트 페이지 열기</string>
     <string name="about_open_releases">게시된 릴리스 보기</string>
     <string name="about_version">버전 %1$s · 빌드 %2$d</string>
-    <string name="update_checking">업데이트 확인 중…</string>
+    <string name="update_checking" tools:ignore="TypographyEllipsis">업데이트 확인 중...</string>
     <string name="update_checking_description">공식 GitHub 릴리스 페이지에 연결 중입니다</string>
     <string name="update_check_failed">업데이트를 확인할 수 없습니다</string>
     <string name="update_check_failed_description">네트워크 연결을 확인하고 나중에 다시 시도하세요.</string>

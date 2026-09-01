@@ -1,13 +1,14 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
-  <h1>3-Ember Player</h1>
-
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    <picture>
+      <source srcset="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap-night/ic_launcher.png?raw=true" media="(prefers-color-scheme: dark)" />
+      <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    </picture>
   </p>
 
-  <p>ملحق مدير الملفات. تشغيل ملفات الفيديو مباشرة</p>
+  <p>تشغيل الفيديو مع قوائم التشغيل والترجمة والصوت في الخلفية</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -221,13 +222,17 @@ required host build: 5276
 
 #### v3.0.0
 
-###### 2026/08/31
+###### 2026/09/01
 
 * `ميزة` مراجعة كاملة لإتاحة المشغل: عناصر تحكم مسماة ذات حالة ديناميكية، وبقاؤها ظاهرة أثناء استكشاف TalkBack باللمس، وبديل بزر أو قائمة لكل إيماءة، وترتيب تركيز محدد، والتحقق عند مقياس نص وعرض 200%
 * `ميزة` دعم لوحة المفاتيح ووحدة التحكم: حلقات تركيز ظاهرة، وتنقل DPAD، وتشغيل/إيقاف مؤقت بواسطة Space/Enter، وتنقل يسارا ويمينا بخطوة 5/10/30 ثانية المضبوطة، ومفاتيح الوسائط عبر MediaSession
 * `ميزة` صوت خلفي اختياري متوقف افتراضيا: بعد منح إذن الإشعارات يمكن نقل التشغيل النشط بلا انقطاع إلى خدمة تشغيل وسائط أمامية مع عناصر تحكم في الإشعار عندما تتعذر صورة داخل صورة
 * `تحسين` تبقى صورة داخل صورة ذات الأولوية؛ يؤدي تعطيل الإعداد أو اكتمال التشغيل أو الخطأ أو الخروج المقصود إلى إيقاف الخدمة، بينما تستعيد نقرة الإشعار المشغل نفسه والموضع المتصل
 * `تحسين` يتبع سلوك سماعة الرأس Media3: نقرة واحدة تبدل التشغيل/الإيقاف، ونقرتان على الجهاز الخارجي تنتقلان إلى التالي عند وجود عنصر لاحق، وأمر Previous صريح يعود إلى السابق؛ ولا يفرض توقيت ثلاث نقرات غير قياسي
+* `تحسين` توحيد تخطيط README وطريقة إدارة إصدارات منصة Gradle
+* `تحسين` تبسيط وصف المكون الإضافي وتوحيد علامات الترقيم في الموارد متعددة اللغات
+* `تحسين` إعادة تسمية مدخل العرض الخارجي إلى External Viewer لتوحيد دلالة العارض
+* `تحسين` فتح صفحة سجل الإصدارات المضمنة من زر سجل الإصدارات في مربع حوار التحديث
 
 #### v2.3.0
 

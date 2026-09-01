@@ -36,7 +36,6 @@
     <string name="auto_advance_prompt">Playing the next item in %1$d s</string>
     <string name="action_cancel_auto_advance">Cancel</string>
     <string name="auto_advance_cancelled">Queue auto-play canceled</string>
-    <string name="app_name" translatable="false">3-Ember Player</string>
     <string name="standalone_title">Your simple video player</string>
     <string name="standalone_description">Choose a video file to play it here, or use 3-Ember Player directly from the AutoJs6 file manager.</string>
     <string name="action_open_video_file">Open a video file</string>
@@ -100,7 +99,7 @@
     <string name="about_open_project">Open project page</string>
     <string name="about_open_releases">View published releases</string>
     <string name="about_version">Version %1$s · build %2$d</string>
-    <string name="update_checking">Checking for updates…</string>
+    <string name="update_checking" tools:ignore="TypographyEllipsis">Checking for updates...</string>
     <string name="update_checking_description">Contacting the official GitHub releases page</string>
     <string name="update_check_failed">Couldn’t check for updates</string>
     <string name="update_check_failed_description">Check your network connection and try again later.</string>
@@ -122,7 +121,6 @@
     <string name="error_no_supported_video">The selected file is not a supported, readable video</string>
     <string name="theme_custom">Custom color</string>
     <string name="theme_custom_error">Enter a six-digit RGB hexadecimal color</string>
-    <string name="theme_custom_hint" translatable="false">#RRGGBB</string>
     <string name="theme_custom_title">Custom source color</string>
     <string name="theme_palette_preview">Generated palette preview</string>
     <string name="theme_picker_description">One source color generates accessible roles for controls, surfaces, outlines, and light or dark appearance.</string>
@@ -168,7 +166,7 @@
     <string name="pip_requires_playback">Start playback before entering picture-in-picture</string>
     <string name="playback_mode_sequence">Play in sequence</string>
     <string name="playback_mode_shuffle">Shuffle</string>
-    <string name="plugin_description">File manager plugin. Play video files directly</string>
+    <string name="plugin_description">Video playback with playlists, subtitles, and background audio</string>
     <string name="resize_mode_fill">Fill</string>
     <string name="resize_mode_fit">Fit</string>
     <string name="resize_mode_zoom">Zoom</string>
@@ -240,11 +238,6 @@
     <string name="media_info_bit_depth_pair_value">%1$d-bit luma / %2$d-bit chroma</string>
     <string name="media_info_copied">All video information copied</string>
     <string name="hdr_type_none">None (SDR)</string>
-    <string name="hdr_type_hdr10" translatable="false">HDR10</string>
-    <string name="hdr_type_hlg" translatable="false">HLG</string>
-    <string name="color_space_bt601" translatable="false">BT.601</string>
-    <string name="color_space_bt709" translatable="false">BT.709</string>
-    <string name="color_space_bt2020" translatable="false">BT.2020</string>
     <string name="color_range_limited">Limited</string>
     <string name="color_range_full">Full</string>
     <string name="hdr_tone_mapping_warning">This display does not report support for %1$s. Tone mapping may alter highlights and colors.</string>

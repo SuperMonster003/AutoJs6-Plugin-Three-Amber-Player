@@ -6,7 +6,7 @@
   "changelog_label_dependency": "Dependencia",
   "$data": {
     "v3.0.0": {
-      "released_date": "2026/08/31",
+      "released_date": "2026/09/01",
       "feature": [
         "Revisión completa de accesibilidad del reproductor: controles con nombre y estado dinámico, controles persistentes durante la exploración táctil de TalkBack, equivalente de botón o menú para cada gesto, orden de foco determinista y diseños verificados con texto y pantalla al 200 %",
         "Compatibilidad con teclado y mando: anillos de foco visibles, navegación DPAD, reproducción/pausa con Espacio/Intro, búsqueda izquierda/derecha según el paso configurado de 5/10/30 segundos y teclas multimedia mediante MediaSession",
@@ -14,7 +14,11 @@
       ],
       "improvement": [
         "PiP siempre tiene prioridad; desactivar el ajuste, finalizar la reproducción, un error o salir deliberadamente detiene el servicio, mientras que tocar la notificación recupera el mismo reproductor y la posición continua",
-        "El comportamiento de los auriculares sigue Media3: una pulsación alterna reproducción/pausa, la doble pulsación del dispositivo avanza si existe un siguiente elemento y un comando Previous explícito retrocede; no se impone un temporizador de triple pulsación no estándar"
+        "El comportamiento de los auriculares sigue Media3: una pulsación alterna reproducción/pausa, la doble pulsación del dispositivo avanza si existe un siguiente elemento y un comando Previous explícito retrocede; no se impone un temporizador de triple pulsación no estándar",
+        "Unificar el diseño del README y la gestión de versiones de la plataforma Gradle",
+        "Simplificar la descripción del complemento y normalizar la puntuación de los recursos multilingües",
+        "Renombrar la entrada de visualización externa como External Viewer para unificar la semántica del visor",
+        "Abrir la página integrada del historial de versiones desde el botón correspondiente del diálogo de actualización"
       ]
     },
     "v2.3.0": {

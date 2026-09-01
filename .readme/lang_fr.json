@@ -1,7 +1,7 @@
 {
   "$name": "Français",
   "text_current_lowercase": "actuel",
-  "text_plugin_synopsis": "Plugin de gestionnaire de fichiers. Lire directement les fichiers vidéo",
+  "text_plugin_synopsis": "Lecture vidéo avec listes, sous-titres et audio en arrière-plan",
   "h3_languages_with_ascii": "Langues (Languages)",
   "p_languages_all_supported_for_readme": "Le fichier README.md est actuellement disponible dans les langues suivantes",
   "h3_introduction": "Introduction",

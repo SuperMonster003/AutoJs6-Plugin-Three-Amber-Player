@@ -1,13 +1,14 @@
 <!--suppress HtmlDeprecatedAttribute, HttpUrlsUsage -->
 
 <div align="center">
-  <h1>3-Ember Player</h1>
-
   <p>
-    <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    <picture>
+      <source srcset="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap-night/ic_launcher.png?raw=true" media="(prefers-color-scheme: dark)" />
+      <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+    </picture>
   </p>
 
-  <p>Complemento del gestor de archivos. Reproducir archivos de video directamente</p>
+  <p>Reproducción de vídeo con listas, subtítulos y audio en segundo plano</p>
 
   <p>
     <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
@@ -221,13 +222,17 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 
 #### v3.0.0
 
-###### 2026/08/31
+###### 2026/09/01
 
 * `Función` Revisión completa de accesibilidad del reproductor: controles con nombre y estado dinámico, controles persistentes durante la exploración táctil de TalkBack, equivalente de botón o menú para cada gesto, orden de foco determinista y diseños verificados con texto y pantalla al 200 %
 * `Función` Compatibilidad con teclado y mando: anillos de foco visibles, navegación DPAD, reproducción/pausa con Espacio/Intro, búsqueda izquierda/derecha según el paso configurado de 5/10/30 segundos y teclas multimedia mediante MediaSession
 * `Función` Audio opcional en segundo plano, desactivado de forma predeterminada: tras conceder permiso de notificaciones, la reproducción activa puede pasar sin cortes a un servicio multimedia en primer plano con controles de notificación cuando PiP no está disponible
 * `Mejora` PiP siempre tiene prioridad; desactivar el ajuste, finalizar la reproducción, un error o salir deliberadamente detiene el servicio, mientras que tocar la notificación recupera el mismo reproductor y la posición continua
 * `Mejora` El comportamiento de los auriculares sigue Media3: una pulsación alterna reproducción/pausa, la doble pulsación del dispositivo avanza si existe un siguiente elemento y un comando Previous explícito retrocede; no se impone un temporizador de triple pulsación no estándar
+* `Mejora` Unificar el diseño del README y la gestión de versiones de la plataforma Gradle
+* `Mejora` Simplificar la descripción del complemento y normalizar la puntuación de los recursos multilingües
+* `Mejora` Renombrar la entrada de visualización externa como External Viewer para unificar la semántica del visor
+* `Mejora` Abrir la página integrada del historial de versiones desde el botón correspondiente del diálogo de actualización
 
 #### v2.3.0
 

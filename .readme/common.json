@@ -2,6 +2,7 @@
   "product_name": "3-Ember Player",
   "icon_alt": "3-Ember Player icon",
   "repo_url": "https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player",
+  "license_url": "{{ repo_url }}/blob/master/LICENSE",
   "repo_slug": "SuperMonster003/AutoJs6-Plugin-Video-Player",
   "docs_autojs6_url": "https://docs.autojs6.com",
   "media3_url": "https://developer.android.com/media/media3/exoplayer",
