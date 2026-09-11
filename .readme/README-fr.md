@@ -222,7 +222,7 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 #### v3.0.0
 
-###### 2026/09/01
+###### 2026/09/11
 
 * `Fonctionnalité` Audit complet de l'accessibilité du lecteur: commandes nommées avec état dynamique, commandes persistantes pendant l'exploration tactile TalkBack, équivalent par bouton ou menu pour chaque geste, ordre de focus déterministe et validation à 200 % pour le texte et l'affichage
 * `Fonctionnalité` Prise en charge du clavier et de la télécommande: anneaux de focus visibles, navigation DPAD, lecture/pause avec Espace/Entrée, recherche gauche/droite selon le pas configuré de 5/10/30 secondes et touches multimédias via MediaSession
@@ -233,6 +233,7 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 * `Amélioration` Simplifier la description du plugin et normaliser la ponctuation des ressources multilingues
 * `Amélioration` Renommer l'entrée de visualisation externe en External Viewer pour unifier la sémantique de la visionneuse
 * `Amélioration` Ouvrir la page intégrée de l'historique des versions depuis le bouton correspondant de la boîte de dialogue de mise à jour
+* `Amélioration` La vérification de compilation rejette les dépendances natives involontaires et produit un rapport JSON
 
 #### v2.3.0
 
@@ -304,3 +305,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - Documentation AutoJs6: https://docs.autojs6.com
 - AndroidX Media3 ExoPlayer (moteur de lecture): https://developer.android.com/media/media3/exoplayer
 - Partage sécurisé de fichiers Android: https://developer.android.com/training/secure-file-sharing
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)

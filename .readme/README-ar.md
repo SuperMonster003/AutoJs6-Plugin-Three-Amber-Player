@@ -222,7 +222,7 @@ required host build: 5276
 
 #### v3.0.0
 
-###### 2026/09/01
+###### 2026/09/11
 
 * `ميزة` مراجعة كاملة لإتاحة المشغل: عناصر تحكم مسماة ذات حالة ديناميكية، وبقاؤها ظاهرة أثناء استكشاف TalkBack باللمس، وبديل بزر أو قائمة لكل إيماءة، وترتيب تركيز محدد، والتحقق عند مقياس نص وعرض 200%
 * `ميزة` دعم لوحة المفاتيح ووحدة التحكم: حلقات تركيز ظاهرة، وتنقل DPAD، وتشغيل/إيقاف مؤقت بواسطة Space/Enter، وتنقل يسارا ويمينا بخطوة 5/10/30 ثانية المضبوطة، ومفاتيح الوسائط عبر MediaSession
@@ -233,6 +233,7 @@ required host build: 5276
 * `تحسين` تبسيط وصف المكون الإضافي وتوحيد علامات الترقيم في الموارد متعددة اللغات
 * `تحسين` إعادة تسمية مدخل العرض الخارجي إلى External Viewer لتوحيد دلالة العارض
 * `تحسين` فتح صفحة سجل الإصدارات المضمنة من زر سجل الإصدارات في مربع حوار التحديث
+* `تحسين` التحقق أثناء البناء لمنع إدخال تبعيات أصلية غير مقصودة, مع تقرير JSON
 
 #### v2.3.0
 
@@ -304,3 +305,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - وثائق AutoJs6: https://docs.autojs6.com
 - AndroidX Media3 ExoPlayer (محرك التشغيل): https://developer.android.com/media/media3/exoplayer
 - مشاركة الملفات الآمنة في Android: https://developer.android.com/training/secure-file-sharing
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)

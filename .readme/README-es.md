@@ -222,7 +222,7 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 
 #### v3.0.0
 
-###### 2026/09/01
+###### 2026/09/11
 
 * `Función` Revisión completa de accesibilidad del reproductor: controles con nombre y estado dinámico, controles persistentes durante la exploración táctil de TalkBack, equivalente de botón o menú para cada gesto, orden de foco determinista y diseños verificados con texto y pantalla al 200 %
 * `Función` Compatibilidad con teclado y mando: anillos de foco visibles, navegación DPAD, reproducción/pausa con Espacio/Intro, búsqueda izquierda/derecha según el paso configurado de 5/10/30 segundos y teclas multimedia mediante MediaSession
@@ -233,6 +233,7 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 * `Mejora` Simplificar la descripción del complemento y normalizar la puntuación de los recursos multilingües
 * `Mejora` Renombrar la entrada de visualización externa como External Viewer para unificar la semántica del visor
 * `Mejora` Abrir la página integrada del historial de versiones desde el botón correspondiente del diálogo de actualización
+* `Mejora` La verificación de compilación rechaza dependencias nativas accidentales y genera un informe JSON
 
 #### v2.3.0
 
@@ -304,3 +305,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - Documentación de AutoJs6: https://docs.autojs6.com
 - AndroidX Media3 ExoPlayer (motor de reproducción): https://developer.android.com/media/media3/exoplayer
 - Uso compartido seguro de archivos en Android: https://developer.android.com/training/secure-file-sharing
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)

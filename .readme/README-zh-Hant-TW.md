@@ -222,7 +222,7 @@ required host build: 5276
 
 #### v3.0.0
 
-###### 2026/09/01
+###### 2026/09/11
 
 * `新增` 完成播放頁無障礙稽核: 控制項具備名稱與動態狀態, TalkBack 觸控探索時不會自動隱藏, 每種手勢都有按鈕或選單等效入口, 焦點順序明確, 並通過 200% 字體與顯示縮放驗證
 * `新增` 支援鍵盤與遙控器: 清楚焦點環, DPAD 導覽, 空白鍵/Enter 播放暫停, 左右鍵依已設定的 5/10/30 秒步長跳轉, 媒體鍵交由 MediaSession 處理
@@ -233,6 +233,7 @@ required host build: 5276
 * `優化` 精簡外掛描述並規範多語言資源中的標點符號
 * `優化` 將外部檢視入口統一命名為 External Viewer
 * `優化` 外掛更新對話框的發行歷史按鈕改為開啟內建發行歷史頁面
+* `優化` 建置階段阻止意外引入原生相依套件, 並輸出 JSON 校驗報告
 
 #### v2.3.0
 
@@ -304,3 +305,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - AutoJs6 文件: https://docs.autojs6.com
 - AndroidX Media3 ExoPlayer (播放引擎): https://developer.android.com/media/media3/exoplayer
 - Android 安全檔案分享: https://developer.android.com/training/secure-file-sharing
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)

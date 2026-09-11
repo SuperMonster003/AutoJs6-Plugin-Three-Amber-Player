@@ -222,7 +222,7 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 #### v3.0.0
 
-###### 2026/09/01
+###### 2026/09/11
 
 * `Feature` Full player accessibility pass: named and state-aware controls, persistent controls during TalkBack touch exploration, button or menu equivalents for every gesture, deterministic focus order, and layouts verified at 200% text and display scale
 * `Feature` Keyboard and remote support: visible focus rings, DPAD navigation, Space/Enter play-pause, left/right seeking by the configured 5/10/30-second step, and media keys through MediaSession
@@ -233,6 +233,7 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 * `Improvement` Refine the plugin description and normalize punctuation in multilingual resources
 * `Improvement` Rename the external viewing entry to External Viewer for consistent viewer semantics
 * `Improvement` Open the built-in release history page from the release history button in the update dialog
+* `Improvement` Build verification rejects accidental native dependencies and produces a JSON report
 
 #### v2.3.0
 
@@ -304,3 +305,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - AutoJs6 documentation: https://docs.autojs6.com
 - AndroidX Media3 ExoPlayer (playback engine): https://developer.android.com/media/media3/exoplayer
 - Android secure file sharing: https://developer.android.com/training/secure-file-sharing
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)

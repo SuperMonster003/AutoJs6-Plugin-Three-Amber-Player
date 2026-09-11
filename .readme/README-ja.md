@@ -222,7 +222,7 @@ required host build: 5276
 
 #### v3.0.0
 
-###### 2026/09/01
+###### 2026/09/11
 
 * `機能` プレーヤーのアクセシビリティを全面監査: 名前と動的状態を持つコントロール, TalkBack タッチ探索中に常時表示される操作, すべてのジェスチャーに対するボタンまたはメニューの代替手段, 確定したフォーカス順序, 200% の文字/表示倍率での検証を追加
 * `機能` キーボードとリモコンに対応: 見えるフォーカスリング, DPAD ナビゲーション, Space/Enter の再生/一時停止, 設定した 5/10/30 秒単位の左右シーク, MediaSession 経由のメディアキーをサポート
@@ -233,6 +233,7 @@ required host build: 5276
 * `改善` プラグインの説明を簡潔にし, 多言語リソースの句読点を統一
 * `改善` 外部表示エントリを External Viewer に改名し, ビューアーの意味を統一
 * `改善` 更新ダイアログのリリース履歴ボタンから内蔵のリリース履歴ページを開くように変更
+* `改善` 意図しないネイティブ依存関係をビルド時に拒否し, JSON レポートを生成
 
 #### v2.3.0
 
@@ -304,3 +305,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - AutoJs6 ドキュメント: https://docs.autojs6.com
 - AndroidX Media3 ExoPlayer (再生エンジン): https://developer.android.com/media/media3/exoplayer
 - Android の安全なファイル共有: https://developer.android.com/training/secure-file-sharing
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)

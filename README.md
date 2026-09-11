@@ -222,7 +222,7 @@ required host build: 5276
 
 #### v3.0.0
 
-###### 2026/09/01
+###### 2026/09/11
 
 * `新增` 完成播放页可访问性审计: 控件具备名称与动态状态, TalkBack 触摸探索时不自动隐藏, 每种手势都有按钮或菜单等价入口, 焦点顺序确定, 并通过 200% 字体与显示缩放验证
 * `新增` 支持键盘与遥控器: 清晰焦点环, DPAD 导航, 空格/回车播放暂停, 左右键按已配置的 5/10/30 秒步长跳转, 媒体键交由 MediaSession 处理
@@ -233,6 +233,7 @@ required host build: 5276
 * `优化` 精简插件描述并规范多语言资源中的标点符号
 * `优化` 将外部查看入口统一命名为 External Viewer
 * `优化` 插件更新对话框的发行历史按钮改为打开内置发行历史页面
+* `优化` 构建阶段阻止意外引入原生依赖, 并输出 JSON 校验报告
 
 #### v2.3.0
 
@@ -304,3 +305,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - AutoJs6 文档: https://docs.autojs6.com
 - AndroidX Media3 ExoPlayer (播放引擎): https://developer.android.com/media/media3/exoplayer
 - Android 安全文件共享: https://developer.android.com/training/secure-file-sharing
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)

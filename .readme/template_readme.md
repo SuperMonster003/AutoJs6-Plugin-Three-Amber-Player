@@ -198,3 +198,6 @@ app/src/main/res/raw-*/plugin_instruction.md
 - {{ text_link_autojs6_docs }}: {{ docs_autojs6_url }}
 - {{ text_link_media3_exoplayer }}: {{ media3_url }}
 - {{ text_link_android_secure_file_sharing }}: {{ android_secure_files_url }}
+
+
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)
