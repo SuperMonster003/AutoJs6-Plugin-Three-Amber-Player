@@ -1,5 +1,6 @@
 package io.github.supermonster003.autojs6.plugin.threeemberplayer
 
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.playlist.PlaylistParser
 import java.util.Locale
 
 internal data class ExplorerSiblingItem(
@@ -57,6 +58,7 @@ internal object HostMediaDiscoveryPolicy {
             .toList()
         val subtitleFiles = safeFiles.filter { extension(it.displayName) in SUBTITLE_MIME_TYPES }
         val videosByName = safeFiles
+            .filter { PlaylistParser.format(it.displayName, it.mimeType) == null }
             .filter { item ->
                 VideoRequestPolicy.normalizeVideoMimeType(item.mimeType) != null ||
                     extension(item.displayName) in ThreeEmberPlayerPlugin.EXTENSIONS

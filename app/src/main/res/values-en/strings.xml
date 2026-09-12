@@ -252,4 +252,11 @@
     <string name="accessibility_on">On</string>
     <string name="accessibility_off">Off</string>
     <string name="background_audio_notification_permission_required">Notification permission is required for background audio controls. The option remains off.</string>
+    <string name="playlist_folder_title">Open playlist folder</string>
+    <string name="playlist_folder_message">Select the folder containing this playlist to read its referenced media. Only files inside the selected folder can be played.</string>
+    <string name="playlist_invalid">Cannot read this playlist. Check its format, or open it from the standalone player to select its media folder.</string>
+    <string name="playlist_empty">No accessible supported media in this playlist. Host playback only supports files in the same folder; network and nested playlists are not supported.</string>
+    <string name="playlist_too_large">This playlist exceeds the size or entry limit.</string>
+    <string name="playlist_hls_unsupported">This is an HLS stream manifest. Local playlist playback does not support HLS streams.</string>
+    <string name="playlist_skipped">Loaded: %1$d. Skipped (unavailable, unsupported, or over the limit): %2$d.</string>
 </resources>

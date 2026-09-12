@@ -252,4 +252,11 @@
     <string name="accessibility_on">开启</string>
     <string name="accessibility_off">关闭</string>
     <string name="background_audio_notification_permission_required">后台音频控件需要通知权限, 此选项将保持关闭.</string>
+    <string name="playlist_folder_title">打开播放列表文件夹</string>
+    <string name="playlist_folder_message">请选择此播放列表所在的文件夹，以读取它引用的媒体。只能播放所选文件夹范围内的文件。</string>
+    <string name="playlist_invalid">无法读取播放列表。请检查格式，或从独立播放器打开以选择媒体文件夹。</string>
+    <string name="playlist_empty">播放列表中没有可访问且受支持的媒体。宿主入口仅支持同目录文件；不支持网络地址和嵌套播放列表。</string>
+    <string name="playlist_too_large">播放列表超过文件大小或条目数量限制。</string>
+    <string name="playlist_hls_unsupported">这是 HLS 流清单。本地播放列表功能不支持 HLS 流。</string>
+    <string name="playlist_skipped">已加载 %1$d 项；跳过 %2$d 项无法访问、不受支持或超出数量限制的条目。</string>
 </resources>

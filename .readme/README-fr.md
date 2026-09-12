@@ -52,6 +52,7 @@ Le plugin applique un modèle de sécurité en lecture seule: les vidéos arrive
 
 ******
 
+- Listes locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservent ordre, titres et doublons. Depuis AutoJs6, les fichiers doivent être dans le même dossier; le lecteur autonome demande le dossier pour les chemins relatifs. Une liste à la fois, 128 éléments maximum. URL réseau, HLS et listes imbriquées non pris en charge.
 - Lecture en un appui: appuyez sur un fichier vidéo dans le gestionnaire de fichiers AutoJs6 et il s'ouvre directement en plein écran immersif, sans aucune configuration.
 - Des gestes bien pensés: balayez la moitié gauche pour la luminosité et la moitié droite pour le volume, balayez horizontalement pour naviguer dans la vidéo, faites un double appui sur les côtés pour sauter, un double appui au centre pour lecture/pause, un appui long pour une vitesse temporaire de 2×, et verrouillez toutes les commandes d'un seul appui pour éviter les appuis accidentels.
 - Vitesse et image sous contrôle: 9 vitesses de lecture de 0,25× à 3×, zoom par pincement (0,25× à 4×), modes d'affichage adapter/remplir/rogner, et bascule de l'orientation en un appui avec suggestion automatique selon le format de l'image.
@@ -222,8 +223,9 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 #### v3.0.0
 
-###### 2026/09/11
+###### 2026/09/12
 
+* `Fonctionnalité` Listes locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservent ordre, titres et doublons. Depuis AutoJs6, les fichiers doivent être dans le même dossier; le lecteur autonome demande le dossier pour les chemins relatifs. Une liste à la fois, 128 éléments maximum. URL réseau, HLS et listes imbriquées non pris en charge
 * `Fonctionnalité` Audit complet de l'accessibilité du lecteur: commandes nommées avec état dynamique, commandes persistantes pendant l'exploration tactile TalkBack, équivalent par bouton ou menu pour chaque geste, ordre de focus déterministe et validation à 200 % pour le texte et l'affichage
 * `Fonctionnalité` Prise en charge du clavier et de la télécommande: anneaux de focus visibles, navigation DPAD, lecture/pause avec Espace/Entrée, recherche gauche/droite selon le pas configuré de 5/10/30 secondes et touches multimédias via MediaSession
 * `Fonctionnalité` Audio facultatif en arrière-plan, désactivé par défaut: après autorisation des notifications, la lecture active peut passer sans coupure à un service multimédia de premier plan avec commandes de notification lorsque le PiP est indisponible

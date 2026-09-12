@@ -52,6 +52,7 @@ The plugin sticks to a read-only security model: videos enter the player through
 
 ******
 
+- Local playlists: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL preserve order, titles and repeated entries. Host playback reads the same folder; standalone playback asks for the playlist folder to resolve relative paths. One list at a time, up to 128 items. Network URLs, HLS and nested playlists are not supported.
 - Tap to play: tap a video file in the AutoJs6 file manager and it opens directly in immersive full screen, no setup required.
 - Handy gestures: swipe the left half for brightness and the right half for volume, swipe horizontally to seek, double-tap the sides to jump, double-tap the center to play/pause, long-press for temporary 2× speed, and lock all controls with one tap to prevent accidental touches.
 - Speed and picture control: 9 playback speeds from 0.25× to 3×, pinch-to-zoom (0.25× to 4×), fit/fill/crop scaling modes, and one-tap orientation switching with an automatic suggestion based on the aspect ratio.
@@ -222,8 +223,9 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 #### v3.0.0
 
-###### 2026/09/11
+###### 2026/09/12
 
+* `Feature` Local playlists: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL preserve order, titles and repeated entries. Host playback reads the same folder; standalone playback asks for the playlist folder to resolve relative paths. One list at a time, up to 128 items. Network URLs, HLS and nested playlists are not supported
 * `Feature` Full player accessibility pass: named and state-aware controls, persistent controls during TalkBack touch exploration, button or menu equivalents for every gesture, deterministic focus order, and layouts verified at 200% text and display scale
 * `Feature` Keyboard and remote support: visible focus rings, DPAD navigation, Space/Enter play-pause, left/right seeking by the configured 5/10/30-second step, and media keys through MediaSession
 * `Feature` Optional background audio, off by default: after notification permission is granted, active playback can move without interruption to a media-playback foreground service with notification controls when picture-in-picture is unavailable

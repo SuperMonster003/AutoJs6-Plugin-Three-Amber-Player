@@ -45,7 +45,7 @@ class PluginContractInstrumentationTest {
         val action = actions.first()
         assertEquals(ThreeEmberPlayerPlugin.ACTION_ID, action.getString(ExplorerActionCatalogKeys.ID))
         assertEquals(ExplorerActionValues.CARDINALITY_SINGLE, action.getInt(ExplorerActionCatalogKeys.CARDINALITY))
-        assertEquals(listOf("video/*"), action.getStringArrayList(ExplorerActionCatalogKeys.MIME_TYPES))
+        assertEquals(listOf("video/*") + io.github.supermonster003.autojs6.plugin.threeemberplayer.playlist.PlaylistParser.mimeTypes.asList(), action.getStringArrayList(ExplorerActionCatalogKeys.MIME_TYPES))
         assertTrue(action.getBoolean(ExplorerActionCatalogKeys.READ_SIBLINGS))
         assertTrue(action.getBoolean(ExplorerActionCatalogKeys.PLAYBACK_PROGRESS))
 

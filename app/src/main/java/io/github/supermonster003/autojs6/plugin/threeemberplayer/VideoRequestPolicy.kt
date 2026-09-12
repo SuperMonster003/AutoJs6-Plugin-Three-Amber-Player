@@ -3,6 +3,8 @@ package io.github.supermonster003.autojs6.plugin.threeemberplayer
 import java.net.URI
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.playlist.PlaylistParser
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.playlist.PlaylistLocationPolicy
 import java.util.Locale
 import java.util.UUID
 
@@ -103,6 +105,14 @@ internal data class ValidatedExternalRequest(
 /** Pure validation for every trust boundary, kept Android-free so it is locally testable. */
 internal object VideoRequestPolicy {
 
+    fun normalizeInputMimeType(value: String?, displayName: String = ""): String? {
+        val raw = value ?: return null
+        if (raw != raw.trim() || raw != raw.lowercase(Locale.ROOT)) return null
+        return if (PlaylistParser.format(displayName, raw) != null) {
+            raw.takeIf { it == "*/*" || Regex("[a-z0-9][a-z0-9!#$&^_.+-]*/(?:[a-z0-9][a-z0-9!#$&^_.+-]*|\\*)").matches(it) }
+        } else normalizeVideoMimeType(raw)
+    }
+
     const val EXPLORER_EXECUTE_ACTION = "org.autojs.plugin.EXPLORER_ACTION_EXECUTE"
     const val EXTERNAL_VIEW_ACTION = "android.intent.action.VIEW"
     const val INTERNAL_PLAY_ACTION =
@@ -154,7 +164,7 @@ internal object VideoRequestPolicy {
                 ?.takeIf { it in 0L..MAX_DECLARED_SIZE }
                 ?: return null
             if ((targetEnvelope.lastModified ?: return null) < UNKNOWN_DECLARED_SIZE) return null
-            val mimeType = normalizeVideoMimeType(targetEnvelope.mimeType) ?: return null
+            val mimeType = normalizeInputMimeType(targetEnvelope.mimeType, displayName) ?: return null
             ValidatedExplorerRequest(
                 targetId = targetId,
                 targetUri = target.original,
@@ -175,7 +185,7 @@ internal object VideoRequestPolicy {
         val validEnvelopeMime = if (multipleAction) {
             envelope.envelopeMimeType == MULTIPLE_TARGET_MIME_TYPE
         } else {
-            normalizeVideoMimeType(envelope.envelopeMimeType) == primary.mimeType
+            normalizeInputMimeType(envelope.envelopeMimeType, primary.displayName) == primary.mimeType
         }
         if (!validEnvelopeMime) return null
 
@@ -189,9 +199,14 @@ internal object VideoRequestPolicy {
     fun validateExternal(envelope: ExternalRequestEnvelope): ValidatedExternalRequest? {
         if (envelope.action != EXTERNAL_VIEW_ACTION) return null
         if (!envelope.grants.isExactReadOnly()) return null
-        val target = parsePlainContentUri(envelope.targetUri) ?: return null
-        val mimeType = normalizeVideoMimeType(envelope.mimeType) ?: return null
-        return ValidatedExternalRequest(target.original, mimeType)
+        val source = envelope.targetUri ?: return null
+        val mimeType = normalizeInputMimeType(envelope.mimeType, source) ?: return null
+        // SAF document IDs may contain encoded slashes; playlist documents are resolved through
+        // their granted URI, never by treating those IDs as filesystem paths.
+        val target = if (PlaylistParser.format(source, mimeType) != null) {
+            PlaylistLocationPolicy.contentUri(source)
+        } else parsePlainContentUri(source)?.original
+        return ValidatedExternalRequest(target ?: return null, mimeType)
     }
 
     fun validateInternal(envelope: InternalRequestEnvelope): ValidatedPlaybackRequest? {

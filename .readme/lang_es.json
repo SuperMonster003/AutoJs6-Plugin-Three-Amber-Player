@@ -9,6 +9,7 @@
   "p_introduction_secure": "El complemento se mantiene fiel a un modelo de seguridad de solo lectura: los videos entran al reproductor mediante concesiones temporales de solo lectura, nunca se solicita permiso de almacenamiento y los archivos de origen jamás se modifican ni se mueven; el acceso a la red se usa únicamente para comprobar actualizaciones del complemento.",
   "h3_highlights": "Funciones destacadas",
   "highlights": [
+    "Listas locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservan orden, títulos y duplicados. AutoJs6 lee archivos de la misma carpeta; el reproductor independiente pide la carpeta para rutas relativas. Una lista a la vez, hasta 128 elementos. No se admiten URL de red, HLS ni listas anidadas.",
     "Tocar y reproducir: toca un archivo de video en el gestor de archivos de AutoJs6 y se abre directamente en pantalla completa inmersiva, sin configurar nada.",
     "Gestos prácticos: desliza en la mitad izquierda para ajustar el brillo y en la derecha el volumen, desliza en horizontal para avanzar o retroceder, doble toque en los laterales para saltar, doble toque en el centro para reproducir/pausar, pulsación larga para una velocidad temporal de 2×, y bloquea todos los controles con un solo toque para evitar toques accidentales.",
     "Velocidad e imagen bajo control: 9 velocidades de reproducción de 0,25× a 3×, zoom por pellizco (de 0,25× a 4×), modos de escalado adaptar/rellenar/recortar, y cambio de orientación con un solo toque, con sugerencia automática según la relación de aspecto.",

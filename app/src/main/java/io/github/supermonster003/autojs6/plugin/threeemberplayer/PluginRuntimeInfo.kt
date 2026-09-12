@@ -3,6 +3,7 @@ package io.github.supermonster003.autojs6.plugin.threeemberplayer
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.playlist.PlaylistParser
 import org.autojs.plugin.common.api.PluginCapabilityKeys
 import org.autojs.plugin.common.api.PluginInfo
 import org.autojs.plugin.explorer.api.ExplorerActionCapabilityKeys
@@ -105,11 +106,11 @@ internal fun threeEmberPlayerActionCatalog(): Bundle {
         putBoolean(ExplorerActionCatalogKeys.PLAYBACK_PROGRESS, playbackProgress)
         putStringArrayList(
             ExplorerActionCatalogKeys.MIME_TYPES,
-            ArrayList(ThreeEmberPlayerPlugin.MIME_TYPES.asList()),
+            ArrayList(ThreeEmberPlayerPlugin.MIME_TYPES.asList() + if (readSiblings) PlaylistParser.mimeTypes.asList() else emptyList()),
         )
         putStringArrayList(
             ExplorerActionCatalogKeys.EXTENSIONS,
-            ArrayList(ThreeEmberPlayerPlugin.EXTENSIONS.asList()),
+            ArrayList(ThreeEmberPlayerPlugin.EXTENSIONS.asList() + if (readSiblings) PlaylistParser.extensions.asList() else emptyList()),
         )
     }
     return Bundle().apply {

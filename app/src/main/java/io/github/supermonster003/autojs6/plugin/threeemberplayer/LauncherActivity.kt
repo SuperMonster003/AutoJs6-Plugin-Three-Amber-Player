@@ -8,6 +8,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.playlist.PlaylistActivity
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.playlist.PlaylistLoader
+import io.github.supermonster003.autojs6.plugin.threeemberplayer.playlist.PlaylistParser
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.databinding.ActivityLauncherBinding
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.settings.SettingsActivity
 import io.github.supermonster003.autojs6.plugin.threeemberplayer.theme.VideoThemePaletteGenerator
@@ -63,7 +66,7 @@ class LauncherActivity : VideoThemedActivity() {
                 return@launch
             }
             retainReadPermission(uri)
-            runCatching { startActivity(VideoIntentFactory.createInternal(this@LauncherActivity, spec)) }
+            runCatching { startActivity(spec) }
                 .onFailure {
                     Toast.makeText(
                         this@LauncherActivity,
@@ -74,7 +77,9 @@ class LauncherActivity : VideoThemedActivity() {
         }
     }
 
-    private fun resolve(uri: Uri): ForwardedPlaybackSpec? {
+    private fun resolve(uri: Uri): Intent? {
+        val source = PlaylistLoader.source(this, uri)
+        if (PlaylistParser.format(source.displayName, source.mimeType) != null) return PlaylistActivity.intent(this, source)
         val rawMimeType = contentResolver.getType(uri)
         val mimeType = if (rawMimeType == null) {
             "video/*"
@@ -103,7 +108,7 @@ class LauncherActivity : VideoThemedActivity() {
             validated,
             metadata.displayName,
             metadata.declaredSize,
-        )
+        ).let { VideoIntentFactory.createInternal(this, it) }
     }
 
     private fun retainReadPermission(uri: Uri) {
@@ -140,7 +145,7 @@ class LauncherActivity : VideoThemedActivity() {
     }
 
     private companion object {
-        val VIDEO_DOCUMENT_MIME_TYPES = arrayOf("video/*")
+        val VIDEO_DOCUMENT_MIME_TYPES = arrayOf("video/*", "text/plain", "application/octet-stream") + PlaylistParser.mimeTypes
         const val RIPPLE_ALPHA = 0x24
     }
 }

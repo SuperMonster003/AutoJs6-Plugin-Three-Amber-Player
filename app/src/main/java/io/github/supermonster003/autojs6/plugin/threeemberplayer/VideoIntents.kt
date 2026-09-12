@@ -19,6 +19,7 @@ internal data class AndroidExplorerRequest(
     val parentUri: Uri,
     val targets: List<AndroidExplorerTarget>,
     val hostSession: IExplorerActionHostSession?,
+    val parentDisplayPath: String? = null,
 ) {
     val isSelection: Boolean
         get() = actionId == ThreeEmberPlayerPlugin.ACTION_SELECTION_ID
@@ -49,8 +50,7 @@ internal data class AndroidPlaybackRequest(
         require(items.size in 1..HostMediaDiscoveryPolicy.MAX_QUEUE_ENTRIES && startIndex in items.indices)
         if (hostSession == null) {
             require(
-                items.size == 1 && items.single().hostTargetId == null &&
-                    items.single().relativePath == null && items.single().subtitles.isEmpty(),
+                items.all { it.hostTargetId == null && it.relativePath == null && it.subtitles.isEmpty() },
             )
         } else {
             require(items.all { it.hostTargetId != null && it.relativePath != null })
@@ -161,6 +161,7 @@ internal object AndroidVideoIntentPolicy {
                 )
             },
             hostSession = hostSession,
+            parentDisplayPath = intent.getStringExtra(ExplorerActionIntentExtras.PARENT_DISPLAY_PATH),
         )
     }.getOrNull()
 
@@ -181,6 +182,7 @@ internal object AndroidVideoIntentPolicy {
 
     fun resolveInternal(intent: Intent?): AndroidPlaybackRequest? = runCatching {
         intent ?: return null
+        if (intent.hasExtra(PlaylistPlayback.EXTRA)) return PlaylistPlayback.resolve(intent)
         if (intent.selector != null) return null
         val targetUri = intent.data ?: return null
         val hostBundle = intent.parcelableBundleExtra(VideoIntentFactory.HOST_REQUEST_EXTRA)

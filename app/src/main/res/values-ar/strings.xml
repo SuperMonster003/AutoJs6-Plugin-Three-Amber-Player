@@ -252,4 +252,11 @@
     <string name="accessibility_on">مفعّل</string>
     <string name="accessibility_off">متوقف</string>
     <string name="background_audio_notification_permission_required">يلزم إذن الإشعارات لعناصر التحكم في صوت الخلفية. سيظل الخيار معطّلًا.</string>
+    <string name="playlist_folder_title">فتح مجلد قائمة التشغيل</string>
+    <string name="playlist_folder_message">اختر المجلد الذي يحتوي على قائمة التشغيل لقراءة الوسائط المشار إليها. يمكن تشغيل الملفات الموجودة داخل المجلد المحدد فقط.</string>
+    <string name="playlist_invalid">تعذرت قراءة قائمة التشغيل. تحقق من التنسيق أو افتحها من المشغل المستقل لاختيار مجلد الوسائط.</string>
+    <string name="playlist_empty">لا توجد وسائط مدعومة يمكن الوصول إليها. يدعم المضيف ملفات المجلد نفسه فقط؛ ولا يدعم عناوين الشبكة أو قوائم التشغيل المتداخلة.</string>
+    <string name="playlist_too_large">تتجاوز قائمة التشغيل حد الحجم أو عدد العناصر.</string>
+    <string name="playlist_hls_unsupported">هذا ملف بيان HLS. لا تدعم قوائم التشغيل المحلية تدفقات HLS.</string>
+    <string name="playlist_skipped">تم تحميل %1$d من العناصر؛ وتم تخطي %2$d من العناصر غير المتاحة أو غير المدعومة أو الزائدة.</string>
 </resources>

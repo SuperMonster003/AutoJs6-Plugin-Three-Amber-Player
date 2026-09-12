@@ -2179,7 +2179,7 @@ class VideoPlayerActivity : VideoThemedActivity(), BackgroundPlaybackClient {
     }
 
     private fun showQueuePanel() {
-        if (request.hostSession == null) return
+        if (request.hostSession == null && request.items.size <= 1) return
         mainHandler.removeCallbacks(hideControlsRunnable)
         dismissQueuePanel(postponeAutoHide = false)
         val sheetBinding = BottomSheetVideoQueueBinding.inflate(layoutInflater)
@@ -2501,7 +2501,7 @@ class VideoPlayerActivity : VideoThemedActivity(), BackgroundPlaybackClient {
             )
         }
         menu.findItem(R.id.action_playlist)?.apply {
-            isVisible = request.hostSession != null
+            isVisible = request.hostSession != null || request.items.size > 1
             isEnabled = player != null
         }
         menu.findItem(R.id.action_previous_video)?.apply {
