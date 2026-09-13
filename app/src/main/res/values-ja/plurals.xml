@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="ignored_update_count"><item quantity="other">無視したバージョン: %1$d</item></plurals>
+</resources>

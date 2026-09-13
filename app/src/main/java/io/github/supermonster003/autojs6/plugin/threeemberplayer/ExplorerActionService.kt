@@ -11,7 +11,7 @@ import org.autojs.plugin.explorer.api.IExplorerActionPlugin
 class ExplorerActionService : Service() {
 
     private val binder = object : IExplorerActionPlugin.Stub() {
-        override fun getInfo() = threeEmberPlayerPluginInfo()
+        override fun getInfo() = threeEmberPlayerPluginInfo().apply { supportedAbis = emptyArray() }
 
         override fun getActionCatalog() = threeEmberPlayerActionCatalog()
 
