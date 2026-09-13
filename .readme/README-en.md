@@ -221,11 +221,18 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 ******
 
+#### v3.1.0
+
+###### 2026/09/13
+
+* `Feature` Local playlists: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL preserve order, titles and repeated entries. Host playback reads the same folder; standalone playback asks for the playlist folder to resolve relative paths. One list at a time, up to 128 items. Network URLs, HLS and nested playlists are not supported
+* `Fix` Keep the plugin version date in English regardless of the build machine locale
+* `Improvement` Consistent localized resources, explicit plugin activation and validated release preparation
+
 #### v3.0.0
 
 ###### 2026/09/12
 
-* `Feature` Local playlists: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL preserve order, titles and repeated entries. Host playback reads the same folder; standalone playback asks for the playlist folder to resolve relative paths. One list at a time, up to 128 items. Network URLs, HLS and nested playlists are not supported
 * `Feature` Full player accessibility pass: named and state-aware controls, persistent controls during TalkBack touch exploration, button or menu equivalents for every gesture, deterministic focus order, and layouts verified at 200% text and display scale
 * `Feature` Keyboard and remote support: visible focus rings, DPAD navigation, Space/Enter play-pause, left/right seeking by the configured 5/10/30-second step, and media keys through MediaSession
 * `Feature` Optional background audio, off by default: after notification permission is granted, active playback can move without interruption to a media-playback foreground service with notification controls when picture-in-picture is unavailable
@@ -247,17 +254,6 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 * `Feature` New session-only volume boost offers +3 dB through +15 dB levels, stays off by default, warns about distortion and hearing risk before first use, and falls back to Off when unsupported
 * `Improvement` Screenshots remain independent MediaStore PNG files without storage permission; sharing grants read-only access only to the selected image
 * `Improvement` LoudnessEnhancer was adopted after evaluation because it can apply bounded playback-only gain without modifying media files; device failures are contained with immediate release and safe fallback
-
-#### v2.2.0
-
-###### 2026/08/31
-
-* `Feature` New Host Session playback queue sheet: file names, known durations or placeholders, current-item highlight, tap-to-jump and a live sequence/shuffle/repeat-one control
-* `Feature` New read-only Play selected file-manager action: play 1 to 128 supported videos from one parent in the host selection order without sibling discovery
-* `Feature` Before queue autoplay, keep the current end frame and show a cancelable three-second next-item prompt without unlocking locked controls
-* `Feature` New Remember playback mode setting, off by default, to retain sequence, shuffle or repeat-one across playback sessions
-* `Improvement` Every selected target is independently checked against its content URI, ClipData position, MIME type, metadata, size and parent; duplicate IDs or URIs reject the whole group
-* `Improvement` Multi-selection reads only explicitly authorized targets through their bounded Host Session routes and never scans siblings for videos or subtitles
 
 ##### Full history
 

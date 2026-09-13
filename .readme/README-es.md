@@ -221,11 +221,18 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 
 ******
 
+#### v3.1.0
+
+###### 2026/09/13
+
+* `Función` Listas locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservan orden, títulos y duplicados. AutoJs6 lee archivos de la misma carpeta; el reproductor independiente pide la carpeta para rutas relativas. Una lista a la vez, hasta 128 elementos. No se admiten URL de red, HLS ni listas anidadas
+* `Corrección` Mantener la fecha de versión del complemento en inglés sin depender del idioma del equipo de compilación
+* `Mejora` Recursos traducidos coherentes, activación explícita del complemento y validación de los paquetes de publicación
+
 #### v3.0.0
 
 ###### 2026/09/12
 
-* `Función` Listas locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservan orden, títulos y duplicados. AutoJs6 lee archivos de la misma carpeta; el reproductor independiente pide la carpeta para rutas relativas. Una lista a la vez, hasta 128 elementos. No se admiten URL de red, HLS ni listas anidadas
 * `Función` Revisión completa de accesibilidad del reproductor: controles con nombre y estado dinámico, controles persistentes durante la exploración táctil de TalkBack, equivalente de botón o menú para cada gesto, orden de foco determinista y diseños verificados con texto y pantalla al 200 %
 * `Función` Compatibilidad con teclado y mando: anillos de foco visibles, navegación DPAD, reproducción/pausa con Espacio/Intro, búsqueda izquierda/derecha según el paso configurado de 5/10/30 segundos y teclas multimedia mediante MediaSession
 * `Función` Audio opcional en segundo plano, desactivado de forma predeterminada: tras conceder permiso de notificaciones, la reproducción activa puede pasar sin cortes a un servicio multimedia en primer plano con controles de notificación cuando PiP no está disponible
@@ -247,17 +254,6 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 * `Función` La nueva amplificación limitada a la sesión ofrece de +3 dB a +15 dB, permanece desactivada de forma predeterminada, avisa de distorsión y riesgo auditivo antes del primer uso y vuelve a Desactivado si no es compatible
 * `Mejora` Las capturas siguen siendo PNG independientes de MediaStore sin permiso de almacenamiento; al compartir solo se concede acceso de lectura a la imagen elegida
 * `Mejora` Tras evaluarlo se adoptó LoudnessEnhancer porque aplica una ganancia limitada solo durante la reproducción sin modificar archivos; cualquier fallo libera el efecto inmediatamente y vuelve a un estado seguro
-
-#### v2.2.0
-
-###### 2026/08/31
-
-* `Función` Nuevo panel de cola de Host Session: nombres, duraciones conocidas o marcadores, elemento actual resaltado, salto con un toque y control sincronizado de secuencia, aleatorio y repetición de uno
-* `Función` Nueva acción de solo lectura Reproducir seleccionados: reproduce de 1 a 128 vídeos compatibles del mismo directorio en el orden elegido por el host, sin descubrir archivos hermanos
-* `Función` Antes de la reproducción automática de la cola, conserva el último fotograma y muestra durante tres segundos un aviso cancelable para el siguiente elemento sin desbloquear los controles
-* `Función` Nueva opción Recordar modo de reproducción, desactivada de forma predeterminada, para conservar secuencia, aleatorio o repetición de uno entre sesiones
-* `Mejora` Cada objetivo se comprueba por separado con su URI content, posición en ClipData, MIME, metadatos, tamaño y directorio; los ID o URI duplicados rechazan todo el grupo
-* `Mejora` La selección múltiple solo lee objetivos autorizados explícitamente mediante rutas limitadas de Host Session y nunca examina archivos hermanos para buscar vídeos o subtítulos
 
 ##### Historial completo
 

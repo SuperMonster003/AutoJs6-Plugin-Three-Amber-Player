@@ -4,11 +4,18 @@
 
 ******
 
+# v3.1.0
+
+###### 2026/09/13
+
+* `Fonctionnalité` Listes locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservent ordre, titres et doublons. Depuis AutoJs6, les fichiers doivent être dans le même dossier; le lecteur autonome demande le dossier pour les chemins relatifs. Une liste à la fois, 128 éléments maximum. URL réseau, HLS et listes imbriquées non pris en charge
+* `Correctif` Conserver la date de version du plugin en anglais quelle que soit la langue de la machine de compilation
+* `Amélioration` Ressources traduites cohérentes, activation explicite du plugin et validation des paquets de publication
+
 # v3.0.0
 
 ###### 2026/09/12
 
-* `Fonctionnalité` Listes locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservent ordre, titres et doublons. Depuis AutoJs6, les fichiers doivent être dans le même dossier; le lecteur autonome demande le dossier pour les chemins relatifs. Une liste à la fois, 128 éléments maximum. URL réseau, HLS et listes imbriquées non pris en charge
 * `Fonctionnalité` Audit complet de l'accessibilité du lecteur: commandes nommées avec état dynamique, commandes persistantes pendant l'exploration tactile TalkBack, équivalent par bouton ou menu pour chaque geste, ordre de focus déterministe et validation à 200 % pour le texte et l'affichage
 * `Fonctionnalité` Prise en charge du clavier et de la télécommande: anneaux de focus visibles, navigation DPAD, lecture/pause avec Espace/Entrée, recherche gauche/droite selon le pas configuré de 5/10/30 secondes et touches multimédias via MediaSession
 * `Fonctionnalité` Audio facultatif en arrière-plan, désactivé par défaut: après autorisation des notifications, la lecture active peut passer sans coupure à un service multimédia de premier plan avec commandes de notification lorsque le PiP est indisponible
