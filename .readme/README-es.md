@@ -221,6 +221,12 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 
 ******
 
+#### v3.1.1
+
+###### 2026/09/15
+
+* `Mejora` compileSdk sube a 37 (Android 17); targetSdk se mantiene en 36 hasta verificar el comportamiento que depende del objetivo
+
 #### v3.1.0
 
 ###### 2026/09/13
@@ -243,17 +249,6 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 * `Mejora` Renombrar la entrada de visualización externa como External Viewer para unificar la semántica del visor
 * `Mejora` Abrir la página integrada del historial de versiones desde el botón correspondiente del diálogo de actualización
 * `Mejora` La verificación de compilación rechaza dependencias nativas accidentales y genera un informe JSON
-
-#### v2.3.0
-
-###### 2026/08/31
-
-* `Función` La información del video ahora identifica HDR10, HLG o SDR y muestra el espacio, rango y profundidad de color disponibles; permite copiar todos los campos y avisa una sola vez si la pantalla no declara compatibilidad con el formato HDR de origen
-* `Función` Las capturas pueden incluir los subtítulos visibles mediante un ajuste desactivado de forma predeterminada, y la acción Compartir envía el PNG recién guardado directamente a otra aplicación
-* `Función` El nuevo reflejo de video, limitado a la sesión, voltea izquierda/derecha, arriba/abajo o ambos ejes y se combina de forma coherente con el zoom de pellizco y la rotación de pantalla
-* `Función` La nueva amplificación limitada a la sesión ofrece de +3 dB a +15 dB, permanece desactivada de forma predeterminada, avisa de distorsión y riesgo auditivo antes del primer uso y vuelve a Desactivado si no es compatible
-* `Mejora` Las capturas siguen siendo PNG independientes de MediaStore sin permiso de almacenamiento; al compartir solo se concede acceso de lectura a la imagen elegida
-* `Mejora` Tras evaluarlo se adoptó LoudnessEnhancer porque aplica una ganancia limitada solo durante la reproducción sin modificar archivos; cualquier fallo libera el efecto inmediatamente y vuelve a un estado seguro
 
 ##### Historial completo
 

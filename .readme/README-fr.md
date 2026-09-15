@@ -221,6 +221,12 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 ******
 
+#### v3.1.1
+
+###### 2026/09/15
+
+* `Amélioration` compileSdk passe à 37 (Android 17) ; targetSdk reste à 36 jusqu'à la vérification du comportement dépendant de la cible
+
 #### v3.1.0
 
 ###### 2026/09/13
@@ -243,17 +249,6 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 * `Amélioration` Renommer l'entrée de visualisation externe en External Viewer pour unifier la sémantique de la visionneuse
 * `Amélioration` Ouvrir la page intégrée de l'historique des versions depuis le bouton correspondant de la boîte de dialogue de mise à jour
 * `Amélioration` La vérification de compilation rejette les dépendances natives involontaires et produit un rapport JSON
-
-#### v2.3.0
-
-###### 2026/08/31
-
-* `Fonctionnalité` Les informations vidéo identifient désormais HDR10, HLG ou SDR et affichent, si disponibles, l'espace colorimétrique, la plage et la profondeur; tous les champs se copient en une fois et un avertissement unique apparaît si l'écran ne signale pas la prise en charge du format HDR source
-* `Fonctionnalité` Les captures peuvent inclure les sous-titres visibles via un réglage désactivé par défaut, puis l'action Partager envoie directement le nouveau PNG vers une autre application
-* `Fonctionnalité` Un nouveau miroir vidéo limité à la session inverse gauche/droite, haut/bas ou les deux axes et se combine de façon cohérente avec le zoom par pincement et la rotation de l'écran
-* `Fonctionnalité` Une amplification limitée à la session propose de +3 dB à +15 dB, reste désactivée par défaut, avertit des risques de distorsion et d'audition avant la première utilisation et revient à l'arrêt si elle n'est pas prise en charge
-* `Amélioration` Les captures restent des PNG MediaStore indépendants sans permission de stockage; le partage n'accorde qu'un accès en lecture à l'image choisie
-* `Amélioration` LoudnessEnhancer a été retenu après évaluation car il applique un gain borné à la lecture sans modifier les médias; tout échec de l'effet libère immédiatement les ressources et revient à un état sûr
 
 ##### Historique complet
 
