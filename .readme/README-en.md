@@ -221,6 +221,12 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 ******
 
+#### v3.1.1
+
+###### 2026/09/15
+
+* `Improvement` Raise compileSdk to 37 (Android 17); targetSdk stays at 36 until the behavior that depends on the target is verified
+
 #### v3.1.0
 
 ###### 2026/09/13
@@ -243,17 +249,6 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 * `Improvement` Rename the external viewing entry to External Viewer for consistent viewer semantics
 * `Improvement` Open the built-in release history page from the release history button in the update dialog
 * `Improvement` Build verification rejects accidental native dependencies and produces a JSON report
-
-#### v2.3.0
-
-###### 2026/08/31
-
-* `Feature` Video information now identifies HDR10, HLG or SDR and shows available color space, range and bit depth; copy every field at once and get a one-time warning when the display does not report support for the source HDR format
-* `Feature` Screenshots can optionally include visible subtitles through a default-off setting, and a Share action sends the newly saved PNG directly to another app
-* `Feature` New session-only video mirroring flips left/right, top/bottom or both axes and composes consistently with pinch zoom and screen rotation
-* `Feature` New session-only volume boost offers +3 dB through +15 dB levels, stays off by default, warns about distortion and hearing risk before first use, and falls back to Off when unsupported
-* `Improvement` Screenshots remain independent MediaStore PNG files without storage permission; sharing grants read-only access only to the selected image
-* `Improvement` LoudnessEnhancer was adopted after evaluation because it can apply bounded playback-only gain without modifying media files; device failures are contained with immediate release and safe fallback
 
 ##### Full history
 
