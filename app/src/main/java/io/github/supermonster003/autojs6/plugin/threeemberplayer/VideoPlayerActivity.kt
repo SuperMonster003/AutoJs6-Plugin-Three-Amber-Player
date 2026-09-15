@@ -3160,7 +3160,7 @@ class VideoPlayerActivity : VideoThemedActivity(), BackgroundPlaybackClient {
 
     @Suppress("DEPRECATION")
     private fun supportedHdrTypes(): IntArray =
-        (binding.root.display ?: windowManager.defaultDisplay).hdrCapabilities.supportedHdrTypes
+        (binding.root.display ?: windowManager.defaultDisplay).hdrCapabilities?.supportedHdrTypes ?: IntArray(0)
 
     private fun applyResizeMode(showOsd: Boolean) {
         binding.playerView.resizeMode = when (resizeMode) {
