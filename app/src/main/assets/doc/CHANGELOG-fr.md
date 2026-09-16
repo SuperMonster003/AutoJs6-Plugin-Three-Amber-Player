@@ -4,6 +4,14 @@
 
 ******
 
+# v3.1.2
+
+###### 2026/09/16
+
+* `Correctif` Perte de l'état de service au premier plan lors du transfert audio en arrière-plan quand l'activité annule la notification de lecture partagée sous Android 17
+* `Correctif` Maintien du service de lecture en arrière-plan après un arrêt par le contrôleur multimédia
+* `Amélioration` Ciblage d'Android 17 (SDK 37) avec prise en charge du service au premier plan pour la lecture audio en arrière-plan
+
 # v3.1.1
 
 ###### 2026/09/15

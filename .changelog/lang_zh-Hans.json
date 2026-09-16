@@ -5,6 +5,16 @@
   "changelog_label_improvement": "优化",
   "changelog_label_dependency": "依赖",
   "$data": {
+    "v3.1.2": {
+      "released_date": "2026/09/16",
+      "fix": [
+        "Android 17 后台音频交接时, 播放界面取消共用通知导致前台服务状态丢失的问题",
+        "媒体控制器停止播放后, 后台播放服务仍保持运行的问题"
+      ],
+      "improvement": [
+        "适配 Android 17 (SDK 37) 目标版本及后台音频播放前台服务要求"
+      ]
+    },
     "v3.1.1": {
       "released_date": "2026/09/15",
       "improvement": [

@@ -221,6 +221,14 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 ******
 
+#### v3.1.2
+
+###### 2026/09/16
+
+* `Fix` Background audio handoff losing foreground service state when the Activity cancels the shared playback notification on Android 17
+* `Fix` Background playback service remaining active after a media controller stops playback
+* `Improvement` Target Android 17 (SDK 37) with foreground service support for background audio playback
+
 #### v3.1.1
 
 ###### 2026/09/15
@@ -234,21 +242,6 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 * `Feature` Local playlists: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL preserve order, titles and repeated entries. Host playback reads the same folder; standalone playback asks for the playlist folder to resolve relative paths. One list at a time, up to 128 items. Network URLs, HLS and nested playlists are not supported
 * `Fix` Keep the plugin version date in English regardless of the build machine locale
 * `Improvement` Consistent localized resources, explicit plugin activation and validated release preparation
-
-#### v3.0.0
-
-###### 2026/09/12
-
-* `Feature` Full player accessibility pass: named and state-aware controls, persistent controls during TalkBack touch exploration, button or menu equivalents for every gesture, deterministic focus order, and layouts verified at 200% text and display scale
-* `Feature` Keyboard and remote support: visible focus rings, DPAD navigation, Space/Enter play-pause, left/right seeking by the configured 5/10/30-second step, and media keys through MediaSession
-* `Feature` Optional background audio, off by default: after notification permission is granted, active playback can move without interruption to a media-playback foreground service with notification controls when picture-in-picture is unavailable
-* `Improvement` Picture-in-picture always wins over background audio; disabling the setting, playback completion, an error or leaving playback deliberately stops the service, while a notification tap reclaims the same player and position
-* `Improvement` Headset behavior stays with Media3: one click toggles playback, the platform external-device double tap advances when a next queue item exists, and an explicit Previous media command goes back; no non-standard triple-click timing is imposed
-* `Improvement` Standardize the README layout and Gradle platform version management
-* `Improvement` Refine the plugin description and normalize punctuation in multilingual resources
-* `Improvement` Rename the external viewing entry to External Viewer for consistent viewer semantics
-* `Improvement` Open the built-in release history page from the release history button in the update dialog
-* `Improvement` Build verification rejects accidental native dependencies and produces a JSON report
 
 ##### Full history
 

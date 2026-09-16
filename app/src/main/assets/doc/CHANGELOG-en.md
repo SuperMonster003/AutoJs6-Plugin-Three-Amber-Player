@@ -4,6 +4,14 @@
 
 ******
 
+# v3.1.2
+
+###### 2026/09/16
+
+* `Fix` Background audio handoff losing foreground service state when the Activity cancels the shared playback notification on Android 17
+* `Fix` Background playback service remaining active after a media controller stops playback
+* `Improvement` Target Android 17 (SDK 37) with foreground service support for background audio playback
+
 # v3.1.1
 
 ###### 2026/09/15

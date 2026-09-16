@@ -1173,12 +1173,18 @@ class VideoPlayerActivity : VideoThemedActivity(), BackgroundPlaybackClient {
             sleepTimerDeadlineElapsedRealtimeMs = sleepTimerDeadlineElapsedRealtimeMs,
             volumeBoostLevel = volumeBoostLevel,
         )
-        if (!BackgroundPlaybackCoordinator.handoff(this, intent, value)) return false
+        // Detaching the Activity's notification cancels the shared notification ID and
+        // Android can revoke the prepared service's foreground state. Do this before the
+        // service reasserts foreground ownership, while this Activity is still visible.
+        systemIntegration.detach()
+        if (!BackgroundPlaybackCoordinator.handoff(this, intent, value)) {
+            systemIntegration.attach(exoPlayer)
+            return false
+        }
 
         savePlaybackPosition()
         capturePlaybackState()
         stopFrameRepeat()
-        systemIntegration.detach()
         trackController.clearAvailability()
         transformedTextureView?.takeIf { transformedTextureAttachedToPlayer }?.let {
             exoPlayer.clearVideoTextureView(it)

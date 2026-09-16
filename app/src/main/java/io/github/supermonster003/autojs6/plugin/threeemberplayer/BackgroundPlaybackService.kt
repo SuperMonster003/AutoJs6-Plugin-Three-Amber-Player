@@ -117,6 +117,9 @@ class BackgroundPlaybackService : MediaSessionService() {
         override fun onPlaybackStateChanged(playbackState: Int) {
             if (playbackState == Player.STATE_ENDED) {
                 terminate(BackgroundServiceEvent.PLAYBACK_ENDED, completed = true)
+            } else if (playbackState == Player.STATE_IDLE) {
+                // Media controllers can stop the player without ending the media item.
+                terminate(BackgroundServiceEvent.PLAYBACK_STOPPED, completed = false)
             } else {
                 updateForegroundNotification()
             }
@@ -251,7 +254,9 @@ class BackgroundPlaybackService : MediaSessionService() {
         }
         handoff = value
         transferredToUi = false
-        if (!foregroundStarted && !promoteToForeground()) {
+        // The Activity has just detached its shared notification. The cached flag can
+        // remain true after that cancellation demotes this service in system_server.
+        if (!promoteToForeground(reassert = true)) {
             handoff = null
             return false
         }
@@ -280,10 +285,7 @@ class BackgroundPlaybackService : MediaSessionService() {
                 BackgroundServiceEvent.HANDOFF_PLAYING,
             ).state
             mainHandler.post(progressRunnable)
-            // PlayerNotificationManager detaches immediately after this handoff and shares the
-            // same notification id. Reposting on the next main-loop turn keeps the service-owned
-            // notification visible without exposing duplicate playback notifications.
-            mainHandler.post(::updateForegroundNotification)
+            updateForegroundNotification()
         }.fold(
             onSuccess = { true },
             onFailure = {
@@ -352,9 +354,9 @@ class BackgroundPlaybackService : MediaSessionService() {
         )
     }
 
-    private fun promoteToForeground(): Boolean {
+    private fun promoteToForeground(reassert: Boolean = false): Boolean {
         val notification = buildNotification()
-        if (foregroundStarted) {
+        if (foregroundStarted && !reassert) {
             (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).notify(
                 NOTIFICATION_ID,
                 notification,
