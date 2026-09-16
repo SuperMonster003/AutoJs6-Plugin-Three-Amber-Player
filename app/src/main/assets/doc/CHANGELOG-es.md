@@ -4,6 +4,14 @@
 
 ******
 
+# v3.1.2
+
+###### 2026/09/16
+
+* `Corrección` Pérdida del estado de servicio en primer plano al transferir el audio al segundo plano cuando la actividad cancela la notificación compartida en Android 17
+* `Corrección` El servicio de reproducción en segundo plano permanece activo después de detener la reproducción con un controlador multimedia
+* `Mejora` Compatibilidad con Android 17 (SDK 37) y el servicio en primer plano para reproducir audio en segundo plano
+
 # v3.1.1
 
 ###### 2026/09/15

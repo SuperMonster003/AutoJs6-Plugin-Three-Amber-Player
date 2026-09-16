@@ -5,6 +5,16 @@
   "changelog_label_improvement": "優化",
   "changelog_label_dependency": "依賴",
   "$data": {
+    "v3.1.2": {
+      "released_date": "2026/09/16",
+      "fix": [
+        "Android 17 背景音訊交接時, 播放介面取消共用通知導致前景服務狀態遺失的問題",
+        "媒體控制器停止播放後, 背景播放服務仍保持執行的問題"
+      ],
+      "improvement": [
+        "適配 Android 17 (SDK 37) 目標版本及背景音訊播放前景服務要求"
+      ]
+    },
     "v3.1.1": {
       "released_date": "2026/09/15",
       "improvement": [

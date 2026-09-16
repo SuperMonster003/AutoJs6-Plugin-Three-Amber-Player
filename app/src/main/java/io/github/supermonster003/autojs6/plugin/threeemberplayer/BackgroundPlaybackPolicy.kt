@@ -17,6 +17,7 @@ internal enum class BackgroundServiceEvent {
     HANDOFF_PLAYING,
     PLAYER_PLAYING,
     PLAYER_PAUSED,
+    PLAYBACK_STOPPED,
     PLAYBACK_ENDED,
     PLAYER_ERROR,
     SETTING_DISABLED,
@@ -67,6 +68,7 @@ internal object BackgroundPlaybackPolicy {
             )
 
             BackgroundServiceEvent.PLAYBACK_ENDED,
+            BackgroundServiceEvent.PLAYBACK_STOPPED,
             BackgroundServiceEvent.PLAYER_ERROR,
             BackgroundServiceEvent.SETTING_DISABLED,
             -> BackgroundServiceTransition(

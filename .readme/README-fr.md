@@ -221,6 +221,14 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 ******
 
+#### v3.1.2
+
+###### 2026/09/16
+
+* `Correctif` Perte de l'état de service au premier plan lors du transfert audio en arrière-plan quand l'activité annule la notification de lecture partagée sous Android 17
+* `Correctif` Maintien du service de lecture en arrière-plan après un arrêt par le contrôleur multimédia
+* `Amélioration` Ciblage d'Android 17 (SDK 37) avec prise en charge du service au premier plan pour la lecture audio en arrière-plan
+
 #### v3.1.1
 
 ###### 2026/09/15
@@ -234,21 +242,6 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 * `Fonctionnalité` Listes locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservent ordre, titres et doublons. Depuis AutoJs6, les fichiers doivent être dans le même dossier; le lecteur autonome demande le dossier pour les chemins relatifs. Une liste à la fois, 128 éléments maximum. URL réseau, HLS et listes imbriquées non pris en charge
 * `Correctif` Conserver la date de version du plugin en anglais quelle que soit la langue de la machine de compilation
 * `Amélioration` Ressources traduites cohérentes, activation explicite du plugin et validation des paquets de publication
-
-#### v3.0.0
-
-###### 2026/09/12
-
-* `Fonctionnalité` Audit complet de l'accessibilité du lecteur: commandes nommées avec état dynamique, commandes persistantes pendant l'exploration tactile TalkBack, équivalent par bouton ou menu pour chaque geste, ordre de focus déterministe et validation à 200 % pour le texte et l'affichage
-* `Fonctionnalité` Prise en charge du clavier et de la télécommande: anneaux de focus visibles, navigation DPAD, lecture/pause avec Espace/Entrée, recherche gauche/droite selon le pas configuré de 5/10/30 secondes et touches multimédias via MediaSession
-* `Fonctionnalité` Audio facultatif en arrière-plan, désactivé par défaut: après autorisation des notifications, la lecture active peut passer sans coupure à un service multimédia de premier plan avec commandes de notification lorsque le PiP est indisponible
-* `Amélioration` Le PiP reste toujours prioritaire; désactiver le réglage, terminer la lecture, rencontrer une erreur ou quitter volontairement arrête le service, tandis qu'un appui sur la notification récupère le même lecteur à la position continue
-* `Amélioration` Le comportement du casque suit Media3: un appui bascule lecture/pause, le double appui du périphérique avance si la file contient un élément suivant et une commande Previous explicite revient en arrière; aucun délai de triple appui non standard n'est imposé
-* `Amélioration` Uniformiser la mise en page du README et la gestion des versions de la plateforme Gradle
-* `Amélioration` Simplifier la description du plugin et normaliser la ponctuation des ressources multilingues
-* `Amélioration` Renommer l'entrée de visualisation externe en External Viewer pour unifier la sémantique de la visionneuse
-* `Amélioration` Ouvrir la page intégrée de l'historique des versions depuis le bouton correspondant de la boîte de dialogue de mise à jour
-* `Amélioration` La vérification de compilation rejette les dépendances natives involontaires et produit un rapport JSON
 
 ##### Historique complet
 
