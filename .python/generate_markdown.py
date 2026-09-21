@@ -290,7 +290,7 @@ CHECK_DIFFERENCES = []
 
 def write_text(path: Path, text: str):
     if CHECK_MODE:
-        if not path.is_file() or path.read_bytes() != text.encode("utf-8"):
+        if not path.is_file() or path.read_bytes().replace(b"\r\n", b"\n") != text.encode("utf-8"):
             CHECK_DIFFERENCES.append(str(path.relative_to(ROOT)))
         return
     validate_symbols(text, path.relative_to(ROOT))
