@@ -223,12 +223,13 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 #### v3.1.2
 
-###### 2026/09/19
+###### 2026/09/29
 
 * `Correctif` Perte de l'état de service au premier plan lors du transfert audio en arrière-plan quand l'activité annule la notification de lecture partagée sous Android 17
 * `Correctif` Maintien du service de lecture en arrière-plan après un arrêt par le contrôleur multimédia
 * `Correctif` Avertissements de lecture SDK XML v4 avec AGP 9.1 et contrôles d'alignement natif des APK déclenchés par erreur lors de l'assemblage des tests unitaires JVM, avec les plugins de compilation partagés 1.8.3
 * `Amélioration` Ciblage d'Android 17 (SDK 37) avec prise en charge du service au premier plan pour la lecture audio en arrière-plan
+* `Amélioration` Uniformiser les icônes du lanceur de la série Three avec un dessin clair sur fond sombre fixe, conserver la transparence et le thème des icônes dans le centre des plugins et dans l'application, et éviter les fonds imbriqués sur certains appareils
 
 #### v3.1.1
 

@@ -223,12 +223,13 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 #### v3.1.2
 
-###### 2026/09/19
+###### 2026/09/29
 
 * `Fix` Background audio handoff losing foreground service state when the Activity cancels the shared playback notification on Android 17
 * `Fix` Background playback service remaining active after a media controller stops playback
 * `Fix` SDK XML v4 parsing warnings with AGP 9.1 and APK native alignment checks incorrectly triggered by JVM unit-test assembly tasks, using shared build plugins 1.8.3
 * `Improvement` Target Android 17 (SDK 37) with foreground service support for background audio playback
+* `Improvement` Unify Three series launcher icons with light artwork on a stable dark background, while plugin-center and in-app icons remain transparent and follow the application theme; prevent nested launcher backgrounds on some devices
 
 #### v3.1.1
 
