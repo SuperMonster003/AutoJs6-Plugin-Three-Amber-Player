@@ -4,6 +4,13 @@
 
 ******
 
+# v3.2.0
+
+###### 2026/09/29
+
+* `Feature` Launcher icon choices in Settings: adaptive light, adaptive dark (default), adaptive automatic, or transparent background. Automatic colors and transparent rendering depend on the launcher; it may cache icons or add a background. Some home-screen shortcuts may need to be added again after a change
+* `Fix` Correct the left-heavy Ember artwork with optical centering in launcher and transparent icons; include the offset in every safe-area check
+
 # v3.1.2
 
 ###### 2026/09/29

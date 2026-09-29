@@ -91,6 +91,15 @@
     <string name="gesture_setting_value">%1$s: %2$s</string>
     <string name="hdr_tone_mapping_warning">Этот дисплей не сообщает о поддержке %1$s. Тональное отображение может изменить яркие участки и цвета.</string>
     <string name="hdr_type_none">Нет (SDR)</string>
+    <string name="launcher_icon_applied_note">Обновление значка может занять несколько секунд. Некоторые ярлыки на главном экране может потребоваться добавить заново.</string>
+    <string name="launcher_icon_auto">Адаптивный автоматический</string>
+    <string name="launcher_icon_auto_note">Пытается следовать системной теме. Некоторые лаунчеры кешируют значки или используют только одну цветовую схему.</string>
+    <string name="launcher_icon_dark">Адаптивный темный</string>
+    <string name="launcher_icon_failed">Не удалось изменить значок запуска. Повторите попытку.</string>
+    <string name="launcher_icon_light">Адаптивный светлый</string>
+    <string name="launcher_icon_title">Значок запуска</string>
+    <string name="launcher_icon_transparent">Прозрачный фон</string>
+    <string name="launcher_icon_transparent_note">Некоторые лаунчеры добавляют фон или маску, поэтому прозрачность может не сохраниться.</string>
     <string name="media_info_audio_codec">Аудиокодек</string>
     <string name="media_info_bit_depth">Глубина цвета</string>
     <string name="media_info_bit_depth_pair_value">Яркость %1$d бит / цветность %2$d бит</string>

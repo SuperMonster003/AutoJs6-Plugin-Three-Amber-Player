@@ -91,6 +91,15 @@
     <string name="gesture_setting_value">%1$s: %2$s</string>
     <string name="hdr_tone_mapping_warning">لا تبلغ هذه الشاشة عن دعم %1$s. قد يغيّر تعيين الدرجات اللونية الإضاءات والألوان.</string>
     <string name="hdr_type_none">بلا (SDR)</string>
+    <string name="launcher_icon_applied_note">قد يستغرق تحديث المشغل بضع ثوان. قد تحتاج إلى إضافة بعض اختصارات الشاشة الرئيسية مرة أخرى.</string>
+    <string name="launcher_icon_auto">متكيف تلقائي</string>
+    <string name="launcher_icon_auto_note">يحاول اتباع سمة النظام. بعض المشغلات تخزن الرموز مؤقتا أو تستخدم نظام ألوان واحدا فقط.</string>
+    <string name="launcher_icon_dark">متكيف داكن</string>
+    <string name="launcher_icon_failed">تعذر تغيير رمز المشغل. يرجى المحاولة مرة أخرى.</string>
+    <string name="launcher_icon_light">متكيف فاتح</string>
+    <string name="launcher_icon_title">رمز المشغل</string>
+    <string name="launcher_icon_transparent">خلفية شفافة</string>
+    <string name="launcher_icon_transparent_note">قد تضيف بعض المشغلات خلفية أو قناعا, لذلك قد لا يتم الحفاظ على الشفافية.</string>
     <string name="media_info_audio_codec">برنامج ترميز الصوت</string>
     <string name="media_info_bit_depth">عمق البت</string>
     <string name="media_info_bit_depth_pair_value">سطوع %1$d بت / صفاء لوني %2$d بت</string>

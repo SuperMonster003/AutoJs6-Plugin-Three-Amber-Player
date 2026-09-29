@@ -91,6 +91,15 @@
     <string name="gesture_setting_value">%1$s: %2$s</string>
     <string name="hdr_tone_mapping_warning">이 디스플레이는 %1$s 지원을 보고하지 않습니다. 톤 매핑으로 밝은 부분과 색상이 달라질 수 있습니다.</string>
     <string name="hdr_type_none">없음(SDR)</string>
+    <string name="launcher_icon_applied_note">런처가 새로 고침되기까지 몇 초가 걸릴 수 있습니다. 일부 홈 화면 바로가기를 다시 추가해야 할 수 있습니다.</string>
+    <string name="launcher_icon_auto">적응형 자동</string>
+    <string name="launcher_icon_auto_note">시스템 테마를 따르려고 시도합니다. 일부 런처는 아이콘을 캐시하거나 한 가지 색상만 사용합니다.</string>
+    <string name="launcher_icon_dark">적응형 어둡게</string>
+    <string name="launcher_icon_failed">런처 아이콘을 변경할 수 없습니다. 다시 시도해 주세요.</string>
+    <string name="launcher_icon_light">적응형 밝게</string>
+    <string name="launcher_icon_title">런처 아이콘</string>
+    <string name="launcher_icon_transparent">투명 배경</string>
+    <string name="launcher_icon_transparent_note">일부 런처는 배경이나 마스크를 추가하므로 투명도가 유지되지 않을 수 있습니다.</string>
     <string name="media_info_audio_codec">오디오 코덱</string>
     <string name="media_info_bit_depth">비트 심도</string>
     <string name="media_info_bit_depth_pair_value">휘도 %1$d비트 / 색차 %2$d비트</string>

@@ -28,7 +28,8 @@
     "Affichage et sortie: inspectez le HDR10/HLG/SDR et les informations colorimétriques disponibles, copiez le panneau, incluez facultativement les sous-titres dans une capture partageable, inversez l'image de la session ou utilisez une amplification avertie jusqu'à +15 dB.",
     "Accessible sans gestes: TalkBack conserve des commandes nommées, chaque geste possède un équivalent par bouton ou menu, les dispositions tolèrent une échelle de texte et d'affichage de 200 %, et le clavier/DPAD, Espace/Entrée, la recherche et les touches MediaSession sont pris en charge.",
     "Audio facultatif en arrière-plan: désactivé par défaut et activable uniquement avec l'autorisation des notifications; si le PiP est indisponible, le lecteur existant passe à un service multimédia de premier plan avec commandes de notification, puis s'arrête à la fin ou à la désactivation. Le PiP reste prioritaire.",
-    "Lecture seule par conception: aucune autorisation de stockage, les vidéos sources ne sont jamais modifiées; le réseau ne sert qu'à vérifier les mises à jour."
+    "Lecture seule par conception: aucune autorisation de stockage, les vidéos sources ne sont jamais modifiées; le réseau ne sert qu'à vérifier les mises à jour.",
+    "Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre (par défaut), adaptative automatique ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement."
   ],
   "h3_usage": "Installation et utilisation",
   "p_usage_prerequisites": "Avant de commencer, vérifiez que l'environnement remplit les conditions suivantes",
