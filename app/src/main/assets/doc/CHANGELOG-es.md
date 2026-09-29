@@ -6,12 +6,13 @@
 
 # v3.1.2
 
-###### 2026/09/19
+###### 2026/09/29
 
 * `Corrección` Pérdida del estado de servicio en primer plano al transferir el audio al segundo plano cuando la actividad cancela la notificación compartida en Android 17
 * `Corrección` El servicio de reproducción en segundo plano permanece activo después de detener la reproducción con un controlador multimedia
 * `Corrección` Advertencias de lectura de SDK XML v4 con AGP 9.1 y comprobaciones de alineación nativa de APK activadas por error al ensamblar pruebas unitarias JVM, mediante los plugins de compilación compartidos 1.8.3
 * `Mejora` Compatibilidad con Android 17 (SDK 37) y el servicio en primer plano para reproducir audio en segundo plano
+* `Mejora` Unificar los iconos del lanzador de la serie Three con dibujos claros sobre un fondo oscuro fijo, mantener transparentes los del centro de complementos y de la aplicación según su tema y evitar fondos superpuestos en algunos dispositivos
 
 # v3.1.1
 
