@@ -4,6 +4,13 @@
 
 ******
 
+# v3.2.0
+
+###### 2026/09/29
+
+* `Fonctionnalité` Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre (par défaut), adaptative automatique ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement
+* `Correctif` Centrage optique du dessin Ember dans les icônes du lanceur et transparentes pour corriger son poids visuel à gauche; décalage inclus dans toutes les vérifications de zone sûre
+
 # v3.1.2
 
 ###### 2026/09/29

@@ -91,6 +91,15 @@
     <string name="gesture_setting_value">%1$s: %2$s</string>
     <string name="hdr_tone_mapping_warning">このディスプレイは %1$s 対応を報告していません.トーンマッピングによりハイライトや色が変化する場合があります.</string>
     <string name="hdr_type_none">なし (SDR)</string>
+    <string name="launcher_icon_applied_note">反映まで数秒かかる場合があります. ホーム画面のショートカットを再追加する必要がある場合があります.</string>
+    <string name="launcher_icon_auto">アダプティブ 自動</string>
+    <string name="launcher_icon_auto_note">システムテーマへの追従を試みます. ランチャーによってはアイコンがキャッシュされ, 配色が固定されます.</string>
+    <string name="launcher_icon_dark">アダプティブ ダーク</string>
+    <string name="launcher_icon_failed">ランチャーアイコンを変更できませんでした. もう一度お試しください.</string>
+    <string name="launcher_icon_light">アダプティブ ライト</string>
+    <string name="launcher_icon_title">ランチャーアイコン</string>
+    <string name="launcher_icon_transparent">透明な背景</string>
+    <string name="launcher_icon_transparent_note">ランチャーが背景やマスクを追加する場合, 透明な背景は維持されないことがあります.</string>
     <string name="media_info_audio_codec">音声コーデック</string>
     <string name="media_info_bit_depth">ビット深度</string>
     <string name="media_info_bit_depth_pair_value">輝度 %1$d ビット / 色差 %2$d ビット</string>

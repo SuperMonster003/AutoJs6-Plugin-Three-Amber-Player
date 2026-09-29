@@ -72,6 +72,7 @@ El complemento se mantiene fiel a un modelo de seguridad de solo lectura: los vi
 - Accesible sin gestos: TalkBack mantiene controles con nombre, cada gesto tiene un botón o menú equivalente, los diseños admiten texto y pantalla al 200 %, y se permiten foco de teclado/DPAD, Espacio/Intro, búsqueda y teclas MediaSession.
 - Audio opcional en segundo plano: desactivado de forma predeterminada y disponible solo con permiso de notificaciones; si PiP no está disponible, el reproductor existente pasa a un servicio multimedia en primer plano con controles de notificación y se detiene al terminar o al desactivar la opción. PiP siempre tiene prioridad.
 - Solo lectura por diseño: sin permiso de almacenamiento, los videos de origen nunca se escriben; la red se usa únicamente para comprobar actualizaciones.
+- Icono del lanzador en Ajustes: adaptable claro, adaptable oscuro (predeterminado), adaptable automático o fondo transparente. Los colores automáticos y la transparencia dependen del lanzador, que puede guardar iconos en caché o añadir un fondo. Algunos accesos directos pueden necesitar añadirse de nuevo tras el cambio.
 
 ******
 
@@ -221,6 +222,13 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 
 ******
 
+#### v3.2.0
+
+###### 2026/09/29
+
+* `Función` Icono del lanzador en Ajustes: adaptable claro, adaptable oscuro (predeterminado), adaptable automático o fondo transparente. Los colores automáticos y la transparencia dependen del lanzador, que puede guardar iconos en caché o añadir un fondo. Algunos accesos directos pueden necesitar añadirse de nuevo tras el cambio
+* `Corrección` Centrado óptico del dibujo Ember en los iconos del lanzador y transparentes para corregir su peso visual a la izquierda; comprobaciones de zona segura con el desplazamiento incluido
+
 #### v3.1.2
 
 ###### 2026/09/29
@@ -236,14 +244,6 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 ###### 2026/09/15
 
 * `Mejora` compileSdk sube a 37 (Android 17); targetSdk se mantiene en 36 hasta verificar el comportamiento que depende del objetivo
-
-#### v3.1.0
-
-###### 2026/09/13
-
-* `Función` Listas locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservan orden, títulos y duplicados. AutoJs6 lee archivos de la misma carpeta; el reproductor independiente pide la carpeta para rutas relativas. Una lista a la vez, hasta 128 elementos. No se admiten URL de red, HLS ni listas anidadas
-* `Corrección` Mantener la fecha de versión del complemento en inglés sin depender del idioma del equipo de compilación
-* `Mejora` Recursos traducidos coherentes, activación explícita del complemento y validación de los paquetes de publicación
 
 ##### Historial completo
 

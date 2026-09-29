@@ -72,6 +72,7 @@ Le plugin applique un modèle de sécurité en lecture seule: les vidéos arrive
 - Accessible sans gestes: TalkBack conserve des commandes nommées, chaque geste possède un équivalent par bouton ou menu, les dispositions tolèrent une échelle de texte et d'affichage de 200 %, et le clavier/DPAD, Espace/Entrée, la recherche et les touches MediaSession sont pris en charge.
 - Audio facultatif en arrière-plan: désactivé par défaut et activable uniquement avec l'autorisation des notifications; si le PiP est indisponible, le lecteur existant passe à un service multimédia de premier plan avec commandes de notification, puis s'arrête à la fin ou à la désactivation. Le PiP reste prioritaire.
 - Lecture seule par conception: aucune autorisation de stockage, les vidéos sources ne sont jamais modifiées; le réseau ne sert qu'à vérifier les mises à jour.
+- Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre (par défaut), adaptative automatique ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement.
 
 ******
 
@@ -221,6 +222,13 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 ******
 
+#### v3.2.0
+
+###### 2026/09/29
+
+* `Fonctionnalité` Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre (par défaut), adaptative automatique ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement
+* `Correctif` Centrage optique du dessin Ember dans les icônes du lanceur et transparentes pour corriger son poids visuel à gauche; décalage inclus dans toutes les vérifications de zone sûre
+
 #### v3.1.2
 
 ###### 2026/09/29
@@ -236,14 +244,6 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 ###### 2026/09/15
 
 * `Amélioration` compileSdk passe à 37 (Android 17) ; targetSdk reste à 36 jusqu'à la vérification du comportement dépendant de la cible
-
-#### v3.1.0
-
-###### 2026/09/13
-
-* `Fonctionnalité` Listes locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservent ordre, titres et doublons. Depuis AutoJs6, les fichiers doivent être dans le même dossier; le lecteur autonome demande le dossier pour les chemins relatifs. Une liste à la fois, 128 éléments maximum. URL réseau, HLS et listes imbriquées non pris en charge
-* `Correctif` Conserver la date de version du plugin en anglais quelle que soit la langue de la machine de compilation
-* `Amélioration` Ressources traduites cohérentes, activation explicite du plugin et validation des paquets de publication
 
 ##### Historique complet
 

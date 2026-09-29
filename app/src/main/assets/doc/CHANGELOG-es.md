@@ -4,6 +4,13 @@
 
 ******
 
+# v3.2.0
+
+###### 2026/09/29
+
+* `Función` Icono del lanzador en Ajustes: adaptable claro, adaptable oscuro (predeterminado), adaptable automático o fondo transparente. Los colores automáticos y la transparencia dependen del lanzador, que puede guardar iconos en caché o añadir un fondo. Algunos accesos directos pueden necesitar añadirse de nuevo tras el cambio
+* `Corrección` Centrado óptico del dibujo Ember en los iconos del lanzador y transparentes para corregir su peso visual a la izquierda; comprobaciones de zona segura con el desplazamiento incluido
+
 # v3.1.2
 
 ###### 2026/09/29

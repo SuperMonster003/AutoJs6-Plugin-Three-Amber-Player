@@ -91,6 +91,15 @@
     <string name="gesture_setting_value">%1$s: %2$s</string>
     <string name="hdr_tone_mapping_warning">此顯示裝置未回報支援 %1$s.色調映射可能會改變亮部與色彩.</string>
     <string name="hdr_type_none">無 (SDR)</string>
+    <string name="launcher_icon_applied_note">啟動器可能需要幾秒鐘重新整理. 部分主畫面捷徑可能需要重新新增.</string>
+    <string name="launcher_icon_auto">自適應自動</string>
+    <string name="launcher_icon_auto_note">嘗試跟隨系統主題. 部分啟動器會快取圖示或只使用一種配色.</string>
+    <string name="launcher_icon_dark">自適應暗色</string>
+    <string name="launcher_icon_failed">無法切換啟動器圖示, 請重試.</string>
+    <string name="launcher_icon_light">自適應亮色</string>
+    <string name="launcher_icon_title">啟動器圖示</string>
+    <string name="launcher_icon_transparent">透明背景</string>
+    <string name="launcher_icon_transparent_note">部分啟動器會自行新增背景或遮罩, 透明效果可能無法保留.</string>
     <string name="media_info_audio_codec">音訊編解碼器</string>
     <string name="media_info_bit_depth">位元深度</string>
     <string name="media_info_bit_depth_pair_value">亮度 %1$d 位元 / 色度 %2$d 位元</string>

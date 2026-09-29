@@ -72,6 +72,7 @@ The plugin sticks to a read-only security model: videos enter the player through
 - Accessible without gestures: TalkBack keeps named controls available, every gesture has a button or menu equivalent, layouts tolerate 200% text and display scale, and keyboard/DPAD focus, Space/Enter, seek and MediaSession keys are supported.
 - Optional background audio: off by default and enabled only with notification permission; when PiP is unavailable, the existing player moves to a media-playback foreground service with notification controls and stops on completion or when the setting is disabled. PiP always takes priority.
 - Read-only by design: no storage permission, source videos are never written; the network is used only for update checks.
+- Launcher icon choices in Settings: adaptive light, adaptive dark (default), adaptive automatic, or transparent background. Automatic colors and transparent rendering depend on the launcher; it may cache icons or add a background. Some home-screen shortcuts may need to be added again after a change.
 
 ******
 
@@ -221,6 +222,13 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 ******
 
+#### v3.2.0
+
+###### 2026/09/29
+
+* `Feature` Launcher icon choices in Settings: adaptive light, adaptive dark (default), adaptive automatic, or transparent background. Automatic colors and transparent rendering depend on the launcher; it may cache icons or add a background. Some home-screen shortcuts may need to be added again after a change
+* `Fix` Correct the left-heavy Ember artwork with optical centering in launcher and transparent icons; include the offset in every safe-area check
+
 #### v3.1.2
 
 ###### 2026/09/29
@@ -236,14 +244,6 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 ###### 2026/09/15
 
 * `Improvement` Raise compileSdk to 37 (Android 17); targetSdk stays at 36 until the behavior that depends on the target is verified
-
-#### v3.1.0
-
-###### 2026/09/13
-
-* `Feature` Local playlists: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL preserve order, titles and repeated entries. Host playback reads the same folder; standalone playback asks for the playlist folder to resolve relative paths. One list at a time, up to 128 items. Network URLs, HLS and nested playlists are not supported
-* `Fix` Keep the plugin version date in English regardless of the build machine locale
-* `Improvement` Consistent localized resources, explicit plugin activation and validated release preparation
 
 ##### Full history
 
