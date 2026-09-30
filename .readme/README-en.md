@@ -3,17 +3,17 @@
 <div align="center">
   <p>
     <picture>
-      <source srcset="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap-night/ic_launcher.png?raw=true" media="(prefers-color-scheme: dark)" />
-      <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+      <source srcset="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/app/src/main/res/mipmap-night/ic_launcher.png?raw=true" media="(prefers-color-scheme: dark)" />
+      <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="autojs6-plugin-three-amber-player-ic-launcher" border="0" width="128" />
     </picture>
   </p>
 
   <p>Video playback with playlists, subtitles, and background audio</p>
 
   <p>
-    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
-    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/issues"><img alt="GitHub closed issues" src="https://img.shields.io/github/issues/SuperMonster003/AutoJs6-Plugin-Video-Player?color=A24232&label=Issues"/></a>
-    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/SuperMonster003/AutoJs6-Plugin-Video-Player?color=534BAE&label=License"/></a>
+    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player?label=Release"/></a>
+    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/issues"><img alt="GitHub closed issues" src="https://img.shields.io/github/issues/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player?color=A24232&label=Issues"/></a>
+    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player?color=534BAE&label=License"/></a>
   </p>
 </div>
 
@@ -25,16 +25,16 @@
 
 The README.md is currently available in the following languages:
 
-- [简体中文 [zh-Hans]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-zh-Hans.md)
-- [繁體中文 (香港) [zh-Hant-HK]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-zh-Hant-HK.md)
-- [繁體中文 (台灣) [zh-Hant-TW]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-zh-Hant-TW.md)
+- [简体中文 [zh-Hans]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-zh-Hans.md)
+- [繁體中文 (香港) [zh-Hant-HK]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-zh-Hant-HK.md)
+- [繁體中文 (台灣) [zh-Hant-TW]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-zh-Hant-TW.md)
 - English [en] # current
-- [Français [fr]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-fr.md)
-- [Español [es]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-es.md)
-- [日本語 [ja]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-ja.md)
-- [한국어 [ko]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-ko.md)
-- [Русский [ru]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-ru.md)
-- [العربية [ar]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-ar.md)
+- [Français [fr]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-fr.md)
+- [Español [es]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-es.md)
+- [日本語 [ja]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-ja.md)
+- [한국어 [ko]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-ko.md)
+- [Русский [ru]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-ru.md)
+- [العربية [ar]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-ar.md)
 
 ******
 
@@ -42,7 +42,9 @@ The README.md is currently available in the following languages:
 
 ******
 
-3-Ember Player is the video playback plugin for the AutoJs6 file manager, and a standalone local video player at the same time. Tap a video file in the file manager and it starts playing full screen; gestures, playback speed, external subtitles, folder-based continuous playback and picture-in-picture cover the core experience of mainstream players. Playback is built on AndroidX Media3 ExoPlayer.
+3-Amber Player is the video playback plugin for the AutoJs6 file manager, and a standalone local video player at the same time. Tap a video file in the file manager and it starts playing full screen; gestures, playback speed, external subtitles, folder-based continuous playback and picture-in-picture cover the core experience of mainstream players. Playback is built on AndroidX Media3 ExoPlayer.
+
+3-Amber Player 4.0 uses the new application ID io.github.supermonster003.autojs6.plugin.three.amber.player. Android installs it as a separate app; existing player settings are not migrated automatically. The old app may remain installed
 
 The plugin sticks to a read-only security model: videos enter the player through temporary read-only grants, no storage permission is ever requested, and source files are never modified or moved; network access is used solely to check for plugin updates.
 
@@ -66,13 +68,13 @@ The plugin sticks to a read-only security model: videos enter the player through
 - Seek preview: dragging the progress bar shows a target-time bubble and, when possible, a thumbnail preview.
 - Frame capture: on Android 10+ save the current frame as a PNG to the system gallery with one tap, without storage permission and without touching the source video.
 - Tricky format fallback: a lightweight built-in XVID-in-MKV compatibility layer; when the device cannot decode a video, a clear message is shown and playback can be handed to another player.
-- Themes your way: one seed color generates readable light and dark palettes, following AutoJs6 by default, with 19 presets and a custom RGB color with live preview.
+- Unified language, night mode, theme color and launcher icon settings, with explicit confirmation, 16 color presets and HEX/RGB preview. App appearance follows AutoJs6 by default and falls back safely when the host is unavailable.
 - Works standalone: comes with a launcher icon and a settings page, opens videos through the system file picker, and can act as a video player in the system "Open with" menu.
 - Display and output tools: inspect HDR10/HLG/SDR and available color details, copy the information panel, optionally include subtitles in a shared screenshot, mirror the session image, or use a warned session-only volume boost up to +15 dB.
 - Accessible without gestures: TalkBack keeps named controls available, every gesture has a button or menu equivalent, layouts tolerate 200% text and display scale, and keyboard/DPAD focus, Space/Enter, seek and MediaSession keys are supported.
 - Optional background audio: off by default and enabled only with notification permission; when PiP is unavailable, the existing player moves to a media-playback foreground service with notification controls and stops on completion or when the setting is disabled. PiP always takes priority.
 - Read-only by design: no storage permission, source videos are never written; the network is used only for update checks.
-- Launcher icon choices in Settings: adaptive light, adaptive dark (default), adaptive automatic, or transparent background. Automatic colors and transparent rendering depend on the launcher; it may cache icons or add a background. Some home-screen shortcuts may need to be added again after a change.
+- Launcher icon choices in Settings: adaptive light, adaptive dark, adaptive automatic (default), or transparent background. Automatic colors and transparent rendering depend on the launcher; it may cache icons or add a background. Some home-screen shortcuts may need to be added again after a change.
 
 ******
 
@@ -86,17 +88,17 @@ Before starting, make sure the environment meets the following requirements:
 host app: AutoJs6 (org.autojs.autojs6)
 minimum host build: 5276 (AutoJs6 6.8.0+)
 minimum android: 7.0 (API 24)
-plugin package: io.github.supermonster003.autojs6.plugin.videoplayer
+plugin package: io.github.supermonster003.autojs6.plugin.three.amber.player
 ```
 
 From installation to the first video in 4 steps:
 
-1. Download and install the plugin APK. A 3-Ember Player icon appears on the launcher, while the plugin capabilities are managed by AutoJs6.
-2. Open AutoJs6, enter the `Plugin Center`, locate `3-Ember Player` and enable it.
+1. Download and install the plugin APK. A 3-Amber Player icon appears on the launcher, while the plugin capabilities are managed by AutoJs6.
+2. Open AutoJs6, enter the `Plugin Center`, locate `3-Amber Player` and enable it.
 3. Locate any video file (such as `movie.mp4`) in the AutoJs6 file manager.
 4. Tap the file and the video starts playing full screen.
 
-Using it without the host: open 3-Ember Player from the launcher, tap `Open video` and pick a video through the system file picker; video viewing requests from other apps can also be handled by this player. The host build requirement above only applies to the file manager entry; standalone playback is unaffected.
+Using it without the host: open 3-Amber Player from the launcher, tap `Open video` and pick a video through the system file picker; video viewing requests from other apps can also be handled by this player. The host build requirement above only applies to the file manager entry; standalone playback is unaffected.
 
 Player gesture cheat sheet:
 
@@ -187,9 +189,9 @@ The host discovers and invokes the plugin via the following identifiers:
 ```text
 service action: org.autojs.plugin.EXPLORER_ACTION
 execute action: org.autojs.plugin.EXPLORER_ACTION_EXECUTE
-plugin id: video-player
-source namespace: io.github.supermonster003.autojs6.plugin.threeemberplayer
-stable application id: io.github.supermonster003.autojs6.plugin.videoplayer
+plugin id: three-amber-player
+source namespace: io.github.supermonster003.autojs6.plugin.three.amber.player
+stable application id: io.github.supermonster003.autojs6.plugin.three.amber.player
 engine: explorer-action
 variant: default
 protocol version: v12
@@ -214,13 +216,23 @@ Full host cooperation requires AutoJs6 6.8.0 (build 5276) or later with Explorer
 
 Shipped capabilities and upcoming plans are maintained as a checkable list in Roadmap.md. Unchecked items express intent and do not describe current version capabilities.
 
-- [Open the checkable Roadmap.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/Roadmap.md)
+- [Open the checkable Roadmap.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/Roadmap.md)
 
 ******
 
 ### Release History
 
 ******
+
+#### v4.0.0
+
+###### 2026/09/30
+
+* `Hint` 3-Amber Player 4.0 uses the new application ID io.github.supermonster003.autojs6.plugin.three.amber.player. Android installs it as a separate app; existing player settings are not migrated automatically. The old app may remain installed
+* `Feature` Launcher icon choices in Settings: adaptive light, adaptive dark, adaptive automatic (default), or transparent background. Automatic colors and transparent rendering depend on the launcher; it may cache icons or add a background. Some home-screen shortcuts may need to be added again after a change
+* `Feature` Unified language, night mode, theme color and launcher icon settings, with explicit confirmation, 16 color presets and HEX/RGB preview. App appearance follows AutoJs6 by default and falls back safely when the host is unavailable
+* `Fix` Correct the left-heavy Amber artwork with optical centering in launcher and transparent icons; include the offset in every safe-area check
+* `Improvement` Neutral surfaces and readable themed Material 3 controls and dialogs, consistent spacing, outline icons and dividers. Automatic launcher icons are the new default; upgrades preserve explicit choices and normalize duplicate entries
 
 #### v3.2.0
 
@@ -239,15 +251,9 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 * `Improvement` Target Android 17 (SDK 37) with foreground service support for background audio playback
 * `Improvement` Unify Three series launcher icons with light artwork on a stable dark background, while plugin-center and in-app icons remain transparent and follow the application theme; prevent nested launcher backgrounds on some devices
 
-#### v3.1.1
-
-###### 2026/09/15
-
-* `Improvement` Raise compileSdk to 37 (Android 17); targetSdk stays at 36 until the behavior that depends on the target is verified
-
 ##### Full history
 
-* [CHANGELOG-en.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/assets/doc/CHANGELOG-en.md)
+* [CHANGELOG-en.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/app/src/main/assets/doc/CHANGELOG-en.md)
 
 ******
 
@@ -295,4 +301,4 @@ app/src/main/res/raw-*/plugin_instruction.md
 - Android secure file sharing: https://developer.android.com/training/secure-file-sharing
 
 
-[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/docs/16kb.md)

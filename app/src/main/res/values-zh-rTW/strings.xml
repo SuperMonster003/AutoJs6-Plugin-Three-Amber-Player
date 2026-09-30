@@ -92,13 +92,13 @@
     <string name="hdr_tone_mapping_warning">此顯示裝置未回報支援 %1$s.色調映射可能會改變亮部與色彩.</string>
     <string name="hdr_type_none">無 (SDR)</string>
     <string name="launcher_icon_applied_note">啟動器可能需要幾秒鐘重新整理. 部分主畫面捷徑可能需要重新新增.</string>
-    <string name="launcher_icon_auto">自適應自動</string>
+    <string name="launcher_icon_auto">自適應圖示 (自動)</string>
     <string name="launcher_icon_auto_note">嘗試跟隨系統主題. 部分啟動器會快取圖示或只使用一種配色.</string>
-    <string name="launcher_icon_dark">自適應暗色</string>
+    <string name="launcher_icon_dark">自適應圖示 (暗色)</string>
     <string name="launcher_icon_failed">無法切換啟動器圖示, 請重試.</string>
-    <string name="launcher_icon_light">自適應亮色</string>
+    <string name="launcher_icon_light">自適應圖示 (亮色)</string>
     <string name="launcher_icon_title">啟動器圖示</string>
-    <string name="launcher_icon_transparent">透明背景</string>
+    <string name="launcher_icon_transparent">透明背景圖示</string>
     <string name="launcher_icon_transparent_note">部分啟動器會自行新增背景或遮罩, 透明效果可能無法保留.</string>
     <string name="media_info_audio_codec">音訊編解碼器</string>
     <string name="media_info_bit_depth">位元深度</string>
@@ -153,7 +153,7 @@
     <string name="screenshot_in_progress">已有截圖正在儲存</string>
     <string name="screenshot_not_ready">影片畫面尚未就緒</string>
     <string name="screenshot_save_failed">無法儲存目前畫面</string>
-    <string name="screenshot_saved">截圖已儲存至"圖片/3-Ember Player"</string>
+    <string name="screenshot_saved">截圖已儲存至"圖片/3-Amber Player"</string>
     <string name="screenshot_share_failed">沒有可用來分享此螢幕擷取畫面的應用程式</string>
     <string name="setting_about">關於應用程式與開發者</string>
     <string name="setting_about_summary">版本, 專案, 開發者及授權資訊</string>
@@ -195,7 +195,7 @@
     <string name="sleep_timer_finished">睡眠計時已結束</string>
     <string name="sleep_timer_off">關閉</string>
     <string name="sleep_timer_set_minutes">將在 %1$d 分鐘後暫停播放</string>
-    <string name="standalone_description">選擇一個影片檔案在此播放, 也可以直接從 AutoJs6 檔案管理器開啟 3-Ember Player.</string>
+    <string name="standalone_description">選擇一個影片檔案在此播放, 也可以直接從 AutoJs6 檔案管理器開啟 3-Amber Player.</string>
     <string name="standalone_title">簡易影片播放器</string>
     <string name="subtitle_background_none">無背景</string>
     <string name="subtitle_background_opaque">不透明</string>

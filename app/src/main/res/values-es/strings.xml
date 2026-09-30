@@ -92,13 +92,13 @@
     <string name="hdr_tone_mapping_warning">Esta pantalla no indica compatibilidad con %1$s. El mapeo de tonos puede alterar las luces y los colores.</string>
     <string name="hdr_type_none">Ninguno (SDR)</string>
     <string name="launcher_icon_applied_note">El lanzador puede tardar unos segundos en actualizarse. Puede ser necesario volver a agregar algunos accesos directos.</string>
-    <string name="launcher_icon_auto">Adaptable automático</string>
+    <string name="launcher_icon_auto">Icono adaptable (automático)</string>
     <string name="launcher_icon_auto_note">Intenta seguir el tema del sistema. Algunos lanzadores guardan los iconos en caché o usan una sola paleta.</string>
-    <string name="launcher_icon_dark">Adaptable oscuro</string>
+    <string name="launcher_icon_dark">Icono adaptable (oscuro)</string>
     <string name="launcher_icon_failed">No se pudo cambiar el icono del lanzador. Inténtalo de nuevo.</string>
-    <string name="launcher_icon_light">Adaptable claro</string>
+    <string name="launcher_icon_light">Icono adaptable (claro)</string>
     <string name="launcher_icon_title">Icono del lanzador</string>
-    <string name="launcher_icon_transparent">Fondo transparente</string>
+    <string name="launcher_icon_transparent">Icono con fondo transparente</string>
     <string name="launcher_icon_transparent_note">Algunos lanzadores agregan un fondo o una máscara. Puede que no se conserve la transparencia.</string>
     <string name="media_info_audio_codec">Códec de audio</string>
     <string name="media_info_bit_depth">Profundidad de bits</string>
@@ -153,7 +153,7 @@
     <string name="screenshot_in_progress">Ya se está guardando una captura</string>
     <string name="screenshot_not_ready">El fotograma del vídeo aún no está listo</string>
     <string name="screenshot_save_failed">No se pudo guardar el fotograma actual</string>
-    <string name="screenshot_saved">Captura guardada en Imágenes/3-Ember Player</string>
+    <string name="screenshot_saved">Captura guardada en Imágenes/3-Amber Player</string>
     <string name="screenshot_share_failed">No hay ninguna aplicación disponible para compartir esta captura</string>
     <string name="setting_about">Acerca de la aplicación y el desarrollador</string>
     <string name="setting_about_summary">Información de versión, proyecto, desarrollador y licencia</string>
@@ -195,7 +195,7 @@
     <string name="sleep_timer_finished">El temporizador ha finalizado</string>
     <string name="sleep_timer_off">Desactivado</string>
     <string name="sleep_timer_set_minutes">La reproducción se pausará en %1$d minutos</string>
-    <string name="standalone_description">Elige un archivo de vídeo para reproducirlo aquí, o usa 3-Ember Player directamente desde el gestor de archivos de AutoJs6.</string>
+    <string name="standalone_description">Elige un archivo de vídeo para reproducirlo aquí, o usa 3-Amber Player directamente desde el gestor de archivos de AutoJs6.</string>
     <string name="standalone_title">Tu reproductor de vídeo sencillo</string>
     <string name="subtitle_background_none">Sin fondo</string>
     <string name="subtitle_background_opaque">Opaco</string>

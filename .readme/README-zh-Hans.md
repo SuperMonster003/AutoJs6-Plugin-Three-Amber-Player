@@ -3,17 +3,17 @@
 <div align="center">
   <p>
     <picture>
-      <source srcset="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap-night/ic_launcher.png?raw=true" media="(prefers-color-scheme: dark)" />
-      <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="3-Ember Player icon" border="0" width="128" />
+      <source srcset="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/app/src/main/res/mipmap-night/ic_launcher.png?raw=true" media="(prefers-color-scheme: dark)" />
+      <img src="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/app/src/main/res/mipmap/ic_launcher.png?raw=true" alt="autojs6-plugin-three-amber-player-ic-launcher" border="0" width="128" />
     </picture>
   </p>
 
   <p>支持播放列表, 字幕与后台音频的视频播放器</p>
 
   <p>
-    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Video-Player?label=Release"/></a>
-    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/issues"><img alt="GitHub closed issues" src="https://img.shields.io/github/issues/SuperMonster003/AutoJs6-Plugin-Video-Player?color=A24232&label=Issues"/></a>
-    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/SuperMonster003/AutoJs6-Plugin-Video-Player?color=534BAE&label=License"/></a>
+    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/releases"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player?label=Release"/></a>
+    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/issues"><img alt="GitHub closed issues" src="https://img.shields.io/github/issues/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player?color=A24232&label=Issues"/></a>
+    <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player?color=534BAE&label=License"/></a>
   </p>
 </div>
 
@@ -26,15 +26,15 @@
 当前 README.md 支持以下语言:
 
 - 简体中文 [zh-Hans] # 当前
-- [繁體中文 (香港) [zh-Hant-HK]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-zh-Hant-HK.md)
-- [繁體中文 (台灣) [zh-Hant-TW]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-zh-Hant-TW.md)
-- [English [en]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-en.md)
-- [Français [fr]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-fr.md)
-- [Español [es]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-es.md)
-- [日本語 [ja]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-ja.md)
-- [한국어 [ko]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-ko.md)
-- [Русский [ru]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-ru.md)
-- [العربية [ar]](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/.readme/README-ar.md)
+- [繁體中文 (香港) [zh-Hant-HK]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-zh-Hant-HK.md)
+- [繁體中文 (台灣) [zh-Hant-TW]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-zh-Hant-TW.md)
+- [English [en]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-en.md)
+- [Français [fr]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-fr.md)
+- [Español [es]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-es.md)
+- [日本語 [ja]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-ja.md)
+- [한국어 [ko]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-ko.md)
+- [Русский [ru]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-ru.md)
+- [العربية [ar]](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/.readme/README-ar.md)
 
 ******
 
@@ -42,7 +42,9 @@
 
 ******
 
-3-Ember Player 是 AutoJs6 文件管理器的视频播放插件, 同时也是一个可独立使用的本地视频播放器. 在文件管理器中点击视频文件即可全屏播放; 手势控制, 倍速, 外挂字幕, 同目录连播, 画中画等主流播放器的核心体验一应俱全. 播放能力基于 AndroidX Media3 ExoPlayer 构建.
+3-Amber Player 是 AutoJs6 文件管理器的视频播放插件, 同时也是一个可独立使用的本地视频播放器. 在文件管理器中点击视频文件即可全屏播放; 手势控制, 倍速, 外挂字幕, 同目录连播, 画中画等主流播放器的核心体验一应俱全. 播放能力基于 AndroidX Media3 ExoPlayer 构建.
+
+3-Amber Player 4.0 使用新应用 ID io.github.supermonster003.autojs6.plugin.three.amber.player. Android 将其作为独立应用安装, 旧播放器设置不会自动迁移, 旧应用可以保留并存
 
 插件坚持只读安全模型: 视频通过临时只读授权进入播放器, 全程不申请存储权限, 不修改也不移动任何源文件; 网络访问仅用于检查插件更新.
 
@@ -52,7 +54,7 @@
 
 ******
 
-- 本地播放列表: 支持 M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL; 保留顺序, 标题和重复项. 宿主入口读取同目录文件; 独立入口可选择列表文件夹以读取相对路径. 一次打开一个列表, 最多 128 项; 不支持网络地址, HLS 与嵌套列表. [格式与使用说明](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/docs/Playlists.md).
+- 本地播放列表: 支持 M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL; 保留顺序, 标题和重复项. 宿主入口读取同目录文件; 独立入口可选择列表文件夹以读取相对路径. 一次打开一个列表, 最多 128 项; 不支持网络地址, HLS 与嵌套列表. [格式与使用说明](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/docs/Playlists.md).
 - 点击即播: 在 AutoJs6 文件管理器中点击视频文件, 直接进入全屏沉浸式播放, 无需任何配置.
 - 顺手的手势: 左半屏滑动调亮度, 右半屏调音量, 横向滑动快进快退, 双击两侧跳转, 双击中央播放/暂停, 长按临时 2 倍速, 还可一键锁定屏蔽误触.
 - 倍速与画面控制: 0.25× 至 3× 共 9 档倍速, 双指捏合缩放画面 (0.25× 至 4×), 适应/填充/裁剪三种缩放模式, 屏幕方向一键切换并按画面比例自动建议.
@@ -66,13 +68,13 @@
 - 拖动预览: 拖动进度条时显示目标时间气泡, 并尽力提供画面缩略图预览.
 - 当前帧截图: Android 10+ 一键将当前画面保存为 PNG 到系统相册, 无需存储权限, 不改动源视频.
 - 疑难格式兜底: 内置轻量 XVID-in-MKV 兼容层; 设备无法解码时给出明确提示, 并可一键转交其他播放器.
-- 主题随心: 由一个主题色生成亮暗两套界面配色, 默认跟随 AutoJs6, 另有 19 个预置色与带实时预览的自定义 RGB 颜色.
+- 统一语言, 夜间模式, 主题色与启动器图标设置, 选择后须确认保存, 支持 16 种预设色与 HEX/RGB 局部预览. 应用外观默认跟随 AutoJs6, 宿主不可用时安全回退.
 - 独立可用: 自带桌面入口与设置页, 可通过系统文件选择器直接打开视频, 也可作为系统 "打开方式" 中的视频播放器.
 - 显示与输出工具: 查看 HDR10/HLG/SDR 与可用色彩信息并一键复制, 可选择把字幕合入可分享截图, 在会话内镜像画面, 或在风险提示后使用最高 +15 dB 音量增强.
 - 无需手势也能完整操作: TalkBack 下具名控件保持可用, 每种手势都有按钮或菜单等价入口, 布局适配 200% 字体与显示缩放, 并支持键盘/DPAD 焦点, 空格/回车, 快进快退及 MediaSession 媒体键.
 - 可选后台听音: 默认关闭且仅在授予通知权限后启用; 画中画不可用时会把现有播放器移交给媒体播放前台服务并提供通知控制, 播完或关闭设置即停止. 画中画始终优先.
 - 只读安全: 不申请存储权限, 绝不写入源视频; 联网仅用于检查更新.
-- 设置页提供自适应亮色, 自适应暗色 (默认), 自适应自动与透明背景四种启动器图标. 自动配色与透明效果取决于启动器, 部分系统可能缓存图标或添加背景. 切换后部分主屏幕快捷方式可能需要重新添加.
+- 设置页提供自适应亮色, 自适应暗色, 自适应自动 (默认)与透明背景四种启动器图标. 自动配色与透明效果取决于启动器, 部分系统可能缓存图标或添加背景. 切换后部分主屏幕快捷方式可能需要重新添加.
 
 ******
 
@@ -86,17 +88,17 @@
 host app: AutoJs6 (org.autojs.autojs6)
 minimum host build: 5276 (AutoJs6 6.8.0+)
 minimum android: 7.0 (API 24)
-plugin package: io.github.supermonster003.autojs6.plugin.videoplayer
+plugin package: io.github.supermonster003.autojs6.plugin.three.amber.player
 ```
 
 从安装到播放第一个视频共 4 步:
 
-1. 下载并安装本插件 APK. 安装后桌面会出现 3-Ember Player 图标, 插件能力则由 AutoJs6 统一管理.
-2. 打开 AutoJs6, 进入 `插件中心`, 找到 `3-Ember Player` 并启用.
+1. 下载并安装本插件 APK. 安装后桌面会出现 3-Amber Player 图标, 插件能力则由 AutoJs6 统一管理.
+2. 打开 AutoJs6, 进入 `插件中心`, 找到 `3-Amber Player` 并启用.
 3. 在 AutoJs6 文件管理器中定位任意视频文件 (如 `movie.mp4`).
 4. 点击该文件, 视频随即全屏开始播放.
 
-不依赖宿主的用法: 从桌面直接打开 3-Ember Player, 点按 `打开视频` 并通过系统文件选择器挑选视频即可播放; 其他应用发起的视频查看请求也可以选择本播放器承接. 上述环境要求中的宿主版本仅约束文件管理器入口, 独立播放不受影响.
+不依赖宿主的用法: 从桌面直接打开 3-Amber Player, 点按 `打开视频` 并通过系统文件选择器挑选视频即可播放; 其他应用发起的视频查看请求也可以选择本播放器承接. 上述环境要求中的宿主版本仅约束文件管理器入口, 独立播放不受影响.
 
 播放页手势速查:
 
@@ -187,9 +189,9 @@ MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V
 ```text
 service action: org.autojs.plugin.EXPLORER_ACTION
 execute action: org.autojs.plugin.EXPLORER_ACTION_EXECUTE
-plugin id: video-player
-source namespace: io.github.supermonster003.autojs6.plugin.threeemberplayer
-stable application id: io.github.supermonster003.autojs6.plugin.videoplayer
+plugin id: three-amber-player
+source namespace: io.github.supermonster003.autojs6.plugin.three.amber.player
+stable application id: io.github.supermonster003.autojs6.plugin.three.amber.player
 engine: explorer-action
 variant: default
 protocol version: v12
@@ -214,13 +216,23 @@ required host build: 5276
 
 已完成能力与后续计划以可勾选清单维护在 Roadmap.md 中. 未勾选条目表示规划意向, 不代表当前版本已具备的能力.
 
-- [查看可勾选的 Roadmap.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/Roadmap.md)
+- [查看可勾选的 Roadmap.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/Roadmap.md)
 
 ******
 
 ### 版本记录
 
 ******
+
+#### v4.0.0
+
+###### 2026/09/30
+
+* `提示` 3-Amber Player 4.0 使用新应用 ID io.github.supermonster003.autojs6.plugin.three.amber.player. Android 将其作为独立应用安装, 旧播放器设置不会自动迁移, 旧应用可以保留并存
+* `新增` 设置页提供自适应亮色, 自适应暗色, 自适应自动 (默认)与透明背景四种启动器图标. 自动配色与透明效果取决于启动器, 部分系统可能缓存图标或添加背景. 切换后部分主屏幕快捷方式可能需要重新添加
+* `新增` 统一语言, 夜间模式, 主题色与启动器图标设置, 选择后须确认保存, 支持 16 种预设色与 HEX/RGB 局部预览. 应用外观默认跟随 AutoJs6, 宿主不可用时安全回退
+* `修复` 校正 Amber 图案视觉偏左, 对启动器及透明图标应用光学居中, 并将偏移纳入所有安全区校验
+* `优化` 采用中性灰阶底色与清晰可读的主题色 Material 3 控件和对话框, 统一间距, 线性图标与分割线. 启动器图标默认改为自动, 升级保留明确选择并修复重复入口
 
 #### v3.2.0
 
@@ -239,15 +251,9 @@ required host build: 5276
 * `优化` 适配 Android 17 (SDK 37) 目标版本及后台音频播放前台服务要求
 * `优化` 统一 Three 系列启动器图标为浅色图案配深色背景, 插件中心与应用内图案随应用主题切换并保持透明背景, 避免部分设备出现启动器背景套环
 
-#### v3.1.1
-
-###### 2026/09/15
-
-* `优化` compileSdk 升级至 37 (Android 17), targetSdk 保持 36
-
 ##### 完整记录
 
-* [CHANGELOG-zh-Hans.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Video-Player/blob/master/app/src/main/assets/doc/CHANGELOG-zh-Hans.md)
+* [CHANGELOG-zh-Hans.md](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/app/src/main/assets/doc/CHANGELOG-zh-Hans.md)
 
 ******
 
@@ -295,4 +301,4 @@ app/src/main/res/raw-*/plugin_instruction.md
 - Android 安全文件共享: https://developer.android.com/training/secure-file-sharing
 
 
-[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/docs/16kb.md)

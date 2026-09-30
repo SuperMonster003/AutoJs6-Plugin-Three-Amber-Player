@@ -92,13 +92,13 @@
     <string name="hdr_tone_mapping_warning">This display does not report support for %1$s. Tone mapping may alter highlights and colors.</string>
     <string name="hdr_type_none">None (SDR)</string>
     <string name="launcher_icon_applied_note">The launcher may take a few seconds to refresh. Some home-screen shortcuts may need to be added again.</string>
-    <string name="launcher_icon_auto">Adaptive automatic</string>
+    <string name="launcher_icon_auto">Adaptive icon (automatic)</string>
     <string name="launcher_icon_auto_note">Tries to follow the system theme. Some launchers cache icons or use only one color scheme.</string>
-    <string name="launcher_icon_dark">Adaptive dark</string>
+    <string name="launcher_icon_dark">Adaptive icon (dark)</string>
     <string name="launcher_icon_failed">Unable to change the launcher icon. Please try again.</string>
-    <string name="launcher_icon_light">Adaptive light</string>
+    <string name="launcher_icon_light">Adaptive icon (light)</string>
     <string name="launcher_icon_title">Launcher icon</string>
-    <string name="launcher_icon_transparent">Transparent background</string>
+    <string name="launcher_icon_transparent">Transparent background icon</string>
     <string name="launcher_icon_transparent_note">Some launchers add their own background or mask, so transparency may not be preserved.</string>
     <string name="media_info_audio_codec">Audio codec</string>
     <string name="media_info_bit_depth">Bit depth</string>
@@ -153,7 +153,7 @@
     <string name="screenshot_in_progress">A screenshot is already being saved</string>
     <string name="screenshot_not_ready">The video frame is not ready yet</string>
     <string name="screenshot_save_failed">Could not save the current frame</string>
-    <string name="screenshot_saved">Screenshot saved to Pictures/3-Ember Player</string>
+    <string name="screenshot_saved">Screenshot saved to Pictures/3-Amber Player</string>
     <string name="screenshot_share_failed">No app is available to share this screenshot</string>
     <string name="setting_about">About the app and developer</string>
     <string name="setting_about_summary">Version, project, developer, and license information</string>
@@ -195,7 +195,7 @@
     <string name="sleep_timer_finished">Sleep timer finished</string>
     <string name="sleep_timer_off">Off</string>
     <string name="sleep_timer_set_minutes">Playback will pause in %1$d minutes</string>
-    <string name="standalone_description">Choose a video file to play it here, or use 3-Ember Player directly from the AutoJs6 file manager.</string>
+    <string name="standalone_description">Choose a video file to play it here, or use 3-Amber Player directly from the AutoJs6 file manager.</string>
     <string name="standalone_title">Your simple video player</string>
     <string name="subtitle_background_none">No background</string>
     <string name="subtitle_background_opaque">Opaque</string>

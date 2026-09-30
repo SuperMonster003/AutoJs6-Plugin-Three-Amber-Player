@@ -5,7 +5,7 @@
   "h3_languages_with_ascii": "Langues (Languages)",
   "p_languages_all_supported_for_readme": "Le fichier README.md est actuellement disponible dans les langues suivantes",
   "h3_introduction": "Introduction",
-  "p_introduction": "3-Ember Player est le plugin de lecture vidéo du gestionnaire de fichiers AutoJs6, et en même temps un lecteur vidéo local autonome. Appuyez sur un fichier vidéo dans le gestionnaire de fichiers et la lecture démarre en plein écran; gestes, vitesses de lecture, sous-titres externes, lecture enchaînée d'un dossier et incrustation vidéo couvrent l'essentiel de l'expérience des lecteurs les plus répandus. La lecture repose sur AndroidX Media3 ExoPlayer.",
+  "p_introduction": "3-Amber Player est le plugin de lecture vidéo du gestionnaire de fichiers AutoJs6, et en même temps un lecteur vidéo local autonome. Appuyez sur un fichier vidéo dans le gestionnaire de fichiers et la lecture démarre en plein écran; gestes, vitesses de lecture, sous-titres externes, lecture enchaînée d'un dossier et incrustation vidéo couvrent l'essentiel de l'expérience des lecteurs les plus répandus. La lecture repose sur AndroidX Media3 ExoPlayer.",
   "p_introduction_secure": "Le plugin applique un modèle de sécurité en lecture seule: les vidéos arrivent dans le lecteur via des accès temporaires en lecture seule, aucune autorisation de stockage n'est jamais demandée, et les fichiers sources ne sont jamais modifiés ni déplacés; le réseau sert uniquement à vérifier les mises à jour du plugin.",
   "h3_highlights": "Points forts",
   "highlights": [
@@ -23,24 +23,24 @@
     "Aperçu du déplacement: faire glisser la barre de progression affiche une bulle avec le temps cible et, quand c'est possible, un aperçu en miniature.",
     "Capture d'image: sur Android 10+, enregistrez l'image actuelle en PNG dans la galerie système d'un seul appui, sans autorisation de stockage et sans toucher à la vidéo source.",
     "Filet de secours pour formats difficiles: une couche légère de compatibilité XVID dans MKV est intégrée; quand l'appareil ne peut pas décoder une vidéo, un message clair s'affiche et la lecture peut être confiée à un autre lecteur.",
-    "Des thèmes à votre goût: une seule couleur de base génère une palette claire et une palette sombre lisibles, en suivant AutoJs6 par défaut, avec 19 couleurs prédéfinies et une couleur RGB personnalisée avec aperçu en direct.",
+    "Réglages unifiés de langue, mode nuit, couleur du thème et icône du lanceur, avec confirmation, 16 couleurs prédéfinies et aperçu HEX/RGB. Par défaut, l'apparence suit AutoJs6 et utilise un repli sûr si l'hôte est indisponible.",
     "Utilisable en autonomie: livré avec une icône sur l'écran d'accueil et une page de paramètres, il ouvre les vidéos via le sélecteur de fichiers du système et peut servir de lecteur vidéo dans le menu \"Ouvrir avec\" du système.",
     "Affichage et sortie: inspectez le HDR10/HLG/SDR et les informations colorimétriques disponibles, copiez le panneau, incluez facultativement les sous-titres dans une capture partageable, inversez l'image de la session ou utilisez une amplification avertie jusqu'à +15 dB.",
     "Accessible sans gestes: TalkBack conserve des commandes nommées, chaque geste possède un équivalent par bouton ou menu, les dispositions tolèrent une échelle de texte et d'affichage de 200 %, et le clavier/DPAD, Espace/Entrée, la recherche et les touches MediaSession sont pris en charge.",
     "Audio facultatif en arrière-plan: désactivé par défaut et activable uniquement avec l'autorisation des notifications; si le PiP est indisponible, le lecteur existant passe à un service multimédia de premier plan avec commandes de notification, puis s'arrête à la fin ou à la désactivation. Le PiP reste prioritaire.",
     "Lecture seule par conception: aucune autorisation de stockage, les vidéos sources ne sont jamais modifiées; le réseau ne sert qu'à vérifier les mises à jour.",
-    "Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre (par défaut), adaptative automatique ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement."
+    "Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre, adaptative automatique (par défaut) ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement."
   ],
   "h3_usage": "Installation et utilisation",
   "p_usage_prerequisites": "Avant de commencer, vérifiez que l'environnement remplit les conditions suivantes",
   "p_usage_steps_intro": "De l'installation à la première vidéo en 4 étapes",
   "usage_steps": [
-    "Téléchargez et installez l'APK du plugin. Une icône 3-Ember Player apparaît sur l'écran d'accueil, tandis que les capacités du plugin sont gérées par AutoJs6.",
-    "Ouvrez AutoJs6, entrez dans le `Centre des plugins`, repérez `3-Ember Player` et activez-le.",
+    "Téléchargez et installez l'APK du plugin. Une icône 3-Amber Player apparaît sur l'écran d'accueil, tandis que les capacités du plugin sont gérées par AutoJs6.",
+    "Ouvrez AutoJs6, entrez dans le `Centre des plugins`, repérez `3-Amber Player` et activez-le.",
     "Repérez n'importe quel fichier vidéo (par exemple `movie.mp4`) dans le gestionnaire de fichiers AutoJs6.",
     "Appuyez sur le fichier et la vidéo démarre en plein écran."
   ],
-  "p_usage_standalone": "Utilisation sans l'hôte: ouvrez 3-Ember Player depuis l'écran d'accueil, appuyez sur `Ouvrir une vidéo` et choisissez une vidéo via le sélecteur de fichiers du système; les demandes de lecture vidéo venant d'autres applications peuvent aussi être prises en charge par ce lecteur. L'exigence de version de l'hôte ci-dessus ne concerne que l'entrée du gestionnaire de fichiers; la lecture autonome n'est pas affectée.",
+  "p_usage_standalone": "Utilisation sans l'hôte: ouvrez 3-Amber Player depuis l'écran d'accueil, appuyez sur `Ouvrir une vidéo` et choisissez une vidéo via le sélecteur de fichiers du système; les demandes de lecture vidéo venant d'autres applications peuvent aussi être prises en charge par ce lecteur. L'exigence de version de l'hôte ci-dessus ne concerne que l'entrée du gestionnaire de fichiers; la lecture autonome n'est pas affectée.",
   "p_usage_gestures_intro": "Mémo des gestes du lecteur",
   "gestures": [
     "Appui simple: afficher ou masquer la barre de commandes.",
@@ -117,5 +117,6 @@
   "h3_links": "Liens",
   "text_link_autojs6_docs": "Documentation AutoJs6",
   "text_link_media3_exoplayer": "AndroidX Media3 ExoPlayer (moteur de lecture)",
-  "text_link_android_secure_file_sharing": "Partage sécurisé de fichiers Android"
+  "text_link_android_secure_file_sharing": "Partage sécurisé de fichiers Android",
+  "p_amber_identity": "3-Amber Player 4.0 utilise le nouvel identifiant io.github.supermonster003.autojs6.plugin.three.amber.player. Android l'installe séparément; les réglages existants ne sont pas transférés automatiquement. L'ancienne application peut être conservée"
 }

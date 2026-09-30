@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">3-Ember Player</string>
+    <string name="app_name" translatable="false">3-Amber Player</string>
     <string name="color_space_bt2020" translatable="false">BT.2020</string>
     <string name="color_space_bt601" translatable="false">BT.601</string>
     <string name="color_space_bt709" translatable="false">BT.709</string>

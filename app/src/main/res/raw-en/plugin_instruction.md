@@ -1,6 +1,6 @@
-# 3-Ember Player
+# 3-Amber Player
 
-3-Ember Player adds a primary read-only video action to the file manager. It uses AndroidX Media3 ExoPlayer and PlayerView, starts playback automatically, handles audio focus and noisy output changes, and restores playback position and play state.
+3-Amber Player adds a primary read-only video action to the file manager. It uses AndroidX Media3 ExoPlayer and PlayerView, starts playback automatically, handles audio focus and noisy output changes, and restores playback position and play state.
 
 The full collaboration path requires AutoJs6 6.8.0 build 5276+ and Explorer Action v12; later plugin capabilities will not raise this baseline. When the plugin is installed, enabled, trusted, and compatible, every file recognized by the host as video opens in this player. A host without the optional session capabilities retains selected-file-only playback. If the plugin is missing, disabled, unauthorized, unavailable, incompatible, or cannot be launched, a compatible host shows recovery guidance and opens the Android application chooser only after the user explicitly selects Open with other apps. Audio playback and image viewing remain independent plugin capabilities.
 
@@ -17,7 +17,7 @@ Playback controls:
 - MediaSession supports headset, Bluetooth, and system playback controls; the media notification exposes the current title and progress.
 - A sleep timer pauses playback after 15, 30, 45, or 60 minutes or at the end of the video. Gesture settings select sensitivity and the double-tap seek interval.
 - Pinch the picture to zoom from 0.25× to 4×; double-tap while zoomed to reset. Scrubbing shows a target-time bubble and a best-effort thumbnail when the container supports it.
-- On Android 10 or later, Save current frame writes a PNG to Pictures/3-Ember Player. The entry stays hidden on earlier Android versions.
+- On Android 10 or later, Save current frame writes a PNG to Pictures/3-Amber Player. The entry stays hidden on earlier Android versions.
 - Builds accessible light and dark semantic roles from one HCT source color, follows AutoJs6 by default, and offers 19 localized Material 500 presets plus live-preview custom RGB colors. Provides a standalone launcher and settings for host-following language, night mode and color, single-video resume behavior, manual and automatic update checks, ignored versions, release history, and app/developer information.
 
 Subtitle and precision tools:

@@ -92,13 +92,13 @@
     <string name="hdr_tone_mapping_warning">Этот дисплей не сообщает о поддержке %1$s. Тональное отображение может изменить яркие участки и цвета.</string>
     <string name="hdr_type_none">Нет (SDR)</string>
     <string name="launcher_icon_applied_note">Обновление значка может занять несколько секунд. Некоторые ярлыки на главном экране может потребоваться добавить заново.</string>
-    <string name="launcher_icon_auto">Адаптивный автоматический</string>
+    <string name="launcher_icon_auto">Адаптивный значок (автоматически)</string>
     <string name="launcher_icon_auto_note">Пытается следовать системной теме. Некоторые лаунчеры кешируют значки или используют только одну цветовую схему.</string>
-    <string name="launcher_icon_dark">Адаптивный темный</string>
+    <string name="launcher_icon_dark">Адаптивный значок (тёмный)</string>
     <string name="launcher_icon_failed">Не удалось изменить значок запуска. Повторите попытку.</string>
-    <string name="launcher_icon_light">Адаптивный светлый</string>
+    <string name="launcher_icon_light">Адаптивный значок (светлый)</string>
     <string name="launcher_icon_title">Значок запуска</string>
-    <string name="launcher_icon_transparent">Прозрачный фон</string>
+    <string name="launcher_icon_transparent">Значок с прозрачным фоном</string>
     <string name="launcher_icon_transparent_note">Некоторые лаунчеры добавляют фон или маску, поэтому прозрачность может не сохраниться.</string>
     <string name="media_info_audio_codec">Аудиокодек</string>
     <string name="media_info_bit_depth">Глубина цвета</string>
@@ -153,7 +153,7 @@
     <string name="screenshot_in_progress">Снимок экрана уже сохраняется</string>
     <string name="screenshot_not_ready">Видеокадр ещё не готов</string>
     <string name="screenshot_save_failed">Не удалось сохранить текущий кадр</string>
-    <string name="screenshot_saved">Снимок сохранён в Pictures/3-Ember Player</string>
+    <string name="screenshot_saved">Снимок сохранён в Pictures/3-Amber Player</string>
     <string name="screenshot_share_failed">Нет приложения, способного поделиться этим снимком</string>
     <string name="setting_about">О приложении и разработчике</string>
     <string name="setting_about_summary">Версия, проект, разработчик и лицензия</string>
@@ -195,7 +195,7 @@
     <string name="sleep_timer_finished">Таймер сна завершён</string>
     <string name="sleep_timer_off">Выключен</string>
     <string name="sleep_timer_set_minutes">Воспроизведение будет приостановлено через %1$d мин.</string>
-    <string name="standalone_description">Выберите видеофайл для воспроизведения здесь либо запускайте 3-Ember Player прямо из файлового менеджера AutoJs6.</string>
+    <string name="standalone_description">Выберите видеофайл для воспроизведения здесь либо запускайте 3-Amber Player прямо из файлового менеджера AutoJs6.</string>
     <string name="standalone_title">Простой видеоплеер</string>
     <string name="subtitle_background_none">Без фона</string>
     <string name="subtitle_background_opaque">Непрозрачный</string>

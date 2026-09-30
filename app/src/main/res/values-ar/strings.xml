@@ -92,13 +92,13 @@
     <string name="hdr_tone_mapping_warning">لا تبلغ هذه الشاشة عن دعم %1$s. قد يغيّر تعيين الدرجات اللونية الإضاءات والألوان.</string>
     <string name="hdr_type_none">بلا (SDR)</string>
     <string name="launcher_icon_applied_note">قد يستغرق تحديث المشغل بضع ثوان. قد تحتاج إلى إضافة بعض اختصارات الشاشة الرئيسية مرة أخرى.</string>
-    <string name="launcher_icon_auto">متكيف تلقائي</string>
+    <string name="launcher_icon_auto">أيقونة تكيفية (تلقائية)</string>
     <string name="launcher_icon_auto_note">يحاول اتباع سمة النظام. بعض المشغلات تخزن الرموز مؤقتا أو تستخدم نظام ألوان واحدا فقط.</string>
-    <string name="launcher_icon_dark">متكيف داكن</string>
+    <string name="launcher_icon_dark">أيقونة تكيفية (داكنة)</string>
     <string name="launcher_icon_failed">تعذر تغيير رمز المشغل. يرجى المحاولة مرة أخرى.</string>
-    <string name="launcher_icon_light">متكيف فاتح</string>
+    <string name="launcher_icon_light">أيقونة تكيفية (فاتحة)</string>
     <string name="launcher_icon_title">رمز المشغل</string>
-    <string name="launcher_icon_transparent">خلفية شفافة</string>
+    <string name="launcher_icon_transparent">أيقونة بخلفية شفافة</string>
     <string name="launcher_icon_transparent_note">قد تضيف بعض المشغلات خلفية أو قناعا, لذلك قد لا يتم الحفاظ على الشفافية.</string>
     <string name="media_info_audio_codec">برنامج ترميز الصوت</string>
     <string name="media_info_bit_depth">عمق البت</string>
@@ -153,7 +153,7 @@
     <string name="screenshot_in_progress">يتم حفظ لقطة شاشة بالفعل</string>
     <string name="screenshot_not_ready">إطار الفيديو غير جاهز بعد</string>
     <string name="screenshot_save_failed">تعذر حفظ الإطار الحالي</string>
-    <string name="screenshot_saved">تم حفظ لقطة الشاشة في Pictures/3-Ember Player</string>
+    <string name="screenshot_saved">تم حفظ لقطة الشاشة في Pictures/3-Amber Player</string>
     <string name="screenshot_share_failed">لا يتوفر تطبيق لمشاركة لقطة الشاشة هذه</string>
     <string name="setting_about">حول التطبيق والمطور</string>
     <string name="setting_about_summary">معلومات الإصدار والمشروع والمطور والترخيص</string>
@@ -195,7 +195,7 @@
     <string name="sleep_timer_finished">انتهى مؤقت النوم</string>
     <string name="sleep_timer_off">إيقاف</string>
     <string name="sleep_timer_set_minutes">سيتوقف التشغيل مؤقتًا بعد %1$d دقيقة</string>
-    <string name="standalone_description">اختر ملف فيديو لتشغيله هنا، أو استخدم 3-Ember Player مباشرة من مدير ملفات AutoJs6.</string>
+    <string name="standalone_description">اختر ملف فيديو لتشغيله هنا، أو استخدم 3-Amber Player مباشرة من مدير ملفات AutoJs6.</string>
     <string name="standalone_title">مشغل فيديو بسيط</string>
     <string name="subtitle_background_none">بلا خلفية</string>
     <string name="subtitle_background_opaque">معتمة</string>

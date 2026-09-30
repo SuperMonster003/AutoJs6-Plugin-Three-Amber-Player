@@ -1,6 +1,6 @@
-# 3-Ember Player
+# 3-Amber Player
 
-3-Ember Player añade una acción principal de video de solo lectura al gestor de archivos. Usa AndroidX Media3 ExoPlayer y PlayerView, inicia la reproducción automáticamente, gestiona el enfoque de audio y los cambios a salida de audio noisy, y restaura la posición y el estado de reproducción.
+3-Amber Player añade una acción principal de video de solo lectura al gestor de archivos. Usa AndroidX Media3 ExoPlayer y PlayerView, inicia la reproducción automáticamente, gestiona el enfoque de audio y los cambios a salida de audio noisy, y restaura la posición y el estado de reproducción.
 
 La cooperación completa requiere AutoJs6 6.8.0 build 5276 o posterior y Explorer Action v12; las capacidades futuras del plugin no elevarán este requisito. Cuando está instalado, activado, es de confianza y compatible, todos los archivos que el host reconoce como video se abren en este reproductor. Un host sin las capacidades de sesión opcionales conserva la reproducción del archivo seleccionado. Si el plugin falta, está desactivado, no está autorizado, no está disponible, es incompatible o no se puede iniciar, un host compatible muestra instrucciones de recuperación y abre el selector de aplicaciones de Android solo cuando el usuario elige explícitamente Abrir con otras aplicaciones. El audio y las imágenes siguen siendo capacidades independientes.
 
@@ -17,7 +17,7 @@ Controles de reproducción:
 - MediaSession admite controles de auriculares, Bluetooth y del sistema; la notificación multimedia muestra el título y el progreso actuales.
 - El temporizador pausa la reproducción tras 15, 30, 45 o 60 minutos, o al final del video. Los ajustes de gestos permiten elegir la sensibilidad y el intervalo del doble toque.
 - Pellizca la imagen para ampliarla entre 0,25× y 4×; tócala dos veces mientras está ampliada para restablecerla. Al arrastrar la barra aparece el tiempo de destino y, si el contenedor lo permite, una miniatura opcional.
-- En Android 10 o posterior, Guardar fotograma actual escribe un PNG en Imágenes/3-Ember Player. La opción está oculta en versiones anteriores.
+- En Android 10 o posterior, Guardar fotograma actual escribe un PNG en Imágenes/3-Amber Player. La opción está oculta en versiones anteriores.
 - Genera roles semánticos accesibles claros y oscuros desde un color HCT, sigue AutoJs6 de forma predeterminada y ofrece 19 preajustes Material 500 localizados y RGB personalizado con vista previa. Ofrece un lanzador independiente y ajustes de idioma, noche y color que siguen al host, reanudación de un único vídeo, comprobaciones manuales y automáticas, versiones ignoradas, historial e información de la aplicación y el desarrollador.
 
 Herramientas de subtítulos y reproducción precisa:
