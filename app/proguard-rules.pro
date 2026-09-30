@@ -1,9 +1,9 @@
--keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.ExplorerActionService { *; }
--keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.PluginInfoService { *; }
--keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.LauncherActivity { *; }
--keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.ExplorerActionActivity { *; }
--keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.ExternalViewerActivity { *; }
--keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.VideoPlayerActivity { *; }
--keep class io.github.supermonster003.autojs6.plugin.threeemberplayer.WakeActivity { *; }
+-keep class io.github.supermonster003.autojs6.plugin.three.amber.player.ExplorerActionService { *; }
+-keep class io.github.supermonster003.autojs6.plugin.three.amber.player.PluginInfoService { *; }
+-keep class io.github.supermonster003.autojs6.plugin.three.amber.player.LauncherActivity { *; }
+-keep class io.github.supermonster003.autojs6.plugin.three.amber.player.ExplorerActionActivity { *; }
+-keep class io.github.supermonster003.autojs6.plugin.three.amber.player.ExternalViewerActivity { *; }
+-keep class io.github.supermonster003.autojs6.plugin.three.amber.player.VideoPlayerActivity { *; }
+-keep class io.github.supermonster003.autojs6.plugin.three.amber.player.WakeActivity { *; }
 -keep class org.autojs.plugin.common.api.PluginInfo { *; }
 -keep class org.autojs.plugin.explorer.api.** { *; }

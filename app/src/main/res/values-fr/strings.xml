@@ -92,13 +92,13 @@
     <string name="hdr_tone_mapping_warning">Cet écran ne signale pas la prise en charge de %1$s. Le mappage tonal peut modifier les hautes lumières et les couleurs.</string>
     <string name="hdr_type_none">Aucun (SDR)</string>
     <string name="launcher_icon_applied_note">Le lanceur peut prendre quelques secondes pour se rafraîchir. Certains raccourcis peuvent devoir être ajoutés a nouveau.</string>
-    <string name="launcher_icon_auto">Adaptative automatique</string>
+    <string name="launcher_icon_auto">Icône adaptative (automatique)</string>
     <string name="launcher_icon_auto_note">Tente de suivre le thème du système. Certains lanceurs gardent les icônes en cache ou utilisent une seule palette.</string>
-    <string name="launcher_icon_dark">Adaptative sombre</string>
+    <string name="launcher_icon_dark">Icône adaptative (sombre)</string>
     <string name="launcher_icon_failed">Impossible de changer l\'icône du lanceur. Veuillez réessayer.</string>
-    <string name="launcher_icon_light">Adaptative claire</string>
+    <string name="launcher_icon_light">Icône adaptative (claire)</string>
     <string name="launcher_icon_title">Icône du lanceur</string>
-    <string name="launcher_icon_transparent">Fond transparent</string>
+    <string name="launcher_icon_transparent">Icône à fond transparent</string>
     <string name="launcher_icon_transparent_note">Certains lanceurs ajoutent un fond ou un masque. La transparence peut ne pas être conservée.</string>
     <string name="media_info_audio_codec">Codec audio</string>
     <string name="media_info_bit_depth">Profondeur de couleur</string>
@@ -153,7 +153,7 @@
     <string name="screenshot_in_progress">Une capture est déjà en cours d\'enregistrement</string>
     <string name="screenshot_not_ready">L\'image vidéo n\'est pas encore prête</string>
     <string name="screenshot_save_failed">Impossible d\'enregistrer l\'image actuelle</string>
-    <string name="screenshot_saved">Capture enregistrée dans Images/3-Ember Player</string>
+    <string name="screenshot_saved">Capture enregistrée dans Images/3-Amber Player</string>
     <string name="screenshot_share_failed">Aucune application ne permet de partager cette capture</string>
     <string name="setting_about">À propos de l\'application et du développeur</string>
     <string name="setting_about_summary">Informations sur la version, le projet, le développeur et la licence</string>
@@ -195,7 +195,7 @@
     <string name="sleep_timer_finished">Le minuteur est terminé</string>
     <string name="sleep_timer_off">Désactivé</string>
     <string name="sleep_timer_set_minutes">La lecture sera mise en pause dans %1$d minutes</string>
-    <string name="standalone_description">Choisissez un fichier vidéo à lire ici, ou utilisez 3-Ember Player directement depuis le gestionnaire de fichiers AutoJs6.</string>
+    <string name="standalone_description">Choisissez un fichier vidéo à lire ici, ou utilisez 3-Amber Player directement depuis le gestionnaire de fichiers AutoJs6.</string>
     <string name="standalone_title">Votre lecteur vidéo simple</string>
     <string name="subtitle_background_none">Sans arrière-plan</string>
     <string name="subtitle_background_opaque">Opaque</string>

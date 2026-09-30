@@ -12,11 +12,10 @@ plugins {
     id("com.android.application")
 }
 
-val sourceNamespace = "io.github.supermonster003.autojs6.plugin.threeemberplayer"
+val sourceNamespace = "io.github.supermonster003.autojs6.plugin.three.amber.player"
 
-// Keep the published application ID stable so existing installations, AutoJs6's official
-// catalog entry and per-package authorization upgrade in place after the product rename.
-val stableApplicationId = "io.github.supermonster003.autojs6.plugin.videoplayer"
+// Amber 4.0 adopts the explicitly approved new install identity; the legacy app may coexist.
+val stableApplicationId = "io.github.supermonster003.autojs6.plugin.three.amber.player"
 
 val buildTypeDebug = "debug"
 val buildTypeRelease = "release"

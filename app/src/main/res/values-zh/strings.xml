@@ -92,13 +92,13 @@
     <string name="hdr_tone_mapping_warning">此显示设备未报告支持 %1$s.色调映射可能会改变高光和色彩.</string>
     <string name="hdr_type_none">无 (SDR)</string>
     <string name="launcher_icon_applied_note">启动器可能需要几秒钟刷新. 部分主屏幕快捷方式可能需要重新添加.</string>
-    <string name="launcher_icon_auto">自适应自动</string>
+    <string name="launcher_icon_auto">自适应图标 (自动)</string>
     <string name="launcher_icon_auto_note">尝试跟随系统主题. 部分启动器会缓存图标或只使用一种配色.</string>
-    <string name="launcher_icon_dark">自适应暗色</string>
+    <string name="launcher_icon_dark">自适应图标 (暗色)</string>
     <string name="launcher_icon_failed">无法切换启动器图标, 请重试.</string>
-    <string name="launcher_icon_light">自适应亮色</string>
+    <string name="launcher_icon_light">自适应图标 (亮色)</string>
     <string name="launcher_icon_title">启动器图标</string>
-    <string name="launcher_icon_transparent">透明背景</string>
+    <string name="launcher_icon_transparent">透明背景图标</string>
     <string name="launcher_icon_transparent_note">部分启动器会自行添加背景或遮罩, 透明效果可能无法保留.</string>
     <string name="media_info_audio_codec">音频编解码器</string>
     <string name="media_info_bit_depth">位深</string>
@@ -153,7 +153,7 @@
     <string name="screenshot_in_progress">已有截图正在保存</string>
     <string name="screenshot_not_ready">视频画面尚未就绪</string>
     <string name="screenshot_save_failed">无法保存当前画面</string>
-    <string name="screenshot_saved">截图已保存到\"图片/3-Ember Player\"</string>
+    <string name="screenshot_saved">截图已保存到\"图片/3-Amber Player\"</string>
     <string name="screenshot_share_failed">没有可用于分享此截图的应用</string>
     <string name="setting_about">关于应用与开发者</string>
     <string name="setting_about_summary">版本, 项目, 开发者及许可证信息</string>
@@ -195,7 +195,7 @@
     <string name="sleep_timer_finished">睡眠定时结束</string>
     <string name="sleep_timer_off">关闭</string>
     <string name="sleep_timer_set_minutes">将在 %1$d 分钟后暂停播放</string>
-    <string name="standalone_description">选择一个视频文件在此播放, 也可以直接从 AutoJs6 文件管理器调用 3-Ember Player.</string>
+    <string name="standalone_description">选择一个视频文件在此播放, 也可以直接从 AutoJs6 文件管理器调用 3-Amber Player.</string>
     <string name="standalone_title">简易视频播放器</string>
     <string name="subtitle_background_none">无背景</string>
     <string name="subtitle_background_opaque">不透明</string>

@@ -4,6 +4,16 @@
 
 ******
 
+# v4.0.0
+
+###### 2026/09/30
+
+* `Hint` 3-Amber Player 4.0 uses the new application ID io.github.supermonster003.autojs6.plugin.three.amber.player. Android installs it as a separate app; existing player settings are not migrated automatically. The old app may remain installed
+* `Feature` Launcher icon choices in Settings: adaptive light, adaptive dark, adaptive automatic (default), or transparent background. Automatic colors and transparent rendering depend on the launcher; it may cache icons or add a background. Some home-screen shortcuts may need to be added again after a change
+* `Feature` Unified language, night mode, theme color and launcher icon settings, with explicit confirmation, 16 color presets and HEX/RGB preview. App appearance follows AutoJs6 by default and falls back safely when the host is unavailable
+* `Fix` Correct the left-heavy Amber artwork with optical centering in launcher and transparent icons; include the offset in every safe-area check
+* `Improvement` Neutral surfaces and readable themed Material 3 controls and dialogs, consistent spacing, outline icons and dividers. Automatic launcher icons are the new default; upgrades preserve explicit choices and normalize duplicate entries
+
 # v3.2.0
 
 ###### 2026/09/29

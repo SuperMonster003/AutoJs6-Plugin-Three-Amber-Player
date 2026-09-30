@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name="io.github.supermonster003.autojs6.plugin.threeemberplayer.ThreeEmberPlayerApplication"
+        android:name="io.github.supermonster003.autojs6.plugin.three.amber.player.ThreeAmberPlayerApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="false"
@@ -63,7 +63,7 @@
 
         <activity-alias
             android:name="${applicationId}.launcher.AdaptiveDarkIconAlias"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/ic_launcher_system"
             android:targetActivity=".LauncherActivity">
@@ -75,7 +75,7 @@
 
         <activity-alias
             android:name="${applicationId}.launcher.AdaptiveAutoIconAlias"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/ic_launcher_system_auto"
             android:targetActivity=".LauncherActivity">
@@ -222,9 +222,17 @@
             android:permission="org.autojs.permission.PLUGIN">
             <intent-filter>
                 <action android:name="org.autojs.plugin.INFO" />
+                <category android:name="three-amber-player" />
             </intent-filter>
         </service>
 
+        <receiver
+            android:name="io.github.supermonster003.autojs6.plugin.three.amber.player.settings.LauncherIconUpdateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

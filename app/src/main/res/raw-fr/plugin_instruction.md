@@ -1,6 +1,6 @@
-# 3-Ember Player
+# 3-Amber Player
 
-3-Ember Player ajoute une action vidéo principale en lecture seule au gestionnaire de fichiers. Il utilise AndroidX Media3 ExoPlayer et PlayerView, démarre automatiquement la lecture, gère le focus audio et le passage à une sortie audio noisy, puis restaure la position et l'état de lecture.
+3-Amber Player ajoute une action vidéo principale en lecture seule au gestionnaire de fichiers. Il utilise AndroidX Media3 ExoPlayer et PlayerView, démarre automatiquement la lecture, gère le focus audio et le passage à une sortie audio noisy, puis restaure la position et l'état de lecture.
 
 La coopération complète nécessite AutoJs6 6.8.0 build 5276 ou ultérieur et Explorer Action v12 ; les capacités futures du plugin ne relèveront pas ce seuil. Lorsqu'il est installé, activé, approuvé et compatible, tous les fichiers reconnus comme vidéo par l'hôte s'ouvrent dans ce lecteur. Un hôte sans capacités de session facultatives conserve la lecture du fichier sélectionné. Si le plugin est absent, désactivé, non autorisé, indisponible, incompatible ou impossible à lancer, un hôte compatible affiche des instructions de récupération et n'ouvre le sélecteur d'applications Android qu'après le choix explicite Ouvrir avec d'autres applications. L'audio et les images restent des capacités indépendantes.
 
@@ -17,7 +17,7 @@ Commandes de lecture:
 - MediaSession prend en charge les commandes des écouteurs, du Bluetooth et du système; la notification multimédia affiche le titre et la progression actuels.
 - Le minuteur met la lecture en pause après 15, 30, 45 ou 60 minutes, ou à la fin de la vidéo. Les paramètres des gestes règlent la sensibilité et l’intervalle du double appui.
 - Pincez l’image pour zoomer de 0,25× à 4×; touchez-la deux fois pendant le zoom pour réinitialiser. Le déplacement de la barre affiche le temps cible et, si le conteneur le permet, une miniature facultative.
-- Sur Android 10 ou version ultérieure, Enregistrer l’image actuelle écrit un PNG dans Images/3-Ember Player. L’option est masquée sur les versions antérieures.
+- Sur Android 10 ou version ultérieure, Enregistrer l’image actuelle écrit un PNG dans Images/3-Amber Player. L’option est masquée sur les versions antérieures.
 - Génère des rôles sémantiques clairs et sombres lisibles depuis une couleur HCT, suit AutoJs6 par défaut et propose 19 couleurs Material 500 localisées ainsi qu’un RGB personnalisé prévisualisé. Fournit un lanceur autonome et des paramètres de langue, nuit et couleur suivant l’hôte, reprise d’une seule vidéo, vérifications manuelles et automatiques, versions ignorées, historique et informations sur l’application et le développeur.
 
 Outils de sous-titres et de lecture précise:

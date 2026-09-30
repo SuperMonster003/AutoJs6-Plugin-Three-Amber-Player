@@ -17,13 +17,13 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "app/src/main/res"
-SOURCE = ROOT / ".python/icons/three-ember-original.png"
+SOURCE = ROOT / ".python/icons/three-amber-original.png"
 SIZE = 432
 SCALE = 4
 UI_GLYPH = 0.66
 ADAPTIVE_GLYPH = 0.39
 # Offset is a fraction of the rendered glyph width/height, not the canvas.
-# Ember uses optical balance assessed in circular masks at 48/96/160 px.
+# Amber uses optical balance assessed in circular masks at 48/96/160 px.
 OPTICAL_X = .12
 OPTICAL_Y = 0.0
 DAY_BACKGROUND = (0xFA, 0xFA, 0xFA, 255)

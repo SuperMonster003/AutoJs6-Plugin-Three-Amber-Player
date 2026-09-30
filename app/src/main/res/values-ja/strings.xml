@@ -92,13 +92,13 @@
     <string name="hdr_tone_mapping_warning">このディスプレイは %1$s 対応を報告していません.トーンマッピングによりハイライトや色が変化する場合があります.</string>
     <string name="hdr_type_none">なし (SDR)</string>
     <string name="launcher_icon_applied_note">反映まで数秒かかる場合があります. ホーム画面のショートカットを再追加する必要がある場合があります.</string>
-    <string name="launcher_icon_auto">アダプティブ 自動</string>
+    <string name="launcher_icon_auto">アダプティブ アイコン (自動)</string>
     <string name="launcher_icon_auto_note">システムテーマへの追従を試みます. ランチャーによってはアイコンがキャッシュされ, 配色が固定されます.</string>
-    <string name="launcher_icon_dark">アダプティブ ダーク</string>
+    <string name="launcher_icon_dark">アダプティブ アイコン (ダーク)</string>
     <string name="launcher_icon_failed">ランチャーアイコンを変更できませんでした. もう一度お試しください.</string>
-    <string name="launcher_icon_light">アダプティブ ライト</string>
+    <string name="launcher_icon_light">アダプティブ アイコン (ライト)</string>
     <string name="launcher_icon_title">ランチャーアイコン</string>
-    <string name="launcher_icon_transparent">透明な背景</string>
+    <string name="launcher_icon_transparent">透明背景のアイコン</string>
     <string name="launcher_icon_transparent_note">ランチャーが背景やマスクを追加する場合, 透明な背景は維持されないことがあります.</string>
     <string name="media_info_audio_codec">音声コーデック</string>
     <string name="media_info_bit_depth">ビット深度</string>
@@ -153,7 +153,7 @@
     <string name="screenshot_in_progress">スクリーンショットを保存中です</string>
     <string name="screenshot_not_ready">動画フレームの準備ができていません</string>
     <string name="screenshot_save_failed">現在のフレームを保存できませんでした</string>
-    <string name="screenshot_saved">スクリーンショットを"Pictures/3-Ember Player"に保存しました</string>
+    <string name="screenshot_saved">スクリーンショットを"Pictures/3-Amber Player"に保存しました</string>
     <string name="screenshot_share_failed">このスクリーンショットを共有できるアプリがありません</string>
     <string name="setting_about">アプリと開発者について</string>
     <string name="setting_about_summary">バージョン, プロジェクト, 開発者, ライセンス情報</string>
@@ -195,7 +195,7 @@
     <string name="sleep_timer_finished">スリープタイマーが終了しました</string>
     <string name="sleep_timer_off">オフ</string>
     <string name="sleep_timer_set_minutes">%1$d 分後に再生を一時停止します</string>
-    <string name="standalone_description">動画ファイルを選んでここで再生するか, AutoJs6 のファイルマネージャーから 3-Ember Player を直接使用できます.</string>
+    <string name="standalone_description">動画ファイルを選んでここで再生するか, AutoJs6 のファイルマネージャーから 3-Amber Player を直接使用できます.</string>
     <string name="standalone_title">シンプルな動画プレーヤー</string>
     <string name="subtitle_background_none">背景なし</string>
     <string name="subtitle_background_opaque">不透明</string>

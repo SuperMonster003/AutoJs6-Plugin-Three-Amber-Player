@@ -35,6 +35,8 @@
 
 {{ p_introduction }}
 
+{{ p_amber_identity }}
+
 {{ p_introduction_secure }}
 
 ******
@@ -200,4 +202,4 @@ app/src/main/res/raw-*/plugin_instruction.md
 - {{ text_link_android_secure_file_sharing }}: {{ android_secure_files_url }}
 
 
-[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Ember-Player/blob/master/docs/16kb.md)
+[16 KB page alignment and build verification](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/docs/16kb.md)

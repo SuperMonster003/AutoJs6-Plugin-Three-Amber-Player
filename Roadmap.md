@@ -1,4 +1,4 @@
-# 3-Ember Player Roadmap
+# 3-Amber Player Roadmap
 
 本路线图维护插件的已完成能力与后续演进计划.
 
@@ -85,7 +85,7 @@
 - [x] `.changelog/lang_*.json` (10 语言) 录入 v2.1.0 条目并重新生成 CHANGELOG 与 README.
 - [x] `version.properties` 升级, 签名 APK 以 CRC32 摘要命名归档至 `releases/`; API 24 模拟器与至少 1 台真机完成冒烟 (覆盖字幕样式, 偏移, 编码探测, 手动加载, 逐帧, A-B 循环).
 
-> v2.1.0 于 2026/08/31 完成验收: JVM 测试与双设备仪器测试通过, lint 为 0 errors; API 24 模拟器与 API 35 真机完成上述功能冒烟, 最终签名包为 `releases/autojs6-plugin-three-ember-player-v2.1.0-e758df32.apk`.
+> v2.1.0 于 2026/08/31 完成验收: JVM 测试与双设备仪器测试通过, lint 为 0 errors; API 24 模拟器与 API 35 真机完成上述功能冒烟, 最终签名包为 `releases/autojs6-plugin-three-amber-player-v2.1.0-e758df32.apk`.
 
 ******
 
@@ -117,7 +117,7 @@
 - [x] 新增单元测试通过, lint 零回归; 10 语言文案与文档同步; v2.2.0 条目录入并再生成文档; 签名 APK 归档 `releases/`.
 - [x] 设备冒烟覆盖: 多选入口 (新宿主), 旧宿主降级不显示, 队列面板跳转, 连播取消, 模式记忆开关.
 
-> v2.2.0 于 2026/08/31 完成验收: 92 项 JVM 测试全部通过; API 33 仪器测试 7/7 通过, API 36 为 6 项通过且 1 项因未安装 Host 按预期跳过; lint 为 0 errors (56 项既有基线 warnings). API 31 真机配合最低支持 Host build 5276 验证多选入口, Host 顺序队列, 面板跳转与模式联动, 3 秒提示及取消保持末帧, 模式记忆开关; API 29 模拟器配合旧 Host build 3849 验证不展示多选动作. 最终签名包为 `releases/autojs6-plugin-three-ember-player-v2.2.0-c4b7be44.apk`.
+> v2.2.0 于 2026/08/31 完成验收: 92 项 JVM 测试全部通过; API 33 仪器测试 7/7 通过, API 36 为 6 项通过且 1 项因未安装 Host 按预期跳过; lint 为 0 errors (56 项既有基线 warnings). API 31 真机配合最低支持 Host build 5276 验证多选入口, Host 顺序队列, 面板跳转与模式联动, 3 秒提示及取消保持末帧, 模式记忆开关; API 29 模拟器配合旧 Host build 3849 验证不展示多选动作. 最终签名包为 `releases/autojs6-plugin-three-amber-player-v2.2.0-c4b7be44.apk`.
 
 ******
 
@@ -149,7 +149,7 @@
 - [x] 新增单元测试通过, lint 零回归; 10 语言文案与文档同步; v2.3.0 条目录入并再生成文档; 签名 APK 归档 `releases/`.
 - [x] 设备冒烟覆盖: HDR 标注 (含不支持设备), 含字幕截图, 分享, 镜像翻转与缩放旋转叠加.
 
-> v2.3.0 于 2026/08/31 完成验收: 101 项 JVM 测试全部通过; API 33 与 API 36 仪器测试均为 7/7 通过; lint 为 0 errors (56 项既有基线 warnings). API 31 Xperia XQ-AT72 验证 HDR10 标注, BT.2020 / 色彩范围 / 位深信息及复制全部字段, 支持 HDR 的显示器不误报提示; API 33 模拟器以空 HDR 能力列表验证 HDR10 tone-mapping 一次性提示. API 31 真机同时验证截图设置默认关闭与显式开启, 含字幕但不含控制层的 MediaStore PNG, 成功提示中的分享入口与系统选择器, 音量增强六档 / 首次风险确认 / 会话内状态, 以及真实双指缩放后叠加水平镜像并切换竖屏. 最终签名包为 `releases/autojs6-plugin-three-ember-player-v2.3.0-20c6233e.apk` (SHA-256: `9e1c2e027b3addc218dac49b11898d856a77fc4b2e50da6eb67a38e49e093c1b`).
+> v2.3.0 于 2026/08/31 完成验收: 101 项 JVM 测试全部通过; API 33 与 API 36 仪器测试均为 7/7 通过; lint 为 0 errors (56 项既有基线 warnings). API 31 Xperia XQ-AT72 验证 HDR10 标注, BT.2020 / 色彩范围 / 位深信息及复制全部字段, 支持 HDR 的显示器不误报提示; API 33 模拟器以空 HDR 能力列表验证 HDR10 tone-mapping 一次性提示. API 31 真机同时验证截图设置默认关闭与显式开启, 含字幕但不含控制层的 MediaStore PNG, 成功提示中的分享入口与系统选择器, 音量增强六档 / 首次风险确认 / 会话内状态, 以及真实双指缩放后叠加水平镜像并切换竖屏. 最终签名包为 `releases/autojs6-plugin-three-amber-player-v2.3.0-20c6233e.apk` (SHA-256: `9e1c2e027b3addc218dac49b11898d856a77fc4b2e50da6eb67a38e49e093c1b`).
 
 ******
 
@@ -180,7 +180,7 @@
 - [x] 新增单元测试通过, lint 零回归; 10 语言文案与文档同步; v3.0.0 条目录入并再生成文档; 签名 APK 归档 `releases/`.
 - [x] 设备冒烟覆盖: TalkBack 触摸探索, 200% 字体/显示缩放, DPAD / 空格 / 回车 / 媒体键, MediaSession 外设命令, 后台听音开关、通知控制、息屏续播、播完清理与 PiP 优先级. 实体蓝牙耳机未纳入本次自动化设备环境, 其 Android 端可观测契约由同一 MediaSession 系统通道验证.
 
-> v3.0.0 于 2026/08/31 完成验收: 110 项 JVM 测试全部通过; API 33 与 API 36 仪器测试均为 10/10 通过, API 29 为 10 项执行通过加 1 项“未安装兼容宿主”条件跳过; lint 为 0 errors (56 项既有基线 warnings). API 33 实机态验证 TalkBack 触摸探索持续显示控件、200% 字体与显示缩放、键盘/DPAD 与媒体键、通知权限拒绝、息屏进度持续、通知直接暂停/恢复以及点击通知无缝返回原播放位置; API 36 验证 targetSdk 36 下 `mediaPlayback` 前台类型、自然播完清理、服务不残留与 R8 后签名包冷启播放. PiP 获得系统 `pinned` 任务后预热服务立即销毁, 全程未出现 FGS 启动拒绝、权限异常或重复通知. 最终签名包为 `releases/autojs6-plugin-three-ember-player-v3.0.0-6c99beff.apk` (CRC32: `6c99beff`; SHA-256: `a3a5d4609594f41f227fd02dfe815dd6fafc5b518a030acf7943e46c18c0b510`; APK Signature Scheme v2, 单签名者).
+> v3.0.0 于 2026/08/31 完成验收: 110 项 JVM 测试全部通过; API 33 与 API 36 仪器测试均为 10/10 通过, API 29 为 10 项执行通过加 1 项“未安装兼容宿主”条件跳过; lint 为 0 errors (56 项既有基线 warnings). API 33 实机态验证 TalkBack 触摸探索持续显示控件、200% 字体与显示缩放、键盘/DPAD 与媒体键、通知权限拒绝、息屏进度持续、通知直接暂停/恢复以及点击通知无缝返回原播放位置; API 36 验证 targetSdk 36 下 `mediaPlayback` 前台类型、自然播完清理、服务不残留与 R8 后签名包冷启播放. PiP 获得系统 `pinned` 任务后预热服务立即销毁, 全程未出现 FGS 启动拒绝、权限异常或重复通知. 最终签名包为 `releases/autojs6-plugin-three-amber-player-v3.0.0-6c99beff.apk` (CRC32: `6c99beff`; SHA-256: `a3a5d4609594f41f227fd02dfe815dd6fafc5b518a030acf7943e46c18c0b510`; APK Signature Scheme v2, 单签名者).
 
 ******
 

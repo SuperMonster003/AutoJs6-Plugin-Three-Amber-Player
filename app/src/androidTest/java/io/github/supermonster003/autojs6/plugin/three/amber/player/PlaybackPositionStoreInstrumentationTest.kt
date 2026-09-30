@@ -1,0 +1,70 @@
+package io.github.supermonster003.autojs6.plugin.three.amber.player
+
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+import org.junit.runner.RunWith
+
+@RunWith(AndroidJUnit4::class)
+class PlaybackPositionStoreInstrumentationTest {
+
+    @Test
+    fun retainsOnlyTheMostRecentlyOpenedUnfinishedVideo() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val recentPreferences = context.getSharedPreferences(RECENT_PREFERENCES, Context.MODE_PRIVATE)
+        val legacyPreferences = context.getSharedPreferences(LEGACY_PREFERENCES, Context.MODE_PRIVATE)
+        val recentBackup = recentPreferences.all.toMap()
+        val legacyBackup = legacyPreferences.all.toMap()
+
+        try {
+            recentPreferences.edit().clear().commit()
+            legacyPreferences.edit().clear().commit()
+            val store = PlaybackPositionStore(context)
+            val first = "content://example/video/a.mp4"
+            val second = "content://example/video/b.mkv"
+
+            store.save(first, 60_000L, 300_000L)
+            assertEquals(60_000L, store.resumePosition(first))
+
+            // Merely opening B invalidates A, even before B has enough progress to save.
+            assertNull(store.resumePosition(second))
+            assertNull(store.resumePosition(first))
+
+            store.save(second, 90_000L, 300_000L)
+            assertEquals(90_000L, store.resumePosition(second))
+
+            store.save(second, 300_000L, 300_000L)
+            assertNull(store.resumePosition(second))
+        } finally {
+            restore(recentPreferences, recentBackup)
+            restore(legacyPreferences, legacyBackup)
+        }
+    }
+
+    private fun restore(preferences: SharedPreferences, values: Map<String, *>) {
+        preferences.edit().clear().apply {
+            values.forEach { (key, value) ->
+                when (value) {
+                    is String -> putString(key, value)
+                    is Boolean -> putBoolean(key, value)
+                    is Int -> putInt(key, value)
+                    is Long -> putLong(key, value)
+                    is Float -> putFloat(key, value)
+                    is Set<*> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        putStringSet(key, value as Set<String>)
+                    }
+                }
+            }
+        }.commit()
+    }
+
+    private companion object {
+        const val RECENT_PREFERENCES = "recent_playback_position"
+        const val LEGACY_PREFERENCES = "playback_positions"
+    }
+}
