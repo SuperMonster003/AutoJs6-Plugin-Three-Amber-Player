@@ -6,7 +6,7 @@
   "changelog_label_dependency": "Dependencia",
   "$data": {
     "v4.0.0": {
-      "released_date": "2026/09/30",
+      "released_date": "2026/10/03",
       "feature": [
         "Icono del lanzador en Ajustes: adaptable claro, adaptable oscuro, adaptable automático (predeterminado) o fondo transparente. Los colores automáticos y la transparencia dependen del lanzador, que puede guardar iconos en caché o añadir un fondo. Algunos accesos directos pueden necesitar añadirse de nuevo tras el cambio",
         "Ajustes unificados de idioma, modo nocturno, color del tema e icono del lanzador, con confirmación, 16 colores predefinidos y vista previa HEX/RGB. La apariencia sigue AutoJs6 por defecto y utiliza una alternativa segura si el anfitrión no está disponible"

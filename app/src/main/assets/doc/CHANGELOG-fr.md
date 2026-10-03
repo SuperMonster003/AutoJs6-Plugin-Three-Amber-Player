@@ -6,7 +6,7 @@
 
 # v4.0.0
 
-###### 2026/09/30
+###### 2026/10/03
 
 * `Note` 3-Amber Player 4.0 utilise le nouvel identifiant io.github.supermonster003.autojs6.plugin.three.amber.player. Android l'installe séparément; les réglages existants ne sont pas transférés automatiquement. L'ancienne application peut être conservée
 * `Fonctionnalité` Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre, adaptative automatique (par défaut) ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement

@@ -6,7 +6,7 @@
 
 # v4.0.0
 
-###### 2026/09/30
+###### 2026/10/03
 
 * `Hint` 3-Amber Player 4.0 uses the new application ID io.github.supermonster003.autojs6.plugin.three.amber.player. Android installs it as a separate app; existing player settings are not migrated automatically. The old app may remain installed
 * `Feature` Launcher icon choices in Settings: adaptive light, adaptive dark, adaptive automatic (default), or transparent background. Automatic colors and transparent rendering depend on the launcher; it may cache icons or add a background. Some home-screen shortcuts may need to be added again after a change
