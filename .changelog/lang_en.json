@@ -15,7 +15,8 @@
         "Correct the left-heavy Amber artwork with optical centering in launcher and transparent icons; include the offset in every safe-area check"
       ],
       "improvement": [
-        "Neutral surfaces and readable themed Material 3 controls and dialogs, consistent spacing, outline icons and dividers. Automatic launcher icons are the new default; upgrades preserve explicit choices and normalize duplicate entries"
+        "Neutral surfaces and readable themed Material 3 controls and dialogs, consistent spacing, outline icons and dividers. Automatic launcher icons are the new default; upgrades preserve explicit choices and normalize duplicate entries",
+        "Consistent visual sizing for launcher and Plugin Center icons, with transparent backgrounds and neutral black, white or grayscale artwork"
       ],
       "hint": [
         "3-Amber Player 4.0 uses the new application ID io.github.supermonster003.autojs6.plugin.three.amber.player. Android installs it as a separate app; existing player settings are not migrated automatically. The old app may remain installed"
