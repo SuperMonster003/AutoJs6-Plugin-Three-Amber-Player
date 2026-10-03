@@ -233,6 +233,7 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 * `Función` Ajustes unificados de idioma, modo nocturno, color del tema e icono del lanzador, con confirmación, 16 colores predefinidos y vista previa HEX/RGB. La apariencia sigue AutoJs6 por defecto y utiliza una alternativa segura si el anfitrión no está disponible
 * `Corrección` Centrado óptico del dibujo Amber en los iconos del lanzador y transparentes para corregir su peso visual a la izquierda; comprobaciones de zona segura con el desplazamiento incluido
 * `Mejora` Superficies grises neutras y controles y diálogos Material 3 legibles con el color del tema, con espaciado, iconos lineales y divisores uniformes. El icono automático es el nuevo valor predeterminado; las actualizaciones conservan las elecciones explícitas y corrigen entradas duplicadas
+* `Mejora` Tamaño visual uniforme de los iconos del lanzador y del Centro de complementos, con fondos transparentes y diseños en blanco, negro o grises neutros
 
 #### v3.2.0
 

@@ -2,10 +2,12 @@ import importlib.util
 import math
 from pathlib import Path
 import unittest
+import sys
 
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / ".python"))
 spec = importlib.util.spec_from_file_location("icons", ROOT / ".python/generate_launcher_icons.py")
 icons = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(icons)
