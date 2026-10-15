@@ -54,7 +54,7 @@ El complemento se mantiene fiel a un modelo de seguridad de solo lectura: los vi
 
 ******
 
-- Listas locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservan orden, títulos y duplicados. AutoJs6 lee archivos de la misma carpeta; el reproductor independiente pide la carpeta para rutas relativas. Una lista a la vez, hasta 128 elementos. No se admiten URL de red, HLS ni listas anidadas.
+- Listas locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservan orden, títulos y duplicados. AutoJs6 lee archivos de la misma carpeta; el reproductor independiente pide la carpeta para rutas relativas. Una lista a la vez, hasta 128 elementos. No se admiten URL de red, HLS ni listas anidadas. [Formatos y uso](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/docs/Playlists.md).
 - Tocar y reproducir: toca un archivo de video en el gestor de archivos de AutoJs6 y se abre directamente en pantalla completa inmersiva, sin configurar nada.
 - Gestos prácticos: desliza en la mitad izquierda para ajustar el brillo y en la derecha el volumen, desliza en horizontal para avanzar o retroceder, doble toque en los laterales para saltar, doble toque en el centro para reproducir/pausar, pulsación larga para una velocidad temporal de 2×, y bloquea todos los controles con un solo toque para evitar toques accidentales.
 - Velocidad e imagen bajo control: 9 velocidades de reproducción de 0,25× a 3×, zoom por pellizco (de 0,25× a 4×), modos de escalado adaptar/rellenar/recortar, y cambio de orientación con un solo toque, con sugerencia automática según la relación de aspecto.

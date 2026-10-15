@@ -54,7 +54,7 @@ The plugin sticks to a read-only security model: videos enter the player through
 
 ******
 
-- Local playlists: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL preserve order, titles and repeated entries. Host playback reads the same folder; standalone playback asks for the playlist folder to resolve relative paths. One list at a time, up to 128 items. Network URLs, HLS and nested playlists are not supported.
+- Local playlists: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL preserve order, titles and repeated entries. Host playback reads the same folder; standalone playback asks for the playlist folder to resolve relative paths. One list at a time, up to 128 items. Network URLs, HLS and nested playlists are not supported. [Formats and usage](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/docs/Playlists.md).
 - Tap to play: tap a video file in the AutoJs6 file manager and it opens directly in immersive full screen, no setup required.
 - Handy gestures: swipe the left half for brightness and the right half for volume, swipe horizontally to seek, double-tap the sides to jump, double-tap the center to play/pause, long-press for temporary 2× speed, and lock all controls with one tap to prevent accidental touches.
 - Speed and picture control: 9 playback speeds from 0.25× to 3×, pinch-to-zoom (0.25× to 4×), fit/fill/crop scaling modes, and one-tap orientation switching with an automatic suggestion based on the aspect ratio.

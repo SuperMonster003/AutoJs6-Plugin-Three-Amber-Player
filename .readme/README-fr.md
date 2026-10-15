@@ -54,7 +54,7 @@ Le plugin applique un modèle de sécurité en lecture seule: les vidéos arrive
 
 ******
 
-- Listes locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservent ordre, titres et doublons. Depuis AutoJs6, les fichiers doivent être dans le même dossier; le lecteur autonome demande le dossier pour les chemins relatifs. Une liste à la fois, 128 éléments maximum. URL réseau, HLS et listes imbriquées non pris en charge.
+- Listes locales: M3U/M3U8, PLS, XSPF, WPL, ASX/WAX/WVX, MPCPL, DPL conservent ordre, titres et doublons. Depuis AutoJs6, les fichiers doivent être dans le même dossier; le lecteur autonome demande le dossier pour les chemins relatifs. Une liste à la fois, 128 éléments maximum. URL réseau, HLS et listes imbriquées non pris en charge. [Formats et utilisation](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player/blob/master/docs/Playlists.md).
 - Lecture en un appui: appuyez sur un fichier vidéo dans le gestionnaire de fichiers AutoJs6 et il s'ouvre directement en plein écran immersif, sans aucune configuration.
 - Des gestes bien pensés: balayez la moitié gauche pour la luminosité et la moitié droite pour le volume, balayez horizontalement pour naviguer dans la vidéo, faites un double appui sur les côtés pour sauter, un double appui au centre pour lecture/pause, un appui long pour une vitesse temporaire de 2×, et verrouillez toutes les commandes d'un seul appui pour éviter les appuis accidentels.
 - Vitesse et image sous contrôle: 9 vitesses de lecture de 0,25× à 3×, zoom par pincement (0,25× à 4×), modes d'affichage adapter/remplir/rogner, et bascule de l'orientation en un appui avec suggestion automatique selon le format de l'image.
