@@ -195,7 +195,7 @@
     <string name="sleep_timer_finished">انتهى مؤقت النوم</string>
     <string name="sleep_timer_off">إيقاف</string>
     <string name="sleep_timer_set_minutes">سيتوقف التشغيل مؤقتًا بعد %1$d دقيقة</string>
-    <string name="standalone_description">اختر ملف فيديو لتشغيله هنا، أو استخدم 3-Amber Player مباشرة من مدير ملفات AutoJs6.</string>
+    <string name="standalone_description">اختر ملف فيديو لتشغيله هنا، أو استخدم ⁨3-Amber Player⁩ مباشرة من مدير ملفات AutoJs6.</string>
     <string name="standalone_title">مشغل فيديو بسيط</string>
     <string name="subtitle_background_none">بلا خلفية</string>
     <string name="subtitle_background_opaque">معتمة</string>
