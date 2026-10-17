@@ -10,7 +10,7 @@ Playback controls:
 - Swipe horizontally to seek, double-tap the left or right third to jump by the configured 5, 10, or 30 seconds, double-tap the center to play or pause, and long-press for a temporary 2× speed.
 - The bottom bar provides play/pause, 10-second jumps, a draggable progress bar, playback speeds from 0.25× to 3×, resize mode, screen orientation, and a control lock against accidental touches.
 - Opening one video from Explorer can build a naturally ordered, bounded queue from readable direct video siblings. Playback starts at the selected video and offers previous / next, sequence, shuffle, and repeat-one modes.
-- Compatible hosts also expose the read-only Play selected toolbar action for 1–128 videos from one parent in host selection order, without sibling discovery. Host queues show a current-item/duration panel with tap-to-jump, pause on the end frame for a cancelable three-second next-item prompt, and can optionally remember the playback mode.
+- Compatible hosts also expose the read-only Play selected toolbar action for 1-128 videos from one parent in host selection order, without sibling discovery. Host queues show a current-item/duration panel with tap-to-jump, pause on the end frame for a cancelable three-second next-item prompt, and can optionally remember the playback mode.
 - Resume history retains exactly one most recently opened unfinished video as a SHA-256 identity digest plus time values; opening another video clears it immediately, and completed playback is never retained.
 - The top bar selects embedded audio and text tracks. Matching .srt and .ass sidecars, including language suffixes, are discovered from the same folder. All subtitles are off by default and load only after explicit selection.
 - Repeat-current, video information, automatic orientation for horizontal media, and Android 8.0+ picture-in-picture with play/pause actions are available from the top bar.
@@ -22,9 +22,9 @@ Playback controls:
 
 Subtitle and precision tools:
 
-- Subtitle settings provide a live preview for 75%–150% text size, four foreground colors, opaque/translucent/no background, and 0%/4%/8% bottom margin; choices also apply in picture-in-picture.
+- Subtitle settings provide a live preview for 75%-150% text size, four foreground colors, opaque/translucent/no background, and 0%/4%/8% bottom margin; choices also apply in picture-in-picture.
 - The subtitle menu can temporarily load one .srt or .ass file up to 4 MiB, detects BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 in memory, and adjusts an external subtitle by ±600.0 seconds in 0.1-second steps. No subtitle grant is persisted.
-- Pause to reveal previous/next-frame buttons (long-press to repeat) and the A–B loop control. An active A–B loop prevents queue advance; choosing a repeat mode or end-of-video timer afterward clears it.
+- Pause to reveal previous/next-frame buttons (long-press to repeat) and the A-B loop control. An active A-B loop prevents queue advance; choosing a repeat mode or end-of-video timer afterward clears it.
 
 Display, accessibility, and background playback:
 

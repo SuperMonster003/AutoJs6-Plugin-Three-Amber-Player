@@ -130,35 +130,35 @@ La lista anterior es una lista de extensiones exactas permitidas que se conserva
 
 ******
 
-**¿Tocas un archivo de video y no se abre este reproductor?**
+**Tocas un archivo de video y no se abre este reproductor?**
 
 Comprueba en este orden: que el código de versión de AutoJs6 sea al menos 5276 (versión 6.8.0 o superior); que el complemento esté activado en el `Centro de complementos`; y que el host reconozca el archivo como video. Si falla cualquiera de las tres condiciones, este complemento no atenderá el toque.
 
-**¿Qué ocurre si el complemento no está instalado o está desactivado?**
+**Qué ocurre si el complemento no está instalado o está desactivado?**
 
 Un host compatible muestra una guía de recuperación que sugiere instalar o activar el complemento; el selector de aplicaciones del sistema solo aparece cuando el usuario elige expresamente `Abrir con otra aplicación`, entregando el video a otros reproductores del dispositivo.
 
-**¿Se oye el audio pero la pantalla queda en negro, o la reproducción falla?**
+**Se oye el audio pero la pantalla queda en negro, o la reproducción falla?**
 
 Que un video se decodifique depende de la plataforma del dispositivo y de Media3; figurar en la lista de extensiones no garantiza la reproducción. Para el habitual formato antiguo XVID en MKV, una capa de compatibilidad integrada entrega la pista al decodificador MPEG-4 Part 2 del sistema; si aun así no se puede decodificar, se muestra un mensaje claro y `Abrir con otra aplicación` pasa el video a otro reproductor.
 
-**¿Cómo reproduzco seguidos todos los videos de una carpeta?**
+**Cómo reproduzco seguidos todos los videos de una carpeta?**
 
 Con un host que cumpla el requisito de versión, abrir cualquier video desde el gestor de archivos crea automáticamente una cola de la misma carpeta: orden natural de nombre de archivo, empezando por el video actual, con reproducción automática del siguiente al terminar y modos secuencial, aleatorio y repetición individual. En hosts antiguos o desde la entrada independiente se mantiene la reproducción de un solo archivo.
 
-**¿Cómo se cargan los subtítulos externos?**
+**Cómo se cargan los subtítulos externos?**
 
 Coloca un archivo `.srt` o `.ass` con el mismo nombre junto al video (se admiten sufijos de idioma como `movie.es.srt`), abre el video desde el gestor de archivos y elige el subtítulo en el menú de subtítulos. Los subtítulos están desactivados de forma predeterminada y nunca se activan solos.
 
-**¿Qué registra la reanudación? ¿Se sube algo?**
+**Qué registra la reanudación? Se sube algo?**
 
 Solo se guarda la posición del último video sin terminar, almacenada como un resumen SHA-256 del archivo más valores de tiempo, sin nombre de archivo ni ruta; abrir otro video o terminar la reproducción la borra de inmediato. Todo permanece en el dispositivo y no se sube nada.
 
-**¿Qué permisos necesita el complemento?**
+**Qué permisos necesita el complemento?**
 
 No necesita permisos de almacenamiento, cámara, micrófono ni ningún otro permiso sensible en tiempo de ejecución. Solo declara el permiso de red para comprobar actualizaciones (iniciadas por el usuario o como mucho una vez al día), más el permiso de complemento protegido por firma para la entrada del gestor de archivos.
 
-**¿Se puede usar de forma independiente de AutoJs6?**
+**Se puede usar de forma independiente de AutoJs6?**
 
 Sí. Desde la v2.0.0 el complemento tiene entrada propia en la pantalla de inicio: elige un video con el selector de archivos del sistema y reprodúcelo, o selecciona este reproductor en el menú `Abrir con` de otra aplicación. La reproducción por carpeta, la detección de subtítulos externos y seguir los ajustes del host siguen requiriendo AutoJs6.
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="ab_loop_active">A–B 반복: %1$s – %2$s</string>
-    <string name="ab_loop_active_label">A–B</string>
-    <string name="ab_loop_cancelled_for_mode">선택한 재생 모드에 맞춰 A–B 반복을 해제했습니다</string>
+    <string name="ab_loop_active">A-B 반복: %1$s - %2$s</string>
+    <string name="ab_loop_active_label">A-B</string>
+    <string name="ab_loop_cancelled_for_mode">선택한 재생 모드에 맞춰 A-B 반복을 해제했습니다</string>
     <string name="ab_loop_clear_label">A/B</string>
-    <string name="ab_loop_cleared">A–B 반복을 해제했습니다</string>
+    <string name="ab_loop_cleared">A-B 반복을 해제했습니다</string>
     <string name="ab_loop_point_a_label">A</string>
     <string name="ab_loop_point_a_set">A 지점을 %1$s(으)로 설정했습니다</string>
     <string name="about_description">AutoJs6 Explorer와 일상적인 독립 재생을 위한 동영상 플레이어입니다.</string>
@@ -15,7 +15,7 @@
     <string name="about_version">버전 %1$s · 빌드 %2$d</string>
     <string name="accessibility_off">꺼짐</string>
     <string name="accessibility_on">켜짐</string>
-    <string name="action_ab_loop">A–B 반복 설정 또는 해제</string>
+    <string name="action_ab_loop">A-B 반복 설정 또는 해제</string>
     <string name="action_audio_track">오디오 트랙</string>
     <string name="action_back">뒤로</string>
     <string name="action_brightness">밝기</string>

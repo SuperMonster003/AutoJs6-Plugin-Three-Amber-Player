@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="ab_loop_active">A–B リピート: %1$s – %2$s</string>
-    <string name="ab_loop_active_label">A–B</string>
-    <string name="ab_loop_cancelled_for_mode">選択した再生モードのため A–B リピートを解除しました</string>
+    <string name="ab_loop_active">A-B リピート: %1$s - %2$s</string>
+    <string name="ab_loop_active_label">A-B</string>
+    <string name="ab_loop_cancelled_for_mode">選択した再生モードのため A-B リピートを解除しました</string>
     <string name="ab_loop_clear_label">A/B</string>
-    <string name="ab_loop_cleared">A–B リピートを解除しました</string>
+    <string name="ab_loop_cleared">A-B リピートを解除しました</string>
     <string name="ab_loop_point_a_label">A</string>
     <string name="ab_loop_point_a_set">A 点を %1$s に設定しました</string>
     <string name="about_description">AutoJs6 Explorer と日常の単独再生に特化した動画プレーヤーです.</string>
@@ -15,7 +15,7 @@
     <string name="about_version">バージョン %1$s · ビルド %2$d</string>
     <string name="accessibility_off">オフ</string>
     <string name="accessibility_on">オン</string>
-    <string name="action_ab_loop">A–B リピートを設定または解除</string>
+    <string name="action_ab_loop">A-B リピートを設定または解除</string>
     <string name="action_audio_track">音声トラック</string>
     <string name="action_back">戻る</string>
     <string name="action_brightness">明るさ</string>
@@ -171,7 +171,7 @@
     <string name="setting_release_history">リリース履歴</string>
     <string name="setting_release_history_summary">このバージョンに同梱された変更履歴を読みます</string>
     <string name="setting_remember_playback_mode">再生モードを記憶</string>
-    <string name="setting_remember_playback_mode_summary">再生セッションをまたいで順次・シャッフル・1項目リピートを保持します</string>
+    <string name="setting_remember_playback_mode_summary">再生セッションをまたいで順次/シャッフル/1項目リピートを保持します</string>
     <string name="setting_resume_playback">再生を再開</string>
     <string name="setting_resume_playback_summary">最後に開いた 1 ファイルの再生位置だけを記憶します</string>
     <string name="setting_subtitle_background">背景</string>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="ab_loop_active">A–B 循環: %1$s – %2$s</string>
-    <string name="ab_loop_active_label">A–B</string>
-    <string name="ab_loop_cancelled_for_mode">已為所選播放模式清除 A–B 循環</string>
+    <string name="ab_loop_active">A-B 循環: %1$s - %2$s</string>
+    <string name="ab_loop_active_label">A-B</string>
+    <string name="ab_loop_cancelled_for_mode">已為所選播放模式清除 A-B 循環</string>
     <string name="ab_loop_clear_label">A/B</string>
-    <string name="ab_loop_cleared">已清除 A–B 循環</string>
+    <string name="ab_loop_cleared">已清除 A-B 循環</string>
     <string name="ab_loop_point_a_label">A</string>
     <string name="ab_loop_point_a_set">A 點已設為 %1$s</string>
     <string name="about_description">專為 AutoJs6 檔案管理器與日常獨立播放設計的輕量影片播放器.</string>
@@ -15,7 +15,7 @@
     <string name="about_version">版本 %1$s · 組建 %2$d</string>
     <string name="accessibility_off">關閉</string>
     <string name="accessibility_on">開啟</string>
-    <string name="action_ab_loop">設定或清除 A–B 循環</string>
+    <string name="action_ab_loop">設定或清除 A-B 循環</string>
     <string name="action_audio_track">音軌</string>
     <string name="action_back">返回</string>
     <string name="action_brightness">亮度</string>

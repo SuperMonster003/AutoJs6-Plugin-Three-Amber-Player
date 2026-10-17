@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="ab_loop_active">Bucle A–B: %1$s – %2$s</string>
-    <string name="ab_loop_active_label">A–B</string>
-    <string name="ab_loop_cancelled_for_mode">Bucle A–B borrado para el modo de reproducción elegido</string>
+    <string name="ab_loop_active">Bucle A-B: %1$s - %2$s</string>
+    <string name="ab_loop_active_label">A-B</string>
+    <string name="ab_loop_cancelled_for_mode">Bucle A-B borrado para el modo de reproducción elegido</string>
     <string name="ab_loop_clear_label">A/B</string>
-    <string name="ab_loop_cleared">Bucle A–B borrado</string>
+    <string name="ab_loop_cleared">Bucle A-B borrado</string>
     <string name="ab_loop_point_a_label">A</string>
     <string name="ab_loop_point_a_set">Punto A fijado en %1$s</string>
     <string name="about_description">Un reproductor de vídeo centrado en AutoJs6 Explorer y en la reproducción independiente cotidiana.</string>
@@ -15,7 +15,7 @@
     <string name="about_version">Versión %1$s · compilación %2$d</string>
     <string name="accessibility_off">Desactivado</string>
     <string name="accessibility_on">Activado</string>
-    <string name="action_ab_loop">Definir o borrar el bucle A–B</string>
+    <string name="action_ab_loop">Definir o borrar el bucle A-B</string>
     <string name="action_audio_track">Pista de audio</string>
     <string name="action_back">Atrás</string>
     <string name="action_brightness">Brillo</string>

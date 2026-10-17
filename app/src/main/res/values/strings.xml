@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="ab_loop_active">A–B loop: %1$s – %2$s</string>
-    <string name="ab_loop_active_label">A–B</string>
-    <string name="ab_loop_cancelled_for_mode">A–B loop cleared for the selected playback mode</string>
+    <string name="ab_loop_active">A-B loop: %1$s - %2$s</string>
+    <string name="ab_loop_active_label">A-B</string>
+    <string name="ab_loop_cancelled_for_mode">A-B loop cleared for the selected playback mode</string>
     <string name="ab_loop_clear_label">A/B</string>
-    <string name="ab_loop_cleared">A–B loop cleared</string>
+    <string name="ab_loop_cleared">A-B loop cleared</string>
     <string name="ab_loop_point_a_label">A</string>
     <string name="ab_loop_point_a_set">A set at %1$s</string>
     <string name="about_description">A focused video player for AutoJs6 Explorer and everyday standalone playback.</string>
@@ -15,7 +15,7 @@
     <string name="about_version">Version %1$s · build %2$d</string>
     <string name="accessibility_off">Off</string>
     <string name="accessibility_on">On</string>
-    <string name="action_ab_loop">Set or clear A–B loop</string>
+    <string name="action_ab_loop">Set or clear A-B loop</string>
     <string name="action_audio_track">Audio track</string>
     <string name="action_back">Back</string>
     <string name="action_brightness">Brightness</string>

@@ -2,6 +2,7 @@
 import argparse
 import json
 import re
+import unicodedata
 import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 
@@ -37,10 +38,17 @@ ANDROID_RESOURCE_QUALIFIERS = {
     "ru": "ru",
     "ar": "ar",
 }
-# Markdown sources and outputs stick to halfwidth punctuation; Android UI resources
-# (strings.xml, plugin_instruction.md) keep native punctuation and are exempt.
-PROHIBITED_SYMBOL_PATTERN = re.compile(
-    r"[‐-‧　-〿・︐-﹯＀-￯]",
+# Every localized text uses ASCII punctuation (COMMON_AGENTS.md), including the Android
+# strings.xml and plugin_instruction.md resources: reject non-ASCII Unicode punctuation except
+# the U+00B7 value separator, plus arrows and the CJK and fullwidth symbol blocks.
+FOLLOW_VALUE_SEPARATOR = 0x00B7
+PROHIBITED_SYMBOL_RANGES = (
+    (0x2010, 0x2027),
+    (0x2190, 0x21FF),
+    (0x3000, 0x303F),
+    (0x30FB, 0x30FB),
+    (0xFE10, 0xFE6F),
+    (0xFF00, 0xFFEF),
 )
 
 
@@ -81,11 +89,23 @@ def validate_source_layout():
         raise ValueError(f"Root compatibility README files are not allowed: {root_compat_readmes}")
 
 
+def is_prohibited_symbol(character: str) -> bool:
+    code_point = ord(character)
+    if code_point <= 0x7F or code_point == FOLLOW_VALUE_SEPARATOR:
+        return False
+    if unicodedata.category(character).startswith("P"):
+        return True
+    return any(low <= code_point <= high for low, high in PROHIBITED_SYMBOL_RANGES)
+
+
 def validate_symbols(text: str, source):
-    match = PROHIBITED_SYMBOL_PATTERN.search(text)
-    if match:
-        code_point = f"U+{ord(match.group()):04X}"
-        raise ValueError(f"Prohibited full-width symbol {match.group()!r} ({code_point}) in {source}")
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        for character in line:
+            if is_prohibited_symbol(character):
+                raise ValueError(
+                    f"Prohibited non-ASCII punctuation {character!r} (U+{ord(character):04X}) "
+                    f"in {source} at line {line_number}",
+                )
 
 
 def validate_json_symbols(value, source):
@@ -227,6 +247,9 @@ def validate_android_resources(languages):
     for code, qualifier in ANDROID_RESOURCE_QUALIFIERS.items():
         validate_android_resource_pair(code, languages, f"values-{qualifier}")
     validate_android_resource_pair("en", languages, "values")
+    text_resources = [*ANDROID_RES_DIR.glob("values*/*.xml"), *ANDROID_RES_DIR.glob("raw*/*.md")]
+    for path in sorted(text_resources):
+        validate_symbols(path.read_text(encoding="utf-8"), path.relative_to(ROOT))
 
 
 def format_changelog_items(changelog, limit=None, heading_level=1):

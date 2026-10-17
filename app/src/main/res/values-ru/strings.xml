@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="ab_loop_active">Цикл A–B: %1$s – %2$s</string>
-    <string name="ab_loop_active_label">A–B</string>
-    <string name="ab_loop_cancelled_for_mode">Цикл A–B сброшен для выбранного режима воспроизведения</string>
+    <string name="ab_loop_active">Цикл A-B: %1$s - %2$s</string>
+    <string name="ab_loop_active_label">A-B</string>
+    <string name="ab_loop_cancelled_for_mode">Цикл A-B сброшен для выбранного режима воспроизведения</string>
     <string name="ab_loop_clear_label">A/B</string>
-    <string name="ab_loop_cleared">Цикл A–B сброшен</string>
+    <string name="ab_loop_cleared">Цикл A-B сброшен</string>
     <string name="ab_loop_point_a_label">A</string>
     <string name="ab_loop_point_a_set">Точка A установлена на %1$s</string>
     <string name="about_description">Специализированный видеоплеер для AutoJs6 Explorer и обычного автономного воспроизведения.</string>
@@ -15,7 +15,7 @@
     <string name="about_version">Версия %1$s · сборка %2$d</string>
     <string name="accessibility_off">Выключено</string>
     <string name="accessibility_on">Включено</string>
-    <string name="action_ab_loop">Установить или сбросить цикл A–B</string>
+    <string name="action_ab_loop">Установить или сбросить цикл A-B</string>
     <string name="action_audio_track">Аудиодорожка</string>
     <string name="action_back">Назад</string>
     <string name="action_brightness">Яркость</string>
@@ -129,7 +129,7 @@
     <string name="orientation_auto">Автоповорот</string>
     <string name="orientation_landscape">Альбомная</string>
     <string name="orientation_portrait">Книжная</string>
-    <string name="pip_requires_playback">Начните воспроизведение перед переходом в режим «картинка в картинке»</string>
+    <string name="pip_requires_playback">Начните воспроизведение перед переходом в режим \"картинка в картинке\"</string>
     <string name="playback_mode_sequence">Воспроизводить по порядку</string>
     <string name="playback_mode_shuffle">В случайном порядке</string>
     <string name="playback_queue">Очередь воспроизведения</string>
@@ -162,7 +162,7 @@
     <string name="setting_check_updates">Проверить обновления</string>
     <string name="setting_check_updates_summary">Проверить последнюю опубликованную версию сейчас</string>
     <string name="setting_continue_audio_in_background">Продолжать звук в фоне</string>
-    <string name="setting_continue_audio_in_background_summary">Если включено, активное воспроизведение продолжается с управлением из уведомления, когда режим «картинка в картинке» недоступен; по умолчанию выключено</string>
+    <string name="setting_continue_audio_in_background_summary">Если включено, активное воспроизведение продолжается с управлением из уведомления, когда режим \"картинка в картинке\" недоступен; по умолчанию выключено</string>
     <string name="setting_include_subtitles_in_screenshot">Добавлять субтитры на снимки</string>
     <string name="setting_include_subtitles_in_screenshot_summary">Наносить видимые субтитры на сохранённые кадры; элементы управления не добавляются</string>
     <string name="setting_language">Язык</string>
@@ -261,7 +261,7 @@
     <string name="volume_boost_continue">Включить усиление</string>
     <string name="volume_boost_db">+%1$d дБ</string>
     <string name="volume_boost_off">Выкл.</string>
-    <string name="volume_boost_unavailable">Эта аудиосессия не поддерживает усиление громкости; выбрано «Выкл.»</string>
+    <string name="volume_boost_unavailable">Эта аудиосессия не поддерживает усиление громкости; выбрано \"Выкл.\"</string>
     <string name="volume_boost_warning_message">Усиление выше исходного уровня может вызвать искажения и повредить слух. Начинайте с малого уровня; результат зависит от устройства и аудиооборудования.</string>
     <string name="volume_boost_warning_title">Высокая громкость опасна для слуха</string>
     <string name="volume_slider_description">Настройка громкости мультимедиа от 0 до 100 процентов</string>

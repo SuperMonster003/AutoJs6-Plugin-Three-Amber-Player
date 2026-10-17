@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="ab_loop_active">Boucle A–B : %1$s – %2$s</string>
-    <string name="ab_loop_active_label">A–B</string>
-    <string name="ab_loop_cancelled_for_mode">Boucle A–B effacée pour le mode de lecture sélectionné</string>
+    <string name="ab_loop_active">Boucle A-B : %1$s - %2$s</string>
+    <string name="ab_loop_active_label">A-B</string>
+    <string name="ab_loop_cancelled_for_mode">Boucle A-B effacée pour le mode de lecture sélectionné</string>
     <string name="ab_loop_clear_label">A/B</string>
-    <string name="ab_loop_cleared">Boucle A–B effacée</string>
+    <string name="ab_loop_cleared">Boucle A-B effacée</string>
     <string name="ab_loop_point_a_label">A</string>
     <string name="ab_loop_point_a_set">Point A défini à %1$s</string>
     <string name="about_description">Un lecteur vidéo ciblé pour AutoJs6 Explorer et la lecture autonome quotidienne.</string>
@@ -15,7 +15,7 @@
     <string name="about_version">Version %1$s · build %2$d</string>
     <string name="accessibility_off">Désactivé</string>
     <string name="accessibility_on">Activé</string>
-    <string name="action_ab_loop">Définir ou effacer la boucle A–B</string>
+    <string name="action_ab_loop">Définir ou effacer la boucle A-B</string>
     <string name="action_audio_track">Piste audio</string>
     <string name="action_back">Retour</string>
     <string name="action_brightness">Luminosité</string>

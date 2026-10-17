@@ -10,21 +10,21 @@ Commandes de lecture:
 - Balayez horizontalement pour naviguer, touchez deux fois le tiers gauche ou droit pour sauter de 5, 10 ou 30 secondes selon le réglage, touchez deux fois le centre pour lire ou mettre en pause, et maintenez appuyé pour une vitesse temporaire de 2×.
 - La barre inférieure offre lecture/pause, sauts de 10 secondes, barre de progression déplaçable, vitesses de 0,25× à 3×, mode d'affichage, orientation de l'écran et verrouillage contre les touches accidentelles.
 - L'ouverture d'une vidéo dans l'explorateur peut former une file bornée et naturellement triée de vidéos sœurs directes lisibles. La lecture commence sur la vidéo choisie et propose précédent / suivant, séquence, aléatoire et répétition d'un élément.
-- Les hôtes compatibles affichent aussi l’action en lecture seule Lire la sélection pour 1 à 128 vidéos d’un même dossier dans l’ordre de l’hôte, sans découverte voisine. Les files de l’hôte offrent un panneau élément/durée et le saut au toucher, gardent la dernière image pendant une invite annulable de trois secondes et peuvent mémoriser le mode.
-- L’historique de reprise conserve exactement la dernière vidéo inachevée sous forme d’un condensé d’identité SHA-256 et de valeurs temporelles ; l’ouverture d’une autre vidéo l’efface immédiatement et une lecture terminée n’est jamais conservée.
+- Les hôtes compatibles affichent aussi l'action en lecture seule Lire la sélection pour 1 à 128 vidéos d'un même dossier dans l'ordre de l'hôte, sans découverte voisine. Les files de l'hôte offrent un panneau élément/durée et le saut au toucher, gardent la dernière image pendant une invite annulable de trois secondes et peuvent mémoriser le mode.
+- L'historique de reprise conserve exactement la dernière vidéo inachevée sous forme d'un condensé d'identité SHA-256 et de valeurs temporelles ; l'ouverture d'une autre vidéo l'efface immédiatement et une lecture terminée n'est jamais conservée.
 - La barre supérieure choisit les pistes audio et texte intégrées. Les sous-titres externes .srt et .ass correspondants, avec suffixes de langue, sont découverts dans le même dossier. Tous sont désactivés par défaut et chargés seulement après une sélection explicite.
-- La barre supérieure propose aussi la répétition de la vidéo actuelle, les informations vidéo, l’orientation automatique des vidéos horizontales et l’incrustation vidéo sur Android 8.0+ avec lecture/pause.
+- La barre supérieure propose aussi la répétition de la vidéo actuelle, les informations vidéo, l'orientation automatique des vidéos horizontales et l'incrustation vidéo sur Android 8.0+ avec lecture/pause.
 - MediaSession prend en charge les commandes des écouteurs, du Bluetooth et du système; la notification multimédia affiche le titre et la progression actuels.
-- Le minuteur met la lecture en pause après 15, 30, 45 ou 60 minutes, ou à la fin de la vidéo. Les paramètres des gestes règlent la sensibilité et l’intervalle du double appui.
-- Pincez l’image pour zoomer de 0,25× à 4×; touchez-la deux fois pendant le zoom pour réinitialiser. Le déplacement de la barre affiche le temps cible et, si le conteneur le permet, une miniature facultative.
-- Sur Android 10 ou version ultérieure, Enregistrer l’image actuelle écrit un PNG dans Images/3-Amber Player. L’option est masquée sur les versions antérieures.
-- Génère des rôles sémantiques clairs et sombres lisibles depuis une couleur HCT, suit AutoJs6 par défaut et propose 19 couleurs Material 500 localisées ainsi qu’un RGB personnalisé prévisualisé. Fournit un lanceur autonome et des paramètres de langue, nuit et couleur suivant l’hôte, reprise d’une seule vidéo, vérifications manuelles et automatiques, versions ignorées, historique et informations sur l’application et le développeur.
+- Le minuteur met la lecture en pause après 15, 30, 45 ou 60 minutes, ou à la fin de la vidéo. Les paramètres des gestes règlent la sensibilité et l'intervalle du double appui.
+- Pincez l'image pour zoomer de 0,25× à 4×; touchez-la deux fois pendant le zoom pour réinitialiser. Le déplacement de la barre affiche le temps cible et, si le conteneur le permet, une miniature facultative.
+- Sur Android 10 ou version ultérieure, Enregistrer l'image actuelle écrit un PNG dans Images/3-Amber Player. L'option est masquée sur les versions antérieures.
+- Génère des rôles sémantiques clairs et sombres lisibles depuis une couleur HCT, suit AutoJs6 par défaut et propose 19 couleurs Material 500 localisées ainsi qu'un RGB personnalisé prévisualisé. Fournit un lanceur autonome et des paramètres de langue, nuit et couleur suivant l'hôte, reprise d'une seule vidéo, vérifications manuelles et automatiques, versions ignorées, historique et informations sur l'application et le développeur.
 
 Outils de sous-titres et de lecture précise:
 
 - Les paramètres de sous-titres offrent un aperçu en direct pour une taille de texte de 75 % à 150 %, quatre couleurs de premier plan, un arrière-plan opaque, translucide ou absent, et une marge inférieure de 0 %, 4 % ou 8 % ; ces choix s'appliquent aussi en incrustation vidéo.
 - Le menu des sous-titres peut charger temporairement un fichier .srt ou .ass de 4 Mio maximum, détecter en mémoire BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 et décaler un sous-titre externe de ±600,0 secondes par pas de 0,1 seconde. Aucune autorisation persistante n'est conservée.
-- Mettez la lecture en pause pour afficher les boutons image précédente/suivante (maintenez-les pour répéter) et la boucle A–B. Une boucle A–B active empêche le passage à l'élément suivant ; choisir ensuite un mode de répétition ou le minuteur de fin de vidéo l'efface.
+- Mettez la lecture en pause pour afficher les boutons image précédente/suivante (maintenez-les pour répéter) et la boucle A-B. Une boucle A-B active empêche le passage à l'élément suivant ; choisir ensuite un mode de répétition ou le minuteur de fin de vidéo l'efface.
 
 Affichage, accessibilité et lecture en arrière-plan:
 
@@ -47,6 +47,6 @@ Limites de sécurité et de confidentialité:
 - Si la lecture échoue, Ouvrir avec une autre application reconstruit un Intent en lecture seule et exclut ce plugin.
 - Les pistes XVID dans MKV validées utilisent le décodeur MPEG-4 Part 2 de l'appareil sans transcodage. S'il est indisponible ou échoue, la lecture s'arrête et propose l'ouverture dans une autre application.
 - Le décodage réel dépend des extracteurs Media3 et des codecs disponibles sur l'appareil.
-- L’historique de reprise conserve exactement la dernière vidéo inachevée sous forme d’un condensé d’identité SHA-256 et de valeurs temporelles ; l’ouverture d’une autre vidéo l’efface immédiatement et une lecture terminée n’est jamais conservée.
-- Le panneau d’informations utilise seulement les métadonnées de la session de lecture, le nom sécurisé et la taille déclarée; il n’analyse ni ne modifie la vidéo source.
-- Une capture demandée crée un PNG séparé via MediaStore et n’écrit jamais dans la vidéo source. Les miniatures restent en mémoire et sont omises silencieusement si leur extraction est impossible.
+- L'historique de reprise conserve exactement la dernière vidéo inachevée sous forme d'un condensé d'identité SHA-256 et de valeurs temporelles ; l'ouverture d'une autre vidéo l'efface immédiatement et une lecture terminée n'est jamais conservée.
+- Le panneau d'informations utilise seulement les métadonnées de la session de lecture, le nom sécurisé et la taille déclarée; il n'analyse ni ne modifie la vidéo source.
+- Une capture demandée crée un PNG séparé via MediaStore et n'écrit jamais dans la vidéo source. Les miniatures restent en mémoire et sont omises silencieusement si leur extraction est impossible.
