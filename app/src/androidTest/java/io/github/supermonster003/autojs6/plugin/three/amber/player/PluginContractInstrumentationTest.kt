@@ -48,8 +48,9 @@ class PluginContractInstrumentationTest {
             assertEquals("three-amber-player", info.id)
             assertEquals("explorer-action", info.engine)
             assertEquals("3-Amber Player", info.name)
-            assertEquals("4.0.0", info.versionName)
-            assertEquals(context.packageManager.getPackageInfo(context.packageName, 0).versionCode.toLong(), info.versionCode)
+            val installed = context.packageManager.getPackageInfo(context.packageName, 0)
+            assertEquals(installed.versionName, info.versionName)
+            assertEquals(installed.versionCode.toLong(), info.versionCode)
             assertTrue(info.supportedAbis.isNullOrEmpty())
         } finally {
             context.unbindService(connection)
