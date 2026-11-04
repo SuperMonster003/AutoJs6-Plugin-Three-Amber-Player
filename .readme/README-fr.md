@@ -224,9 +224,15 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 ******
 
+#### v4.0.1
+
+###### 2026/11/04
+
+* `Amélioration` Les icônes des informations d'application Android utilisent les illustrations et les fonds clairs et sombres d'Icon Studio, en conservant les images transparentes du centre de plugins et les choix du lanceur
+
 #### v4.0.0
 
-###### 2026/10/05
+###### 2026/10/03
 
 * `Note` 3-Amber Player 4.0 utilise le nouvel identifiant io.github.supermonster003.autojs6.plugin.three.amber.player. Android l'installe séparément; les réglages existants ne sont pas transférés automatiquement. L'ancienne application peut être conservée
 * `Fonctionnalité` Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre, adaptative automatique (par défaut) ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement
@@ -234,7 +240,6 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 * `Correctif` Centrage optique du dessin Amber dans les icônes du lanceur et transparentes pour corriger son poids visuel à gauche; décalage inclus dans toutes les vérifications de zone sûre
 * `Amélioration` Surfaces grises neutres et commandes et dialogues Material 3 lisibles aux couleurs du thème, avec espacement, icônes linéaires et séparateurs cohérents. L'icône automatique devient le choix par défaut; les mises à jour préservent les choix explicites et corrigent les entrées en double
 * `Amélioration` Taille visuelle harmonisée des icônes du lanceur et du Centre de plugins, avec des fonds transparents et des motifs noirs, blancs ou gris neutres
-* `Amélioration` Les icônes des informations d'application Android utilisent les illustrations et les fonds clairs et sombres d'Icon Studio, en conservant les images transparentes du centre de plugins et les choix du lanceur
 
 #### v3.2.0
 
@@ -242,16 +247,6 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 * `Fonctionnalité` Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre (par défaut), adaptative automatique ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement
 * `Correctif` Centrage optique du dessin Ember dans les icônes du lanceur et transparentes pour corriger son poids visuel à gauche; décalage inclus dans toutes les vérifications de zone sûre
-
-#### v3.1.2
-
-###### 2026/09/29
-
-* `Correctif` Perte de l'état de service au premier plan lors du transfert audio en arrière-plan quand l'activité annule la notification de lecture partagée sous Android 17
-* `Correctif` Maintien du service de lecture en arrière-plan après un arrêt par le contrôleur multimédia
-* `Correctif` Avertissements de lecture SDK XML v4 avec AGP 9.1 et contrôles d'alignement natif des APK déclenchés par erreur lors de l'assemblage des tests unitaires JVM, avec les plugins de compilation partagés 1.8.3
-* `Amélioration` Ciblage d'Android 17 (SDK 37) avec prise en charge du service au premier plan pour la lecture audio en arrière-plan
-* `Amélioration` Uniformiser les icônes du lanceur de la série Three avec un dessin clair sur fond sombre fixe, conserver la transparence et le thème des icônes dans le centre des plugins et dans l'application, et éviter les fonds imbriqués sur certains appareils
 
 ##### Historique complet
 

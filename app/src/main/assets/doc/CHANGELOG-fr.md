@@ -4,9 +4,15 @@
 
 ******
 
+# v4.0.1
+
+###### 2026/11/04
+
+* `Amélioration` Les icônes des informations d'application Android utilisent les illustrations et les fonds clairs et sombres d'Icon Studio, en conservant les images transparentes du centre de plugins et les choix du lanceur
+
 # v4.0.0
 
-###### 2026/10/05
+###### 2026/10/03
 
 * `Note` 3-Amber Player 4.0 utilise le nouvel identifiant io.github.supermonster003.autojs6.plugin.three.amber.player. Android l'installe séparément; les réglages existants ne sont pas transférés automatiquement. L'ancienne application peut être conservée
 * `Fonctionnalité` Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre, adaptative automatique (par défaut) ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement
@@ -14,7 +20,6 @@
 * `Correctif` Centrage optique du dessin Amber dans les icônes du lanceur et transparentes pour corriger son poids visuel à gauche; décalage inclus dans toutes les vérifications de zone sûre
 * `Amélioration` Surfaces grises neutres et commandes et dialogues Material 3 lisibles aux couleurs du thème, avec espacement, icônes linéaires et séparateurs cohérents. L'icône automatique devient le choix par défaut; les mises à jour préservent les choix explicites et corrigent les entrées en double
 * `Amélioration` Taille visuelle harmonisée des icônes du lanceur et du Centre de plugins, avec des fonds transparents et des motifs noirs, blancs ou gris neutres
-* `Amélioration` Les icônes des informations d'application Android utilisent les illustrations et les fonds clairs et sombres d'Icon Studio, en conservant les images transparentes du centre de plugins et les choix du lanceur
 
 # v3.2.0
 

@@ -224,9 +224,15 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 
 ******
 
+#### v4.0.1
+
+###### 2026/11/04
+
+* `Mejora` Los iconos de información de la aplicación de Android comparten las imágenes y los fondos claros y oscuros de Icon Studio, conservando las imágenes transparentes del centro de plugins y las opciones del lanzador
+
 #### v4.0.0
 
-###### 2026/10/05
+###### 2026/10/03
 
 * `Aviso` 3-Amber Player 4.0 usa el nuevo identificador io.github.supermonster003.autojs6.plugin.three.amber.player. Android lo instala por separado; los ajustes anteriores no se transfieren automáticamente. La aplicación anterior puede conservarse
 * `Función` Icono del lanzador en Ajustes: adaptable claro, adaptable oscuro, adaptable automático (predeterminado) o fondo transparente. Los colores automáticos y la transparencia dependen del lanzador, que puede guardar iconos en caché o añadir un fondo. Algunos accesos directos pueden necesitar añadirse de nuevo tras el cambio
@@ -234,7 +240,6 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 * `Corrección` Centrado óptico del dibujo Amber en los iconos del lanzador y transparentes para corregir su peso visual a la izquierda; comprobaciones de zona segura con el desplazamiento incluido
 * `Mejora` Superficies grises neutras y controles y diálogos Material 3 legibles con el color del tema, con espaciado, iconos lineales y divisores uniformes. El icono automático es el nuevo valor predeterminado; las actualizaciones conservan las elecciones explícitas y corrigen entradas duplicadas
 * `Mejora` Tamaño visual uniforme de los iconos del lanzador y del Centro de complementos, con fondos transparentes y diseños en blanco, negro o grises neutros
-* `Mejora` Los iconos de información de la aplicación de Android comparten las imágenes y los fondos claros y oscuros de Icon Studio, conservando las imágenes transparentes del centro de plugins y las opciones del lanzador
 
 #### v3.2.0
 
@@ -242,16 +247,6 @@ Las capacidades ya publicadas y los planes futuros se mantienen en Roadmap.md co
 
 * `Función` Icono del lanzador en Ajustes: adaptable claro, adaptable oscuro (predeterminado), adaptable automático o fondo transparente. Los colores automáticos y la transparencia dependen del lanzador, que puede guardar iconos en caché o añadir un fondo. Algunos accesos directos pueden necesitar añadirse de nuevo tras el cambio
 * `Corrección` Centrado óptico del dibujo Ember en los iconos del lanzador y transparentes para corregir su peso visual a la izquierda; comprobaciones de zona segura con el desplazamiento incluido
-
-#### v3.1.2
-
-###### 2026/09/29
-
-* `Corrección` Pérdida del estado de servicio en primer plano al transferir el audio al segundo plano cuando la actividad cancela la notificación compartida en Android 17
-* `Corrección` El servicio de reproducción en segundo plano permanece activo después de detener la reproducción con un controlador multimedia
-* `Corrección` Advertencias de lectura de SDK XML v4 con AGP 9.1 y comprobaciones de alineación nativa de APK activadas por error al ensamblar pruebas unitarias JVM, mediante los plugins de compilación compartidos 1.8.3
-* `Mejora` Compatibilidad con Android 17 (SDK 37) y el servicio en primer plano para reproducir audio en segundo plano
-* `Mejora` Unificar los iconos del lanzador de la serie Three con dibujos claros sobre un fondo oscuro fijo, mantener transparentes los del centro de complementos y de la aplicación según su tema y evitar fondos superpuestos en algunos dispositivos
 
 ##### Historial completo
 
