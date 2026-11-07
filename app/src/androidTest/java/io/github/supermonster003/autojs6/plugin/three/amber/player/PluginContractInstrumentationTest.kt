@@ -74,6 +74,8 @@ class PluginContractInstrumentationTest {
             catalog.getParcelableArrayList<android.os.Bundle>(ExplorerActionCatalogKeys.ACTIONS),
         )
         assertEquals(ThreeAmberPlayerPlugin.PROTOCOL_VERSION, catalog.getInt(ExplorerActionCatalogKeys.PROTOCOL_VERSION))
+        assertEquals("app_name", catalog.getString("menuGroupLabelResourceName"))
+        assertEquals("3-Amber Player", catalog.getString("menuGroupLabelFallback"))
         assertEquals(2, actions.size)
         val action = actions.first()
         assertEquals(ThreeAmberPlayerPlugin.ACTION_ID, action.getString(ExplorerActionCatalogKeys.ID))

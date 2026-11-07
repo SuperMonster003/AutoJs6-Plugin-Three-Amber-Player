@@ -224,6 +224,12 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 
 ******
 
+#### v4.0.2
+
+###### 2026/11/07
+
+* `Improvement` When the AutoJs6 file manager offers options of the same name for a multiple selection, the options of this plugin are marked "3-Amber Player", named as in the Plugin Center (requires AutoJs6 6.8.1 or later)
+
 #### v4.0.1
 
 ###### 2026/11/04
@@ -240,13 +246,6 @@ Shipped capabilities and upcoming plans are maintained as a checkable list in Ro
 * `Fix` Correct the left-heavy Amber artwork with optical centering in launcher and transparent icons; include the offset in every safe-area check
 * `Improvement` Neutral surfaces and readable themed Material 3 controls and dialogs, consistent spacing, outline icons and dividers. Automatic launcher icons are the new default; upgrades preserve explicit choices and normalize duplicate entries
 * `Improvement` Consistent visual sizing for launcher and Plugin Center icons, with transparent backgrounds and neutral black, white or grayscale artwork
-
-#### v3.2.0
-
-###### 2026/09/29
-
-* `Feature` Launcher icon choices in Settings: adaptive light, adaptive dark (default), adaptive automatic, or transparent background. Automatic colors and transparent rendering depend on the launcher; it may cache icons or add a background. Some home-screen shortcuts may need to be added again after a change
-* `Fix` Correct the left-heavy Ember artwork with optical centering in launcher and transparent icons; include the offset in every safe-area check
 
 ##### Full history
 

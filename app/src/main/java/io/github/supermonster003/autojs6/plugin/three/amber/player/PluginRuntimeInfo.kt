@@ -27,6 +27,15 @@ internal object ThreeAmberPlayerPlugin {
         "io.github.supermonster003.autojs6.plugin.three.amber.player.ExplorerActionActivity"
     const val ACTION_PRIORITY = 20
 
+    // The name of the plugin's first-level menu in the AutoJs6 file manager (host Explorer Action protocol v27):
+    // the display name, as in the Plugin Center. The bundled explorer-action-api predates v27 and has no constants
+    // for the two catalog-level keys, hence the literal key names. Hosts from 6.8.1 read them from catalogs of every
+    // protocol version and older hosts ignore unknown keys, so PROTOCOL_VERSION and REQUIRED_HOST_VERSION stay.
+    const val MENU_GROUP_LABEL_RESOURCE_NAME_KEY = "menuGroupLabelResourceName"
+    const val MENU_GROUP_LABEL_FALLBACK_KEY = "menuGroupLabelFallback"
+    const val MENU_GROUP_LABEL_RESOURCE_NAME = "app_name"
+    const val MENU_GROUP_LABEL_FALLBACK = "3-Amber Player"
+
     val MIME_TYPES = arrayOf("video/*")
 
     val EXTENSIONS = arrayOf(
@@ -115,6 +124,8 @@ internal fun threeAmberPlayerActionCatalog(): Bundle {
     }
     return Bundle().apply {
         putInt(ExplorerActionCatalogKeys.PROTOCOL_VERSION, ThreeAmberPlayerPlugin.PROTOCOL_VERSION)
+        putString(ThreeAmberPlayerPlugin.MENU_GROUP_LABEL_RESOURCE_NAME_KEY, ThreeAmberPlayerPlugin.MENU_GROUP_LABEL_RESOURCE_NAME)
+        putString(ThreeAmberPlayerPlugin.MENU_GROUP_LABEL_FALLBACK_KEY, ThreeAmberPlayerPlugin.MENU_GROUP_LABEL_FALLBACK)
         putParcelableArrayList(
             ExplorerActionCatalogKeys.ACTIONS,
             arrayListOf(

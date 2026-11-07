@@ -224,6 +224,12 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 
 ******
 
+#### v4.0.2
+
+###### 2026/11/07
+
+* `Amélioration` Lorsque le gestionnaire de fichiers d'AutoJs6 propose des options de même nom pour une sélection multiple, celles de ce plugin portent la mention "3-Amber Player", nommée comme dans le Centre des plugins (AutoJs6 6.8.1 ou ultérieur requis)
+
 #### v4.0.1
 
 ###### 2026/11/04
@@ -240,13 +246,6 @@ Les capacités livrées et les projets à venir sont tenus à jour sous forme de
 * `Correctif` Centrage optique du dessin Amber dans les icônes du lanceur et transparentes pour corriger son poids visuel à gauche; décalage inclus dans toutes les vérifications de zone sûre
 * `Amélioration` Surfaces grises neutres et commandes et dialogues Material 3 lisibles aux couleurs du thème, avec espacement, icônes linéaires et séparateurs cohérents. L'icône automatique devient le choix par défaut; les mises à jour préservent les choix explicites et corrigent les entrées en double
 * `Amélioration` Taille visuelle harmonisée des icônes du lanceur et du Centre de plugins, avec des fonds transparents et des motifs noirs, blancs ou gris neutres
-
-#### v3.2.0
-
-###### 2026/09/29
-
-* `Fonctionnalité` Choix de l'icône du lanceur dans les paramètres: adaptative claire, adaptative sombre (par défaut), adaptative automatique ou fond transparent. Les couleurs automatiques et la transparence dépendent du lanceur, qui peut garder les icônes en cache ou ajouter un fond. Certains raccourcis doivent parfois être ajoutés à nouveau après le changement
-* `Correctif` Centrage optique du dessin Ember dans les icônes du lanceur et transparentes pour corriger son poids visuel à gauche; décalage inclus dans toutes les vérifications de zone sûre
 
 ##### Historique complet
 

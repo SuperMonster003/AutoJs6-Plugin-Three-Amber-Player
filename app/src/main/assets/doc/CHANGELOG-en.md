@@ -4,6 +4,12 @@
 
 ******
 
+# v4.0.2
+
+###### 2026/11/07
+
+* `Improvement` When the AutoJs6 file manager offers options of the same name for a multiple selection, the options of this plugin are marked "3-Amber Player", named as in the Plugin Center (requires AutoJs6 6.8.1 or later)
+
 # v4.0.1
 
 ###### 2026/11/04
