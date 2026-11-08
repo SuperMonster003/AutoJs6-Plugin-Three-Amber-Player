@@ -217,4 +217,5 @@
 4. [x] `.changelog/lang_*.json` 10 语言条目录入, 运行 `.python/generate_markdown.py` 再生成 CHANGELOG 与 README.
 5. [x] `:app:appendDigestToReleasedFiles` 产出 CRC32 命名的签名 APK 至 `releases/`.
 6. [x] 可访问性回归: TalkBack 名称/焦点顺序/手势等价路径, 200% 字体与显示缩放, 键盘/DPAD 可达性.
-7. [ ] GitHub Release 发布并同步宿主插件中心元数据.
+7. [ ] 低版本 release 包回归 (2026-11-08 起): 第 5 项产出的签名 APK (不是 debug 包) 装到 API 24 - 30 的模拟器 (至少 API 24 与 API 29) 或真机, 跑一遍 media3 路径: `ACTION_VIEW` 打开本地视频播放到结束; 播放中按 Home, 画中画 (API 26+) 或开启 "后台继续播放音频" 后的后台播放继续; 媒体键暂停 / 继续; logcat 无 `NoClassDefFoundError` / `FATAL EXCEPTION`. 原因: R8 优化 (横向类合并) 可能把持有新版本类型 (例如 API 31 的 `android.media.metrics.LogSessionId`) 字段的 media3 类并进所有版本都会执行的代码, 只有 release 包在 Android 7 - 11 上崩溃, debug 包, 单元测试与 API 31+ 设备都查不出 (3-Slate Studio 1.0.0 发布时发现). 4.0.2 (build 60) 已于 2026-11-08 在 API 24 / 27 / 29 模拟器上通过, 未复现.
+8. [ ] GitHub Release 发布并同步宿主插件中心元数据.
