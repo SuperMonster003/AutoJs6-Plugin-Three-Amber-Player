@@ -111,7 +111,7 @@
   "h5_for_more_release_history": "完全な履歴",
   "h3_build": "ビルド",
   "text_release_build": "Release ビルド",
-  "p_build_params": "ビルドパラメーターは `version.properties` から取得します. 現在の最小 SDK は 24, ターゲット SDK は 36 です",
+  "p_build_params": "ビルドパラメーターは `version.properties` から取得します. 現在の最小 SDK は 24, ターゲット SDK は 37 です",
   "h3_resource_layout": "リソース構成",
   "p_resource_layout": "`strings.xml` はプラグイン情報とプレーヤー画面のローカライズを提供し, `plugin_instruction.md` はホスト側に表示される使用説明を提供します. すべての README と CHANGELOG は `.python/generate_markdown.py` が JSON ソースから生成します: ドキュメントを変更するときは `.readme` と `.changelog` 配下の `lang_*.json` を編集してスクリプトを再実行し, 生成された Markdown ファイルを直接編集しないでください",
   "h3_links": "関連リンク",

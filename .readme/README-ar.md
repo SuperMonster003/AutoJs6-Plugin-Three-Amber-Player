@@ -267,7 +267,7 @@ required host build: 5276
 .\gradlew.bat :app:assembleRelease
 ```
 
-تأتي معاملات البناء من `version.properties`; والحد الأدنى الحالي لإصدار SDK هو 24 والإصدار المستهدف هو 36.
+تأتي معاملات البناء من `version.properties`; والحد الأدنى الحالي لإصدار SDK هو 24 والإصدار المستهدف هو 37.
 
 ******
 

@@ -267,7 +267,7 @@ Release-сборка:
 .\gradlew.bat :app:assembleRelease
 ```
 
-Параметры сборки берутся из `version.properties`; текущий минимальный SDK равен 24, целевой SDK равен 36.
+Параметры сборки берутся из `version.properties`; текущий минимальный SDK равен 24, целевой SDK равен 37.
 
 ******
 

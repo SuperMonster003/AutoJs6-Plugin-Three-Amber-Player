@@ -267,7 +267,7 @@ Release build:
 .\gradlew.bat :app:assembleRelease
 ```
 
-Build parameters come from `version.properties`; the current minimum SDK is 24 and the target SDK is 36.
+Build parameters come from `version.properties`; the current minimum SDK is 24 and the target SDK is 37.
 
 ******
 

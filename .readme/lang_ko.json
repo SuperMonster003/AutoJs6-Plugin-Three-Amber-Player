@@ -111,7 +111,7 @@
   "h5_for_more_release_history": "전체 기록",
   "h3_build": "빌드",
   "text_release_build": "Release 빌드",
-  "p_build_params": "빌드 매개변수는 `version.properties`에서 가져오며, 현재 최소 SDK는 24, 대상 SDK는 36입니다",
+  "p_build_params": "빌드 매개변수는 `version.properties`에서 가져오며, 현재 최소 SDK는 24, 대상 SDK는 37입니다",
   "h3_resource_layout": "리소스 구성",
   "p_resource_layout": "`strings.xml`은 플러그인 정보와 플레이어 인터페이스를 현지화하고, `plugin_instruction.md`는 호스트 쪽에 표시되는 사용 안내를 제공합니다. 모든 README와 CHANGELOG는 `.python/generate_markdown.py`가 JSON 원본에서 생성합니다. 문서를 수정할 때는 `.readme`와 `.changelog` 아래의 `lang_*.json`을 편집한 뒤 스크립트를 다시 실행해 주시고, 생성된 Markdown 파일은 직접 편집하지 마세요",
   "h3_links": "관련 링크",

@@ -267,7 +267,7 @@ Release ビルド:
 .\gradlew.bat :app:assembleRelease
 ```
 
-ビルドパラメーターは `version.properties` から取得します. 現在の最小 SDK は 24, ターゲット SDK は 36 です.
+ビルドパラメーターは `version.properties` から取得します. 現在の最小 SDK は 24, ターゲット SDK は 37 です.
 
 ******
 

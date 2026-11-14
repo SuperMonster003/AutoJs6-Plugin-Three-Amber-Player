@@ -111,7 +111,7 @@
   "h5_for_more_release_history": "Full history",
   "h3_build": "Build",
   "text_release_build": "Release build",
-  "p_build_params": "Build parameters come from `version.properties`; the current minimum SDK is 24 and the target SDK is 36",
+  "p_build_params": "Build parameters come from `version.properties`; the current minimum SDK is 24 and the target SDK is 37",
   "h3_resource_layout": "Resource Layout",
   "p_resource_layout": "`strings.xml` localizes the plugin information and player interface, and `plugin_instruction.md` provides the usage notes shown on the host side. All README and CHANGELOG files are generated from JSON sources by `.python/generate_markdown.py`: to change the documentation, edit `lang_*.json` under `.readme` and `.changelog` and rerun the script instead of editing the generated Markdown files",
   "h3_links": "Links",

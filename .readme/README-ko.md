@@ -267,7 +267,7 @@ Release 빌드:
 .\gradlew.bat :app:assembleRelease
 ```
 
-빌드 매개변수는 `version.properties`에서 가져오며, 현재 최소 SDK는 24, 대상 SDK는 36입니다.
+빌드 매개변수는 `version.properties`에서 가져오며, 현재 최소 SDK는 24, 대상 SDK는 37입니다.
 
 ******
 

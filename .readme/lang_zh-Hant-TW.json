@@ -111,7 +111,7 @@
   "h5_for_more_release_history": "完整記錄",
   "h3_build": "建置",
   "text_release_build": "Release 建置",
-  "p_build_params": "建置參數來自 `version.properties`, 目前最低 SDK 為 24, 目標 SDK 為 36",
+  "p_build_params": "建置參數來自 `version.properties`, 目前最低 SDK 為 24, 目標 SDK 為 37",
   "h3_resource_layout": "資源配置",
   "p_resource_layout": "`strings.xml` 提供外掛程式資訊與播放器介面的本地化, `plugin_instruction.md` 提供主程式端顯示的使用說明. 全部 README 與 CHANGELOG 由 `.python/generate_markdown.py` 依據 JSON 來源產生: 修改文件時請編輯 `.readme` 與 `.changelog` 下的 `lang_*.json` 並重新執行指令碼, 不要直接編輯產生的 Markdown 檔案",
   "h3_links": "相關連結",

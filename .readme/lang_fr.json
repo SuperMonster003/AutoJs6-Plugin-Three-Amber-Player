@@ -111,7 +111,7 @@
   "h5_for_more_release_history": "Historique complet",
   "h3_build": "Compilation",
   "text_release_build": "Compilation Release",
-  "p_build_params": "Les paramètres de compilation proviennent de `version.properties`; le SDK minimal actuel est 24 et le SDK cible est 36",
+  "p_build_params": "Les paramètres de compilation proviennent de `version.properties`; le SDK minimal actuel est 24 et le SDK cible est 37",
   "h3_resource_layout": "Structure des ressources",
   "p_resource_layout": "`strings.xml` localise les informations du plugin et l'interface du lecteur, et `plugin_instruction.md` fournit les notes d'utilisation affichées côté hôte. Tous les fichiers README et CHANGELOG sont générés à partir des sources JSON par `.python/generate_markdown.py`: pour modifier la documentation, éditez les fichiers `lang_*.json` sous `.readme` et `.changelog` puis relancez le script, au lieu d'éditer les fichiers Markdown générés",
   "h3_links": "Liens",

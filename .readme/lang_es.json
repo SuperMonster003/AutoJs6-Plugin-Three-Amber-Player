@@ -111,7 +111,7 @@
   "h5_for_more_release_history": "Historial completo",
   "h3_build": "Compilación",
   "text_release_build": "Compilación Release",
-  "p_build_params": "Los parámetros de compilación proceden de `version.properties`; el SDK mínimo actual es 24 y el SDK de destino es 36",
+  "p_build_params": "Los parámetros de compilación proceden de `version.properties`; el SDK mínimo actual es 24 y el SDK de destino es 37",
   "h3_resource_layout": "Estructura de recursos",
   "p_resource_layout": "`strings.xml` localiza la información del complemento y la interfaz del reproductor, y `plugin_instruction.md` aporta las notas de uso que se muestran en el lado del host. Todos los archivos README y CHANGELOG se generan a partir de fuentes JSON con `.python/generate_markdown.py`: para modificar la documentación, edita los archivos `lang_*.json` de `.readme` y `.changelog` y vuelve a ejecutar el script, en lugar de editar los archivos Markdown generados",
   "h3_links": "Enlaces",
