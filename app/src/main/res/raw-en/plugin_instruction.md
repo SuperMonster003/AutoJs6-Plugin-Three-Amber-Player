@@ -1,52 +1,43 @@
-# 3-Amber Player
+3-Amber Player is the video player plugin for the AutoJs6 file explorer and also works as a standalone local video player. Tap a video in the file explorer to play it full screen, with continuous playback of the same folder, local playlists, external subtitles, picture-in-picture and background audio; source videos are never modified.
 
-3-Amber Player adds a primary read-only video action to the file manager. It uses AndroidX Media3 ExoPlayer and PlayerView, starts playback automatically, handles audio focus and noisy output changes, and restores playback position and play state.
+### Getting started
 
-The full collaboration path requires AutoJs6 6.8.0 build 5276+ and Explorer Action v12; later plugin capabilities will not raise this baseline. When the plugin is installed, enabled, trusted, and compatible, every file recognized by the host as video opens in this player. A host without the optional session capabilities retains selected-file-only playback. If the plugin is missing, disabled, unauthorized, unavailable, incompatible, or cannot be launched, a compatible host shows recovery guidance and opens the Android application chooser only after the user explicitly selects Open with other apps. Audio playback and image viewing remain independent plugin capabilities.
+1. Make sure this plugin is enabled in AutoJs6 "Plugin center".
+2. Tap a video in the AutoJs6 file explorer; the player opens full screen and starts playing.
+3. Tap the picture to show the controls; swipe up or down on the left or right half to adjust brightness or volume, and double-tap the center to play or pause.
+4. To use it without AutoJs6, open this plugin from its launcher icon and tap "Open a video file".
 
-Playback controls:
+### Main features
 
-- Swipe vertically on the left or right half of the screen to adjust brightness or media volume.
-- Swipe horizontally to seek, double-tap the left or right third to jump by the configured 5, 10, or 30 seconds, double-tap the center to play or pause, and long-press for a temporary 2× speed.
-- The bottom bar provides play/pause, 10-second jumps, a draggable progress bar, playback speeds from 0.25× to 3×, resize mode, screen orientation, and a control lock against accidental touches.
-- Opening one video from Explorer can build a naturally ordered, bounded queue from readable direct video siblings. Playback starts at the selected video and offers previous / next, sequence, shuffle, and repeat-one modes.
-- Compatible hosts also expose the read-only Play selected toolbar action for 1-128 videos from one parent in host selection order, without sibling discovery. Host queues show a current-item/duration panel with tap-to-jump, pause on the end frame for a cancelable three-second next-item prompt, and can optionally remember the playback mode.
-- Resume history retains exactly one most recently opened unfinished video as a SHA-256 identity digest plus time values; opening another video clears it immediately, and completed playback is never retained.
-- The top bar selects embedded audio and text tracks. Matching .srt and .ass sidecars, including language suffixes, are discovered from the same folder. All subtitles are off by default and load only after explicit selection.
-- Repeat-current, video information, automatic orientation for horizontal media, and Android 8.0+ picture-in-picture with play/pause actions are available from the top bar.
-- MediaSession supports headset, Bluetooth, and system playback controls; the media notification exposes the current title and progress.
-- A sleep timer pauses playback after 15, 30, 45, or 60 minutes or at the end of the video. Gesture settings select sensitivity and the double-tap seek interval.
-- Pinch the picture to zoom from 0.25× to 4×; double-tap while zoomed to reset. Scrubbing shows a target-time bubble and a best-effort thumbnail when the container supports it.
-- On Android 10 or later, Save current frame writes a PNG to Pictures/3-Amber Player. The entry stays hidden on earlier Android versions.
-- Builds accessible light and dark semantic roles from one HCT source color, follows AutoJs6 by default, and offers 19 localized Material 500 presets plus live-preview custom RGB colors. Provides a standalone launcher and settings for host-following language, night mode and color, single-video resume behavior, manual and automatic update checks, ignored versions, release history, and app/developer information.
+- **Continuous playback**: After you open a video, the other videos in the same folder form a queue; jump within it from "Video playlist", and choose to play in sequence, shuffle or repeat the current video.
+- **Play selected**: Select several videos in the file explorer and tap "Play selected" to play up to 128 of them in the order you selected them.
+- **Local playlists**: Open playlist files such as M3U/M3U8, PLS and XSPF with up to 128 items; when a playlist refers to videos in another folder, open it from the launcher icon and pick that folder when asked.
+- **Gestures and speed**: Swipe sideways to seek and long-press for temporary 2x speed; set the double-tap seek step in "Gesture settings", and use "Lock controls" to prevent accidental touches.
+- **Subtitles and audio tracks**: Switch embedded tracks in "Subtitles" and "Audio track", use "Load from file" for an .srt or .ass subtitle, and adjust "Subtitle style" and "Subtitle offset".
+- **Resume playback**: A video you did not finish continues from where it stopped the next time you open it; turn this off with "Resume playback" in the settings.
+- **Picture-in-picture and background audio**: On Android 8.0 or later, use "Picture-in-picture"; with "Continue audio in background" on, the sound keeps playing after you leave the player.
+- **Sleep timer and frame stepping**: "Sleep timer" stops playback when the time is up; while paused, step frame by frame and set an A-B loop.
+- **Screenshots and video information**: On Android 10 or later, "Save current frame" saves a PNG to `Pictures/3-Amber Player`; "Video information" shows the resolution, frame rate and more.
+- **Appearance and settings**: Colors, night mode and language follow AutoJs6 by default; in "Settings" you can also "Check for updates" and view "Release history".
 
-Subtitle and precision tools:
+### Requirements
 
-- Subtitle settings provide a live preview for 75%-150% text size, four foreground colors, opaque/translucent/no background, and 0%/4%/8% bottom margin; choices also apply in picture-in-picture.
-- The subtitle menu can temporarily load one .srt or .ass file up to 4 MiB, detects BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 in memory, and adjusts an external subtitle by ±600.0 seconds in 0.1-second steps. No subtitle grant is persisted.
-- Pause to reveal previous/next-frame buttons (long-press to repeat) and the A-B loop control. An active A-B loop prevents queue advance; choosing a repeat mode or end-of-video timer afterward clears it.
+- Android 7.0 or later.
+- Opening videos from the file explorer requires AutoJs6 6.8.0 or later; the standalone player opened from its launcher icon does not need AutoJs6.
+- "Continue audio in background" needs the notification permission to show the playback controls notification.
 
-Display, accessibility, and background playback:
+### FAQ
 
-- The information panel identifies HDR10, HLG or SDR and available color details. Screenshots can include subtitles and be shared; mirror and warned +3 to +15 dB boost remain session-only.
-- TalkBack keeps named controls visible and every gesture has a button or menu equivalent. The player tolerates 200% text/display scale and supports visible keyboard/DPAD focus, Space/Enter play-pause, configured-step left/right seek, and MediaSession keys.
-- Media3 owns headset multi-click timing: one click toggles playback, a platform external-device double click advances when a next queue item exists, and an explicit Previous command goes back. No non-standard triple-click recognizer is added.
-- Continue audio in background is off by default and requires notification permission. If PiP is unavailable, it hands the existing player to a private media-playback foreground service with notification controls; PiP wins, and disabling the setting, completion, error or explicit exit stops the service. FOREGROUND_SERVICE and FOREGROUND_SERVICE_MEDIA_PLAYBACK are used only for this opted-in lifecycle, and URI access remains temporary.
+**Why tapping a video does not open this player**
 
-Explorer extensions:
+Make sure AutoJs6 meets the version requirement and this plugin is enabled in "Plugin center". When the plugin is unavailable, AutoJs6 shows recovery guidance, and "Open by other apps" hands the video to another player.
 
-- MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT.
+**When a video cannot be played**
 
-Safety and privacy limits:
+Whether a video can be decoded depends on the decoders of the device. When playback fails, tap "Open with another app" to use another player.
 
-- Explorer execution requires the signature-level plugin permission.
-- The plugin accepts content URIs with temporary read-only access and never writes the source.
-- A request-scoped Host Session is pinned to the plugin UID and permits only non-recursive listing of the selected file's direct parent plus opening the selected file or a readable direct sibling. The plugin receives no filesystem path.
-- Write and persistable grants are rejected. Prefix access is never forwarded to the player.
-- A separate ACTION_VIEW entry accepts only read-only video content URIs and discards incoming extras and ClipData.
-- If playback fails, Open with another app rebuilds a read-only intent and excludes this plugin.
-- Validated XVID-in-MKV tracks use the device's MPEG-4 Part 2 decoder without transcoding. If the decoder is unavailable or fails, playback stops and offers Open with another app.
-- Actual decoding depends on Media3 extractors and codecs available on the device.
-- Resume history retains exactly one most recently opened unfinished video as a SHA-256 identity digest plus time values; opening another video clears it immediately, and completed playback is never retained.
-- The information panel uses playback-session metadata plus the sanitized display name and declared size; it does not scan or modify the source video.
-- A requested screenshot creates a separate PNG through MediaStore and never writes the source. Scrub thumbnails remain in memory and are silently omitted when extraction is unavailable.
+**What the resume record stores**
+
+Only an identity digest and the playback position of the latest unfinished video, kept on this device; it is cleared when you open another video or playback ends.
+
+See the [project homepage](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player) for more details.

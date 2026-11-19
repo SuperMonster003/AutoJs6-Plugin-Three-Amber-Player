@@ -1,52 +1,43 @@
-# 3-Amber Player
+3-Amber Player es el plugin de reproducción de vídeo del explorador de archivos de AutoJs6 y también funciona como reproductor de vídeo local independiente. Toca un vídeo en el explorador de archivos para reproducirlo a pantalla completa, con reproducción continua de la misma carpeta, listas de reproducción locales, subtítulos externos, imagen en imagen y audio en segundo plano, sin modificar nunca el vídeo original.
 
-3-Amber Player añade una acción principal de video de solo lectura al gestor de archivos. Usa AndroidX Media3 ExoPlayer y PlayerView, inicia la reproducción automáticamente, gestiona el enfoque de audio y los cambios a salida de audio noisy, y restaura la posición y el estado de reproducción.
+### Primeros pasos
 
-La cooperación completa requiere AutoJs6 6.8.0 build 5276 o posterior y Explorer Action v12; las capacidades futuras del plugin no elevarán este requisito. Cuando está instalado, activado, es de confianza y compatible, todos los archivos que el host reconoce como video se abren en este reproductor. Un host sin las capacidades de sesión opcionales conserva la reproducción del archivo seleccionado. Si el plugin falta, está desactivado, no está autorizado, no está disponible, es incompatible o no se puede iniciar, un host compatible muestra instrucciones de recuperación y abre el selector de aplicaciones de Android solo cuando el usuario elige explícitamente Abrir con otras aplicaciones. El audio y las imágenes siguen siendo capacidades independientes.
+1. Comprueba que este plugin esté activado en el "Centro de plugins" de AutoJs6.
+2. Toca un vídeo en el explorador de archivos de AutoJs6; el reproductor se abre a pantalla completa y empieza a reproducir.
+3. Toca la imagen para mostrar los controles; desliza hacia arriba o abajo en la mitad izquierda o derecha para ajustar el brillo o el volumen, y toca dos veces el centro para reproducir o pausar.
+4. Para usarlo sin AutoJs6, abre este plugin desde su icono y toca "Abrir un archivo de vídeo".
 
-Controles de reproducción:
+### Funciones principales
 
-- Desliza verticalmente en la mitad izquierda o derecha de la pantalla para ajustar el brillo o el volumen multimedia.
-- Desliza horizontalmente para buscar, toca dos veces el tercio izquierdo o derecho para saltar los 5, 10 o 30 segundos configurados, toca dos veces el centro para reproducir o pausar, y mantén pulsado para una velocidad temporal de 2×.
-- La barra inferior ofrece reproducir/pausar, saltos de 10 segundos, barra de progreso arrastrable, velocidades de 0,25× a 3×, modo de ajuste, orientación de la pantalla y bloqueo contra toques accidentales.
-- Al abrir un video desde el Explorador se puede formar una cola acotada y ordenada de forma natural con videos hermanos directos legibles. Comienza en el video seleccionado y ofrece anterior / siguiente, secuencia, aleatorio y repetición de uno.
-- Los hosts compatibles también muestran la acción de solo lectura Reproducir seleccionados para 1-128 videos de un mismo directorio en el orden del host, sin descubrir hermanos. Las colas del host ofrecen panel de elemento/duración y salto al tocar, conservan el último fotograma durante un aviso cancelable de tres segundos y pueden recordar el modo.
-- El historial de reanudación conserva exactamente el último vídeo sin terminar como un resumen SHA-256 de identidad y valores de tiempo; abrir otro vídeo lo borra de inmediato y nunca se conserva una reproducción terminada.
-- La barra superior permite elegir pistas integradas de audio y texto. Descubre en la misma carpeta subtítulos externos .srt y .ass coincidentes, incluidos sufijos de idioma. Todos están desactivados de forma predeterminada y solo se cargan tras una selección explícita.
-- La barra superior también ofrece repetición del video actual, información del video, orientación automática para videos horizontales e imagen en imagen en Android 8.0+ con acciones de reproducción y pausa.
-- MediaSession admite controles de auriculares, Bluetooth y del sistema; la notificación multimedia muestra el título y el progreso actuales.
-- El temporizador pausa la reproducción tras 15, 30, 45 o 60 minutos, o al final del video. Los ajustes de gestos permiten elegir la sensibilidad y el intervalo del doble toque.
-- Pellizca la imagen para ampliarla entre 0,25× y 4×; tócala dos veces mientras está ampliada para restablecerla. Al arrastrar la barra aparece el tiempo de destino y, si el contenedor lo permite, una miniatura opcional.
-- En Android 10 o posterior, Guardar fotograma actual escribe un PNG en Imágenes/3-Amber Player. La opción está oculta en versiones anteriores.
-- Genera roles semánticos accesibles claros y oscuros desde un color HCT, sigue AutoJs6 de forma predeterminada y ofrece 19 preajustes Material 500 localizados y RGB personalizado con vista previa. Ofrece un lanzador independiente y ajustes de idioma, noche y color que siguen al host, reanudación de un único vídeo, comprobaciones manuales y automáticas, versiones ignoradas, historial e información de la aplicación y el desarrollador.
+- **Reproducción continua**: Al abrir un vídeo, los demás vídeos de la misma carpeta forman una cola; salta entre ellos desde "Lista de reproducción de vídeos" y elige reproducir en orden, de forma aleatoria o repetir el video actual.
+- **Reproducir seleccionados**: Selecciona varios vídeos en el explorador de archivos y toca "Reproducir seleccionados" para reproducir hasta 128 en el orden de selección.
+- **Listas de reproducción locales**: Abre archivos de lista como M3U/M3U8, PLS o XSPF, con hasta 128 elementos; si una lista hace referencia a vídeos de otra carpeta, ábrela desde el icono del plugin y elige esa carpeta cuando se solicite.
+- **Gestos y velocidad**: Desliza en horizontal para avanzar o retroceder y mantén pulsado para reproducir temporalmente a 2x; ajusta el salto del doble toque en "Ajustes de gestos", y "Bloquear controles" evita toques accidentales.
+- **Subtítulos y pistas de audio**: Cambia las pistas integradas en "Subtítulos" y "Pista de audio", usa "Cargar desde archivo" para un subtítulo .srt o .ass, y ajusta "Estilo de subtítulos" y "Desfase de subtítulos".
+- **Reanudar reproducción**: Un vídeo sin terminar continúa donde se detuvo al volver a abrirlo; desactiva "Reanudar reproducción" en los ajustes para evitarlo.
+- **Imagen en imagen y audio en segundo plano**: En Android 8.0 o posterior puedes usar "Imagen en imagen"; con "Continuar el audio en segundo plano" activado, el sonido sigue al salir del reproductor.
+- **Temporizador y fotograma a fotograma**: "Temporizador de apagado" detiene la reproducción al terminar el tiempo; en pausa, avanza fotograma a fotograma y define un bucle A-B.
+- **Capturas e información del vídeo**: En Android 10 o posterior, "Guardar fotograma actual" guarda un PNG en `Pictures/3-Amber Player`; "Información del video" muestra la resolución, la velocidad de fotogramas y más.
+- **Apariencia y ajustes**: Los colores, el modo nocturno y el idioma siguen a AutoJs6 de forma predeterminada; en "Ajustes" también puedes "Buscar actualizaciones" y ver "Historial de versiones".
 
-Herramientas de subtítulos y reproducción precisa:
+### Requisitos
 
-- Los ajustes de subtítulos ofrecen una vista previa en directo para tamaños de texto del 75 % al 150 %, cuatro colores de primer plano, fondo opaco, translúcido o sin fondo y un margen inferior del 0 %, 4 % u 8 %; las opciones también se aplican en imagen en imagen.
-- El menú de subtítulos puede cargar temporalmente un archivo .srt o .ass de hasta 4 MiB, detectar en memoria BOM/GBK/Big5/Shift_JIS/EUC-KR/Windows-1251/Windows-1256 y desplazar un subtítulo externo ±600,0 segundos en pasos de 0,1 segundos. No se conserva ningún permiso persistente.
-- Pausa la reproducción para mostrar los botones de fotograma anterior/siguiente (mantenlos pulsados para repetir) y el bucle A-B. Un bucle A-B activo impide avanzar por la cola; elegir después un modo de repetición o el temporizador de fin de vídeo lo borra.
+- Android 7.0 o posterior.
+- Abrir vídeos desde el explorador de archivos requiere AutoJs6 6.8.0 o posterior; el reproductor independiente abierto desde su icono no necesita AutoJs6.
+- "Continuar el audio en segundo plano" necesita el permiso de notificaciones para mostrar la notificación con los controles de reproducción.
 
-Pantalla, accesibilidad y reproducción en segundo plano:
+### Preguntas frecuentes
 
-- El panel de información identifica HDR10, HLG o SDR y los datos de color disponibles. Las capturas pueden incluir subtítulos y compartirse; el reflejo y el refuerzo advertido de +3 a +15 dB se limitan a la sesión.
-- TalkBack mantiene visibles los controles con nombre y cada gesto tiene un botón o menú equivalente. El reproductor admite texto/pantalla al 200 % y foco visible de teclado/DPAD, Espacio/Intro, búsqueda izquierda/derecha según el paso configurado y teclas MediaSession.
-- Media3 gestiona el ritmo de pulsaciones del auricular: una pulsación alterna reproducción/pausa, la doble pulsación de un dispositivo externo avanza si hay un siguiente elemento y un comando Previous explícito retrocede. No se añade un detector de triple pulsación no estándar.
-- Continuar el audio en segundo plano está desactivado de forma predeterminada y requiere permiso de notificaciones. Si PiP no está disponible, entrega el reproductor existente a un servicio privado multimedia en primer plano con controles de notificación; PiP tiene prioridad y desactivar el ajuste, finalizar, un error o salir explícitamente detiene el servicio. FOREGROUND_SERVICE y FOREGROUND_SERVICE_MEDIA_PLAYBACK se usan solo para este ciclo activado voluntariamente y el acceso URI sigue siendo temporal.
+**Motivos por los que tocar un vídeo no abre este reproductor**
 
-Extensiones del Explorador:
+Comprueba que AutoJs6 cumple la versión requerida y que este plugin está activado en el "Centro de plugins". Si el plugin no está disponible, AutoJs6 muestra una guía de recuperación, y "Abierto por otras aplicaciones" entrega el vídeo a otro reproductor.
 
-- MP4, MPEG4, MPG4, AVI, MKV, MOV, FLV, WEBM, M4V, 3GP, MPEG, 3G2, 3GP2, 3GPP, F4V, M2T, M2TS, MTS, TS, MPG, MPE, VOB, QT.
+**Casos en que un vídeo no se puede reproducir**
 
-Límites de seguridad y privacidad:
+La decodificación depende de los decodificadores del dispositivo. Si la reproducción falla, toca "Abrir con otra aplicación" para usar otro reproductor.
 
-- La ejecución desde el gestor de archivos requiere el permiso de complemento de nivel signature.
-- El plugin acepta content URI con acceso temporal de solo lectura y nunca escribe el origen.
-- Una Host Session por solicitud queda vinculada por el host al UID del plugin y solo permite listar sin recursión el padre directo del archivo seleccionado y abrir este o un hermano directo legible. El plugin no recibe rutas del sistema de archivos.
-- Se rechazan las concesiones de escritura y persistentes. El acceso prefix nunca se reenvía al reproductor.
-- Una entrada ACTION_VIEW separada solo acepta content URI de video de solo lectura y descarta los extras y ClipData recibidos.
-- Si la reproducción falla, Abrir con otra aplicación reconstruye un Intent de solo lectura y excluye este plugin.
-- Las pistas XVID en MKV validadas usan el decodificador MPEG-4 Part 2 del dispositivo sin transcodificación. Si no está disponible o falla, la reproducción se detiene y ofrece Abrir con otra aplicación.
-- La decodificación real depende de los extractores de Media3 y de los códecs disponibles en el dispositivo.
-- El historial de reanudación conserva exactamente el último vídeo sin terminar como un resumen SHA-256 de identidad y valores de tiempo; abrir otro vídeo lo borra de inmediato y nunca se conserva una reproducción terminada.
-- El panel de información solo usa metadatos de la sesión de reproducción, el nombre seguro y el tamaño declarado; no examina ni modifica el video de origen.
-- Una captura solicitada crea un PNG independiente mediante MediaStore y nunca escribe en el video de origen. Las miniaturas solo permanecen en memoria y se omiten silenciosamente si no se pueden extraer.
+**Contenido del registro de reanudación**
+
+Solo se guardan una huella de identidad y la posición de reproducción del último vídeo sin terminar, únicamente en este dispositivo; se borran al abrir otro vídeo o al terminar la reproducción.
+
+Más detalles en la [página del proyecto](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Amber-Player).

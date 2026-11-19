@@ -118,5 +118,48 @@
   "text_link_autojs6_docs": "Documentación de AutoJs6",
   "text_link_media3_exoplayer": "AndroidX Media3 ExoPlayer (motor de reproducción)",
   "text_link_android_secure_file_sharing": "Uso compartido seguro de archivos en Android",
-  "p_amber_identity": "3-Amber Player 4.0 usa el nuevo identificador io.github.supermonster003.autojs6.plugin.three.amber.player. Android lo instala por separado; los ajustes anteriores no se transfieren automáticamente. La aplicación anterior puede conservarse"
+  "p_amber_identity": "3-Amber Player 4.0 usa el nuevo identificador io.github.supermonster003.autojs6.plugin.three.amber.player. Android lo instala por separado; los ajustes anteriores no se transfieren automáticamente. La aplicación anterior puede conservarse",
+  "instruction_p_what": "3-Amber Player es el plugin de reproducción de vídeo del explorador de archivos de AutoJs6 y también funciona como reproductor de vídeo local independiente. Toca un vídeo en el explorador de archivos para reproducirlo a pantalla completa, con reproducción continua de la misma carpeta, listas de reproducción locales, subtítulos externos, imagen en imagen y audio en segundo plano, sin modificar nunca el vídeo original.",
+  "instruction_h3_start": "Primeros pasos",
+  "instruction_start_steps": [
+    "Comprueba que este plugin esté activado en el \"Centro de plugins\" de AutoJs6.",
+    "Toca un vídeo en el explorador de archivos de AutoJs6; el reproductor se abre a pantalla completa y empieza a reproducir.",
+    "Toca la imagen para mostrar los controles; desliza hacia arriba o abajo en la mitad izquierda o derecha para ajustar el brillo o el volumen, y toca dos veces el centro para reproducir o pausar.",
+    "Para usarlo sin AutoJs6, abre este plugin desde su icono y toca \"Abrir un archivo de vídeo\"."
+  ],
+  "instruction_h3_features": "Funciones principales",
+  "instruction_features": [
+    "**Reproducción continua**: Al abrir un vídeo, los demás vídeos de la misma carpeta forman una cola; salta entre ellos desde \"Lista de reproducción de vídeos\" y elige reproducir en orden, de forma aleatoria o repetir el video actual.",
+    "**Reproducir seleccionados**: Selecciona varios vídeos en el explorador de archivos y toca \"Reproducir seleccionados\" para reproducir hasta 128 en el orden de selección.",
+    "**Listas de reproducción locales**: Abre archivos de lista como M3U/M3U8, PLS o XSPF, con hasta 128 elementos; si una lista hace referencia a vídeos de otra carpeta, ábrela desde el icono del plugin y elige esa carpeta cuando se solicite.",
+    "**Gestos y velocidad**: Desliza en horizontal para avanzar o retroceder y mantén pulsado para reproducir temporalmente a 2x; ajusta el salto del doble toque en \"Ajustes de gestos\", y \"Bloquear controles\" evita toques accidentales.",
+    "**Subtítulos y pistas de audio**: Cambia las pistas integradas en \"Subtítulos\" y \"Pista de audio\", usa \"Cargar desde archivo\" para un subtítulo .srt o .ass, y ajusta \"Estilo de subtítulos\" y \"Desfase de subtítulos\".",
+    "**Reanudar reproducción**: Un vídeo sin terminar continúa donde se detuvo al volver a abrirlo; desactiva \"Reanudar reproducción\" en los ajustes para evitarlo.",
+    "**Imagen en imagen y audio en segundo plano**: En Android 8.0 o posterior puedes usar \"Imagen en imagen\"; con \"Continuar el audio en segundo plano\" activado, el sonido sigue al salir del reproductor.",
+    "**Temporizador y fotograma a fotograma**: \"Temporizador de apagado\" detiene la reproducción al terminar el tiempo; en pausa, avanza fotograma a fotograma y define un bucle A-B.",
+    "**Capturas e información del vídeo**: En Android 10 o posterior, \"Guardar fotograma actual\" guarda un PNG en `Pictures/3-Amber Player`; \"Información del video\" muestra la resolución, la velocidad de fotogramas y más.",
+    "**Apariencia y ajustes**: Los colores, el modo nocturno y el idioma siguen a AutoJs6 de forma predeterminada; en \"Ajustes\" también puedes \"Buscar actualizaciones\" y ver \"Historial de versiones\"."
+  ],
+  "instruction_h3_requirements": "Requisitos",
+  "instruction_requirements": [
+    "Android 7.0 o posterior.",
+    "Abrir vídeos desde el explorador de archivos requiere AutoJs6 {{ required_host_version }} o posterior; el reproductor independiente abierto desde su icono no necesita AutoJs6.",
+    "\"Continuar el audio en segundo plano\" necesita el permiso de notificaciones para mostrar la notificación con los controles de reproducción."
+  ],
+  "instruction_h3_faq": "Preguntas frecuentes",
+  "instruction_faq": [
+    {
+      "q": "Motivos por los que tocar un vídeo no abre este reproductor",
+      "a": "Comprueba que AutoJs6 cumple la versión requerida y que este plugin está activado en el \"Centro de plugins\". Si el plugin no está disponible, AutoJs6 muestra una guía de recuperación, y \"Abierto por otras aplicaciones\" entrega el vídeo a otro reproductor."
+    },
+    {
+      "q": "Casos en que un vídeo no se puede reproducir",
+      "a": "La decodificación depende de los decodificadores del dispositivo. Si la reproducción falla, toca \"Abrir con otra aplicación\" para usar otro reproductor."
+    },
+    {
+      "q": "Contenido del registro de reanudación",
+      "a": "Solo se guardan una huella de identidad y la posición de reproducción del último vídeo sin terminar, únicamente en este dispositivo; se borran al abrir otro vídeo o al terminar la reproducción."
+    }
+  ],
+  "instruction_p_more": "Más detalles en la [página del proyecto]({{ repo_url }})."
 }
