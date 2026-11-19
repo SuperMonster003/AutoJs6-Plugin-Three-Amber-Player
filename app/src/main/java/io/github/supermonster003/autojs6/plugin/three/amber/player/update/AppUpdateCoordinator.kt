@@ -8,7 +8,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.supermonster003.autojs6.plugin.three.amber.player.BuildConfig
 import io.github.supermonster003.autojs6.plugin.three.amber.player.R
 import io.github.supermonster003.autojs6.plugin.three.amber.player.settings.AppPreferenceStore
-import io.github.supermonster003.autojs6.plugin.three.amber.player.settings.ReleaseHistoryActivity
+import io.github.supermonster003.autojs6.plugin.three.amber.player.settings.openReleaseHistory
 import io.github.supermonster003.autojs6.plugin.three.amber.player.theme.VideoThemedActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -134,7 +134,8 @@ internal object AppUpdateCoordinator {
         }
     }
 
-    private fun showAvailableRelease(activity: VideoThemedActivity, release: AppRelease) {
+    /** Internal so that the instrumentation test can show it for a made-up release; returns the dialog it shows. */
+    internal fun showAvailableRelease(activity: VideoThemedActivity, release: AppRelease): AlertDialog {
         val message = buildString {
             append(activity.getString(R.string.update_available_message, release.version))
             release.notes.takeIf(String::isNotBlank)?.let { notes ->
@@ -149,11 +150,12 @@ internal object AppUpdateCoordinator {
                 openUrl(activity, release.pageUrl)
             }
             .setNeutralButton(R.string.setting_release_history) { _, _ ->
-                activity.startActivity(Intent(activity, ReleaseHistoryActivity::class.java))
+                activity.openReleaseHistory()
             }
             .setNegativeButton(R.string.update_later, null)
             .create()
         activity.showThemedDialog(dialog)
+        return dialog
     }
 
     private fun showCheckFailure(activity: VideoThemedActivity) {

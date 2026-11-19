@@ -75,7 +75,7 @@
     <string name="error_invalid_request">Недействительный запрос видео</string>
     <string name="error_no_external_player">Другой видеоплеер недоступен</string>
     <string name="error_no_supported_video">Выбранный файл не является поддерживаемым и доступным для чтения видео</string>
-    <string name="error_release_history_unavailable">Не удалось загрузить встроенную историю выпусков</string>
+    <string name="error_release_history_unavailable">Не удалось загрузить историю выпусков</string>
     <string name="error_xvid_decoder_failed">Системному декодеру не удалось декодировать эту видеодорожку XVID. Попробуйте открыть файл в другом приложении.</string>
     <string name="error_xvid_decoder_unavailable">На этом устройстве нет системного декодера для видеодорожки XVID. Попробуйте открыть файл в другом приложении.</string>
     <string name="follow_autojs6">Как в AutoJs6</string>
@@ -144,6 +144,10 @@
     <string name="queue_current_item_description">Сейчас воспроизводится: %1$s</string>
     <string name="queue_duration_unknown">--:--</string>
     <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="release_history_collapse_all">Свернуть всё</string>
+    <string name="release_history_collapsed">Свёрнуто</string>
+    <string name="release_history_expand_all">Развернуть всё</string>
+    <string name="release_history_expanded">Развёрнуто</string>
     <string name="repeat_off">Повтор выключен</string>
     <string name="repeat_one">Повтор текущего видео</string>
     <string name="resize_mode_fill">Заполнить</string>
@@ -169,7 +173,7 @@
     <string name="setting_manage_ignored_updates">Управление игнорируемыми обновлениями</string>
     <string name="setting_night_mode">Ночной режим</string>
     <string name="setting_release_history">История выпусков</string>
-    <string name="setting_release_history_summary">Прочитать журнал изменений, включённый в эту версию</string>
+    <string name="setting_release_history_summary">Открыть встроенную историю выпусков приложения</string>
     <string name="setting_remember_playback_mode">Запоминать режим воспроизведения</string>
     <string name="setting_remember_playback_mode_summary">Сохранять выбор последовательного, случайного или повтора одного элемента между сеансами</string>
     <string name="setting_resume_playback">Продолжать воспроизведение</string>

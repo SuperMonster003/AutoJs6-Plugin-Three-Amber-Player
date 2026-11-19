@@ -71,8 +71,9 @@ class VideoThemePaletteTest {
     }
 
     private fun assertOpaque(palette: VideoThemePalette) {
+        // Instance fields only: the Compose compiler adds a static `$stable` field to every class it compiles.
         palette.javaClass.declaredFields
-            .filter { field -> field.type == Int::class.javaPrimitiveType }
+            .filter { field -> field.type == Int::class.javaPrimitiveType && !java.lang.reflect.Modifier.isStatic(field.modifiers) }
             .forEach { field ->
                 field.isAccessible = true
                 val color = field.getInt(palette)

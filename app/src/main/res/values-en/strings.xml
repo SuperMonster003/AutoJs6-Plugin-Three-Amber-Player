@@ -75,7 +75,7 @@
     <string name="error_invalid_request">Invalid video request</string>
     <string name="error_no_external_player">No other video player is available</string>
     <string name="error_no_supported_video">The selected file is not a supported, readable video</string>
-    <string name="error_release_history_unavailable">The bundled release history could not be loaded</string>
+    <string name="error_release_history_unavailable">Unable to load the release history</string>
     <string name="error_xvid_decoder_failed">The system decoder could not decode this XVID video track. Try opening it with another app.</string>
     <string name="error_xvid_decoder_unavailable">This device has no system decoder for the XVID video track. Try opening it with another app.</string>
     <string name="follow_autojs6">Follow AutoJs6</string>
@@ -144,6 +144,10 @@
     <string name="queue_current_item_description">Currently playing: %1$s</string>
     <string name="queue_duration_unknown">--:--</string>
     <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="release_history_collapse_all">Collapse all</string>
+    <string name="release_history_collapsed">Collapsed</string>
+    <string name="release_history_expand_all">Expand all</string>
+    <string name="release_history_expanded">Expanded</string>
     <string name="repeat_off">Repeat off</string>
     <string name="repeat_one">Repeat current video</string>
     <string name="resize_mode_fill">Fill</string>
@@ -169,7 +173,7 @@
     <string name="setting_manage_ignored_updates">Manage ignored updates</string>
     <string name="setting_night_mode">Night mode</string>
     <string name="setting_release_history">Release history</string>
-    <string name="setting_release_history_summary">Read the changelog included with this version</string>
+    <string name="setting_release_history_summary">Read the release history included with this app</string>
     <string name="setting_remember_playback_mode">Remember playback mode</string>
     <string name="setting_remember_playback_mode_summary">Keep sequence, shuffle, or repeat-one across playback sessions</string>
     <string name="setting_resume_playback">Resume playback</string>

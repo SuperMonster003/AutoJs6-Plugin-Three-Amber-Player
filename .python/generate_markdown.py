@@ -336,9 +336,8 @@ def generate_readmes(languages, changelogs):
 
 
 def generate_changelogs(languages, changelogs):
-    # CHANGELOG version headings must stay at level 1 ("# vX.Y.Z"); the in-app
-    # release history screen (ReleaseHistoryActivity.formatMarkdown) only styles
-    # "# ", "### ", "###### " and "* " prefixed lines.
+    # The in-app release history page (settings/ReleaseHistory.kt, ReleaseHistoryParser) reads the
+    # "# vX.Y.Z" version headings, the "###### " date lines and the "* " bullets written here.
     template = load_template(CHANGELOG_DIR / "template_changelog.md")
     for code in LANGUAGE_CODES:
         values = dict(languages[code])

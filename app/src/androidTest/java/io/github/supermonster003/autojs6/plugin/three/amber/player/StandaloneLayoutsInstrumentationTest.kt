@@ -8,7 +8,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.supermonster003.autojs6.plugin.three.amber.player.databinding.ActivityAboutBinding
 import io.github.supermonster003.autojs6.plugin.three.amber.player.databinding.ActivityLauncherBinding
-import io.github.supermonster003.autojs6.plugin.three.amber.player.databinding.ActivityReleaseHistoryBinding
 import io.github.supermonster003.autojs6.plugin.three.amber.player.databinding.ActivitySettingsBinding
 import io.github.supermonster003.autojs6.plugin.three.amber.player.databinding.ActivityVideoPlayerBinding
 import io.github.supermonster003.autojs6.plugin.three.amber.player.databinding.BottomSheetVideoQueueBinding
@@ -32,7 +31,6 @@ class StandaloneLayoutsInstrumentationTest {
             listOf(
                 ActivityLauncherBinding.inflate(inflater).root,
                 settings.root,
-                ActivityReleaseHistoryBinding.inflate(inflater).root,
                 ActivityAboutBinding.inflate(inflater).root,
                 BottomSheetVideoQueueBinding.inflate(inflater).root,
                 ItemVideoQueueBinding.inflate(inflater).root,

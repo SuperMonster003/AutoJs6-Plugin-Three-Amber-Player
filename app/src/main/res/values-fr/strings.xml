@@ -75,7 +75,7 @@
     <string name="error_invalid_request">Demande vidéo non valide</string>
     <string name="error_no_external_player">Aucun autre lecteur vidéo n\'est disponible</string>
     <string name="error_no_supported_video">Le fichier sélectionné n\'est pas une vidéo compatible et lisible</string>
-    <string name="error_release_history_unavailable">Impossible de charger l\'historique des versions intégré</string>
+    <string name="error_release_history_unavailable">Impossible de charger l\'historique des versions</string>
     <string name="error_xvid_decoder_failed">Le décodeur système n\'a pas pu décoder cette piste vidéo XVID. Essayez de l\'ouvrir avec une autre application.</string>
     <string name="error_xvid_decoder_unavailable">Cet appareil ne dispose d\'aucun décodeur système pour la piste vidéo XVID. Essayez de l\'ouvrir avec une autre application.</string>
     <string name="follow_autojs6">Suivre AutoJs6</string>
@@ -144,6 +144,10 @@
     <string name="queue_current_item_description">Lecture en cours : %1$s</string>
     <string name="queue_duration_unknown">--:--</string>
     <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="release_history_collapse_all">Tout réduire</string>
+    <string name="release_history_collapsed">Réduit</string>
+    <string name="release_history_expand_all">Tout développer</string>
+    <string name="release_history_expanded">Développé</string>
     <string name="repeat_off">Répétition désactivée</string>
     <string name="repeat_one">Répéter la vidéo actuelle</string>
     <string name="resize_mode_fill">Remplir</string>
@@ -169,7 +173,7 @@
     <string name="setting_manage_ignored_updates">Gérer les mises à jour ignorées</string>
     <string name="setting_night_mode">Mode nuit</string>
     <string name="setting_release_history">Historique des versions</string>
-    <string name="setting_release_history_summary">Lire le journal des modifications inclus dans cette version</string>
+    <string name="setting_release_history_summary">Consulter l\'historique des versions inclus dans l\'application</string>
     <string name="setting_remember_playback_mode">Mémoriser le mode de lecture</string>
     <string name="setting_remember_playback_mode_summary">Conserver séquence, aléatoire ou répétition d\'un élément entre les sessions</string>
     <string name="setting_resume_playback">Reprendre la lecture</string>

@@ -75,7 +75,7 @@
     <string name="error_invalid_request">無効な動画リクエストです</string>
     <string name="error_no_external_player">利用可能な別の動画プレーヤーがありません</string>
     <string name="error_no_supported_video">選択したファイルは, 対応する読み取り可能な動画ではありません</string>
-    <string name="error_release_history_unavailable">同梱のリリース履歴を読み込めませんでした</string>
+    <string name="error_release_history_unavailable">リリース履歴を読み込めませんでした</string>
     <string name="error_xvid_decoder_failed">システムデコーダーでこの XVID 動画トラックをデコードできませんでした.別のアプリで開いてみてください.</string>
     <string name="error_xvid_decoder_unavailable">このデバイスには XVID 動画トラック用のシステムデコーダーがありません.別のアプリで開いてみてください.</string>
     <string name="follow_autojs6">AutoJs6 に従う</string>
@@ -144,6 +144,10 @@
     <string name="queue_current_item_description">再生中: %1$s</string>
     <string name="queue_duration_unknown">--:--</string>
     <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="release_history_collapse_all">すべて折りたたむ</string>
+    <string name="release_history_collapsed">折りたたみ中</string>
+    <string name="release_history_expand_all">すべて展開する</string>
+    <string name="release_history_expanded">展開中</string>
     <string name="repeat_off">リピート オフ</string>
     <string name="repeat_one">現在の動画をリピート</string>
     <string name="resize_mode_fill">フィル</string>
@@ -169,7 +173,7 @@
     <string name="setting_manage_ignored_updates">無視したアップデートを管理</string>
     <string name="setting_night_mode">ナイトモード</string>
     <string name="setting_release_history">リリース履歴</string>
-    <string name="setting_release_history_summary">このバージョンに同梱された変更履歴を読みます</string>
+    <string name="setting_release_history_summary">アプリに含まれるリリース履歴を表示します</string>
     <string name="setting_remember_playback_mode">再生モードを記憶</string>
     <string name="setting_remember_playback_mode_summary">再生セッションをまたいで順次/シャッフル/1項目リピートを保持します</string>
     <string name="setting_resume_playback">再生を再開</string>

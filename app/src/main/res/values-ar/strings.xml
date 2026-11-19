@@ -75,7 +75,7 @@
     <string name="error_invalid_request">طلب الفيديو غير صالح</string>
     <string name="error_no_external_player">لا يتوفر مشغل فيديو آخر</string>
     <string name="error_no_supported_video">الملف المحدد ليس ملف فيديو مدعوما وقابلا للقراءة</string>
-    <string name="error_release_history_unavailable">تعذر تحميل سجل الإصدارات المرفق</string>
+    <string name="error_release_history_unavailable">تعذر تحميل سجل الإصدارات</string>
     <string name="error_xvid_decoder_failed">تعذّر على وحدة فك ترميز النظام فك ترميز مسار فيديو XVID هذا. جرّب فتحه باستخدام تطبيق آخر.</string>
     <string name="error_xvid_decoder_unavailable">لا يحتوي هذا الجهاز على وحدة فك ترميز نظام لمسار فيديو XVID. جرّب فتحه باستخدام تطبيق آخر.</string>
     <string name="follow_autojs6">اتباع AutoJs6</string>
@@ -144,6 +144,10 @@
     <string name="queue_current_item_description">قيد التشغيل الآن: %1$s</string>
     <string name="queue_duration_unknown">--:--</string>
     <string name="queue_item_details">%1$d · %2$s</string>
+    <string name="release_history_collapse_all">طيّ الكل</string>
+    <string name="release_history_collapsed">مطوي</string>
+    <string name="release_history_expand_all">توسيع الكل</string>
+    <string name="release_history_expanded">موسَّع</string>
     <string name="repeat_off">إيقاف التكرار</string>
     <string name="repeat_one">تكرار الفيديو الحالي</string>
     <string name="resize_mode_fill">ملء</string>
@@ -169,7 +173,7 @@
     <string name="setting_manage_ignored_updates">إدارة التحديثات المتجاهلة</string>
     <string name="setting_night_mode">الوضع الليلي</string>
     <string name="setting_release_history">سجل الإصدارات</string>
-    <string name="setting_release_history_summary">قراءة سجل التغييرات المرفق بهذا الإصدار</string>
+    <string name="setting_release_history_summary">عرض سجل الإصدارات المضمن في التطبيق</string>
     <string name="setting_remember_playback_mode">تذكّر وضع التشغيل</string>
     <string name="setting_remember_playback_mode_summary">الاحتفاظ بوضع التسلسل أو الخلط أو تكرار عنصر واحد بين جلسات التشغيل</string>
     <string name="setting_resume_playback">متابعة التشغيل</string>
